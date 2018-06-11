@@ -21,11 +21,11 @@ Please check the following projects:
 
 | Name          | Description                                                   | Link                                                                                                                             |
 | ------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Core          | Fundamental types, containers and utilities.                  | [open-space-collective/library-core](https://github.com/open-space-collective/library-core)                   |
-| I/O           | Addressing, networking, database connectors.                  | [open-space-collective/library-io](https://github.com/open-space-collective/library-io)                       |
-| Mathematics   | Geometry, curve fitting, optimization.                        | [open-space-collective/library-mathematics](https://github.com/open-space-collective/library-mathematics)     |
-| Physics       | Physical units, time, reference frames, environment modeling. | [open-space-collective/library-physics](https://github.com/open-space-collective/library-physics)             |
-| Astrodynamics | Orbit, attitude, access.                                      | [open-space-collective/library-astrodynamics](https://github.com/open-space-collective/library-astrodynamics) |
+| Core          | Fundamental types, containers and utilities.                  | [library-core](https://github.com/open-space-collective/library-core)                   |
+| I/O           | Addressing, networking, database connectors.                  | [library-io](https://github.com/open-space-collective/library-io)                       |
+| Mathematics   | Geometry, curve fitting, optimization.                        | [library-mathematics](https://github.com/open-space-collective/library-mathematics)     |
+| Physics       | Physical units, time, reference frames, environment modeling. | [library-physics](https://github.com/open-space-collective/library-physics)             |
+| Astrodynamics | Orbit, attitude, access.                                      | [library-astrodynamics](https://github.com/open-space-collective/library-astrodynamics) |
 
 ## Examples
 
