@@ -19,8 +19,8 @@ Please check the following projects:
 
 ## Libraries
 
-| Name          | Description                                                   | Link                                                                                                                             |
-| ------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Name          | Description                                                   | Link                                                                                    |
+| ------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Core          | Fundamental types, containers and utilities.                  | [library-core](https://github.com/open-space-collective/library-core)                   |
 | I/O           | Addressing, networking, database connectors.                  | [library-io](https://github.com/open-space-collective/library-io)                       |
 | Mathematics   | Geometry, curve fitting, optimization.                        | [library-mathematics](https://github.com/open-space-collective/library-mathematics)     |
