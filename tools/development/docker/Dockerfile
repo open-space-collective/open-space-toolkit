@@ -58,6 +58,19 @@ RUN mkdir /tmp/cmake \
     && make install \
     && rm -rf /tmp/cmake
 
+## GoogleTest [???]
+
+RUN pushd /tmp > /dev/null \
+    && git clone https://github.com/google/googletest.git \
+    && cd googletest \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make -j ${cpu_count} \
+    && make install \
+    && popd > /dev/null \
+    && rm -rf /tmp/googletest
+
 # Dependencies
 
 ## Boost [1.67.0]
