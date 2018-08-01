@@ -41,18 +41,18 @@ RUN dnf update -y \
 RUN dnf install -y \
     rpm-build \
     ncurses ncurses-devel \
-    python python-devel \
+    python3 python3-devel \
     && dnf group install -y "Development Tools" \
     && dnf install -y gcc-c++ gdb lcov \
     && dnf clean all
 
-## CMake [3.11.3]
+## CMake [3.12.0]
 
 RUN mkdir /tmp/cmake \
     && cd /tmp/cmake \
-    && wget --quiet https://cmake.org/files/v3.11/cmake-3.11.3.tar.gz \
-    && tar -xvf cmake-3.11.3.tar.gz \
-    && cd cmake-3.11.3 \
+    && wget --quiet https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz \
+    && tar -xf cmake-3.12.0.tar.gz \
+    && cd cmake-3.12.0 \
     && ./bootstrap \
     && make -j ${cpu_count} \
     && make install \
@@ -78,9 +78,10 @@ RUN pushd /tmp > /dev/null \
 RUN mkdir /tmp/boost \
     && cd /tmp/boost \
     && wget --quiet http://sourceforge.net/projects/boost/files/boost/1.67.0/boost_1_67_0.tar.gz \
-    && tar -xvf boost_1_67_0.tar.gz \
+    && tar -xf boost_1_67_0.tar.gz \
     && cd boost_1_67_0 \
-    && ./bootstrap.sh \
+    && ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-version=3.6 --with-python-root=/usr/lib/python3.6 \
+    && echo "using python : 3.6 : /usr : /usr/include/python3.6m ;" >> project-config.jam \
     && ./b2 -j ${cpu_count} link=static cxxflags=-fPIC install \
     && rm -rf /tmp/boost
 
