@@ -13,7 +13,6 @@ LABEL maintainer="lucas@loftorbital.com"
 
 # Arguments
 
-ARG version
 ARG cpu_count=1
 
 # Environment
@@ -46,6 +45,10 @@ RUN dnf install -y \
     && dnf install -y gcc-c++ gdb lcov \
     && dnf clean all
 
+## Python Tools
+
+RUN python3 -m pip install --user --upgrade setuptools wheel twine
+
 ## CMake [3.12.0]
 
 RUN mkdir /tmp/cmake \
@@ -73,19 +76,21 @@ RUN pushd /tmp > /dev/null \
 
 # Dependencies
 
-## Boost [1.67.0]
+## Boost [1.68.0]
 
-RUN mkdir /tmp/boost \
-    && cd /tmp/boost \
-    && wget --quiet http://sourceforge.net/projects/boost/files/boost/1.67.0/boost_1_67_0.tar.gz \
-    && tar -xf boost_1_67_0.tar.gz \
-    && cd boost_1_67_0 \
+RUN pushd /tmp > /dev/null \
+    && wget --quiet http://sourceforge.net/projects/boost/files/boost/1.68.0/boost_1_68_0.tar.gz \
+    && tar -xf boost_1_68_0.tar.gz \
+    && cd boost_1_68_0 \
     && ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-version=3.6 --with-python-root=/usr/lib/python3.6 \
     && echo "using python : 3.6 : /usr : /usr/include/python3.6m ;" >> project-config.jam \
     && ./b2 -j ${cpu_count} link=static cxxflags=-fPIC install \
-    && rm -rf /tmp/boost
+    && popd > /dev/null \
+    && rm -rf /tmp/boost_1_68_0
 
 # Labels
+
+ARG version
 
 ENV version ${version}
 
