@@ -88,6 +88,11 @@ RUN pushd /tmp > /dev/null \
     && popd > /dev/null \
     && rm -rf /tmp/boost_1_68_0
 
+# Environment
+
+# ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
+ENV PYTHONPATH /usr/local/lib:${PYTHONPATH}
+
 # Labels
 
 ARG version
