@@ -29,6 +29,7 @@ RUN dnf update -y \
     nano \
     htop \
     tree \
+    which \
  && dnf clean all
 
 # Development Tools
@@ -47,22 +48,22 @@ RUN dnf install -y \
 
 RUN python3 -m pip install --user --upgrade setuptools wheel twine
 
-## CMake [3.12.0]
+## CMake [3.12.2]
 
-RUN mkdir /tmp/cmake \
- && cd /tmp/cmake \
- && wget --quiet https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz \
- && tar -xf cmake-3.12.0.tar.gz \
- && cd cmake-3.12.0 \
+RUN pushd /tmp > /dev/null \
+ && wget --quiet https://cmake.org/files/v3.12/cmake-3.12.2.tar.gz \
+ && tar -xf cmake-3.12.2.tar.gz \
+ && cd cmake-3.12.2 \
  && ./bootstrap \
  && make -j ${cpu_count} \
  && make install \
- && rm -rf /tmp/cmake
+ && popd > /dev/null \
+ && rm -rf /tmp/cmake-3.12.2 /tmp/cmake-3.12.2.tar.gz
 
-## GoogleTest [???]
+## GoogleTest [1.8.1]
 
 RUN pushd /tmp > /dev/null \
- && git clone https://github.com/google/googletest.git \
+ && git clone --branch release-1.8.1 --depth 1 https://github.com/google/googletest.git \
  && cd googletest \
  && mkdir build \
  && cd build \
@@ -73,6 +74,12 @@ RUN pushd /tmp > /dev/null \
  && rm -rf /tmp/googletest
 
 # Dependencies
+
+## Numpy
+
+RUN dnf update -y \
+ && dnf install -y python3-numpy \
+ && dnf clean all
 
 ## Boost [1.68.0]
 
@@ -85,7 +92,7 @@ RUN pushd /tmp > /dev/null \
  && ./b2 -j ${cpu_count} link=static cxxflags=-fPIC install \
  && ./b2 -j ${cpu_count} --with-python link=shared cxxflags=-fPIC install \
  && popd > /dev/null \
- && rm -rf /tmp/boost_1_68_0
+ && rm -rf /tmp/boost_1_68_0 /tmp/boost_1_68_0.tar.gz
 
 # Environment
 
