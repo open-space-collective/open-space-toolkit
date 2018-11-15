@@ -3,7 +3,7 @@
 # @project        Libraries
 # @file           tools/development/docker/Dockerfile
 # @author         Lucas Brémond <lucas@loftorbital.com>
-# @license        TBD
+# @license        Apache License 2.0
 
 ################################################################################################################################################################
 

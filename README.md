@@ -1,15 +1,14 @@
-# Open Space Collective :: Libraries
+# Open Space Collective ▸ Libraries
 
-*To be completed...*
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Warning
 
-**Names** and **licenses** are yet to be defined.
+**Names** are yet to be defined.
 
 Please check the following projects:
 
 - [Naming Project](https://github.com/orgs/open-space-collective/projects/1)
-- [Licensing Project](https://github.com/orgs/open-space-collective/projects/2)
 
 *⚠ Still under heavy development. Please do not use!*
 
@@ -300,4 +299,4 @@ Please read our [contributing guide](CONTRIBUTING.md) to learn about our develop
 
 ## License
 
-*To be defined...*
+Apache License 2.0
