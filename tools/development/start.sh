@@ -17,7 +17,7 @@ source "${script_directory}/../.env"
 
 # Build Docker image if it does not exist already
 
-if [[ "$(docker images -q ${image_name} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q ${image_name}:${image_version} 2> /dev/null)" == "" ]]; then
 
     pushd "${script_directory}/docker" > /dev/null
 
@@ -34,7 +34,7 @@ docker run \
 -it \
 --rm \
 --privileged \
-"${image_name}" \
+"${image_name}:${image_version}" \
 "/bin/bash"
 
 ################################################################################################################################################################

@@ -13,6 +13,6 @@ script_directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "${script_directory}/../../.env"
 
-docker push ${image_name}
+docker push ${image_name}:${image_version}
 
 ################################################################################################################################################################

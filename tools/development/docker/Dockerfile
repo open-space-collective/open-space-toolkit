@@ -11,10 +11,6 @@ FROM fedora:27
 
 LABEL maintainer="lucas@loftorbital.com"
 
-# Arguments
-
-ARG cpu_count=1
-
 # Aliases
 
 RUN alias ls='ls --color=auto' \
@@ -55,7 +51,7 @@ RUN pushd /tmp > /dev/null \
  && tar -xf cmake-3.12.2.tar.gz \
  && cd cmake-3.12.2 \
  && ./bootstrap \
- && make -j ${cpu_count} \
+ && make -j $(nproc) \
  && make install \
  && popd > /dev/null \
  && rm -rf /tmp/cmake-3.12.2 /tmp/cmake-3.12.2.tar.gz
@@ -68,7 +64,7 @@ RUN pushd /tmp > /dev/null \
  && mkdir build \
  && cd build \
  && cmake .. \
- && make -j ${cpu_count} \
+ && make -j $(nproc) \
  && make install \
  && popd > /dev/null \
  && rm -rf /tmp/googletest
@@ -89,8 +85,8 @@ RUN pushd /tmp > /dev/null \
  && cd boost_1_68_0 \
  && ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-version=3.6 --with-python-root=/usr/lib/python3.6 \
  && echo "using python : 3.6 : /usr : /usr/include/python3.6m ;" >> project-config.jam \
- && ./b2 -j ${cpu_count} link=static cxxflags=-fPIC install \
- && ./b2 -j ${cpu_count} --with-python link=shared cxxflags=-fPIC install \
+ && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
+ && ./b2 -j $(nproc) --with-python link=shared cxxflags=-fPIC install \
  && popd > /dev/null \
  && rm -rf /tmp/boost_1_68_0 /tmp/boost_1_68_0.tar.gz
 
@@ -101,11 +97,11 @@ ENV PYTHONPATH /usr/local/lib:${PYTHONPATH}
 
 # Labels
 
-ARG version
+ARG VERSION
 
-ENV version ${version}
+ENV VERSION ${VERSION}
 
-LABEL version="${version}"
+LABEL VERSION="${VERSION}"
 
 # Execution
 

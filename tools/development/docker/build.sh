@@ -18,9 +18,8 @@ source "${script_directory}/../../.env"
 # Build Docker image
 
 docker build \
---build-arg="version=${version}" \
---build-arg="cpu_count=${cpu_count}" \
---tag="${image_name}" \
+--build-arg="VERSION=${image_version}" \
+--tag="${image_name}:${image_version}" \
 --file="${script_directory}/Dockerfile" \
 "${script_directory}"
 
