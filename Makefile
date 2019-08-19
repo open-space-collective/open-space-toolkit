@@ -19,55 +19,48 @@ export docker_image_version := $(project_version)
 
 build-images: build-image-debian build-image-fedora
 
-build-image-debian:
+build-image-debian: linux := debian
+build-image-fedora: linux := fedora
+
+build-image-debian build-image-fedora: _build_image
+
+_build_image:
 
 	docker build \
-	--file="$(project_directory)/docker/debian/Dockerfile" \
-	--tag=$(docker_image_repository):$(docker_image_version)-debian \
-	--tag=$(docker_image_repository):latest-debian \
+	--file="$(project_directory)/docker/$(linux)/Dockerfile" \
+	--tag=$(docker_image_repository):$(docker_image_version)-$(linux) \
+	--tag=$(docker_image_repository):latest-$(linux) \
 	--build-arg="VERSION=$(docker_image_version)" \
-	"$(project_directory)/docker/debian"
-
-build-image-fedora:
-
-	docker build \
-	--file="$(project_directory)/docker/fedora/Dockerfile" \
-	--tag=$(docker_image_repository):$(docker_image_version)-fedora \
-	--tag=$(docker_image_repository):latest-fedora \
-	--build-arg="VERSION=$(docker_image_version)" \
-	"$(project_directory)/docker/fedora"
+	"$(project_directory)/docker/$(linux)"
 
 ######################################################################################################################################################
 
-run-image-debian: build-image-debian
+run-image-debian: linux := debian
+run-image-fedora: linux := fedora
+
+run-image-debian run-image-fedora: _run-image
+
+_run-image: _build_image
 
 	docker run \
 	-it \
 	--rm \
-	$(docker_image_repository):debian-$(docker_image_version) \
-	/bin/bash
-
-run-image-fedora: build-image-fedora
-
-	docker run \
-	-it \
-	--rm \
-	$(docker_image_repository):fedora-$(docker_image_version) \
+	$(docker_image_repository):$(docker_image_version)-$(linux) \
 	/bin/bash
 
 ######################################################################################################################################################
 
 deploy-images: deploy-image-debian deploy-image-debian
 
-deploy-image-debian: build-image-debian
+deploy-image-debian: linux := debian
+deploy-image-fedora: linux := fedora
 
-	docker push $(docker_image_repository):debian-$(docker_image_version)
-	docker push $(docker_image_repository):debian-latest
+deploy-image-debian deploy-image-fedora: _deploy-image
 
-deploy-image-fedora: build-image-fedora
+_deploy-image: _build-image
 
-	docker push $(docker_image_repository):fedora-$(docker_image_version)
-	docker push $(docker_image_repository):fedora-latest
+	docker push $(docker_image_repository):$(docker_image_version)-$(linux)
+	docker push $(docker_image_repository):latest-$(linux)
 
 ######################################################################################################################################################
 
