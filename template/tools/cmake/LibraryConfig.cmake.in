@@ -1,0 +1,29 @@
+################################################################################################################################################################
+
+# @project        Libraries
+# @file           tools/cmake/LibraryConfig.cmake.in
+# @author         Lucas Brémond <lucas.bremond@gmail.com>
+# @license        Apache License 2.0
+
+################################################################################################################################################################
+
+SET (Library_ROOT_DIR ${Library_ROOT_DIR} @CMAKE_INSTALL_PREFIX@)
+
+FIND_PATH (Library_INCLUDE_DIR "Library/Utilities.hpp" PATHS ${Library_ROOT_DIR} PATH_SUFFIXES "include" NO_DEFAULT_PATH)
+FIND_LIBRARY (Library_LIBRARY NAMES "liblibrary-.so" PATHS ${Library_ROOT_DIR} PATH_SUFFIXES "lib" NO_DEFAULT_PATH)
+
+# MESSAGE (STATUS "Library_ROOT_DIR = ${Library_ROOT_DIR}")
+# MESSAGE (STATUS "Library_INCLUDE_DIR = ${Library_INCLUDE_DIR}")
+# MESSAGE (STATUS "Library_LIBRARY = ${Library_LIBRARY}")
+# MESSAGE (STATUS "Library_FIND_VERSION = ${Library_FIND_VERSION}")
+
+IF (Library_INCLUDE_DIR)
+
+    SET (Library_INCLUDE_DIRS ${Library_INCLUDE_DIR} ${Library_INCLUDE_DIR}/Library/)
+    SET (Library_LIBRARIES ${Library_LIBRARY})
+
+    SET (Library_FOUND TRUE)
+
+ENDIF ()
+
+################################################################################################################################################################

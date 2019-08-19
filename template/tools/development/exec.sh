@@ -3,16 +3,23 @@
 ################################################################################################################################################################
 
 # @project        Libraries
-# @file           tools/development/docker/push.sh
-# @author         Lucas Brémond <lucas@loftorbital.com>
+# @file           tools/development/exec.sh
+# @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
 ################################################################################################################################################################
 
 script_directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "${script_directory}/../../.env"
+# Setup environment
 
-docker push ${image_name}:${image_version}
+source "${script_directory}/../.env"
+
+# Exec Docker container
+
+docker exec \
+-it \
+${container_name} \
+/bin/bash
 
 ################################################################################################################################################################
