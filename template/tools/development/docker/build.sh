@@ -4,7 +4,7 @@
 
 # @project        Libraries
 # @file           tools/development/docker/build.sh
-# @author         Lucas Brémond <lucas@loftorbital.com>
+# @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
 ################################################################################################################################################################
@@ -22,5 +22,9 @@ docker build \
 --tag="${image_name}:${image_version}" \
 --file="${script_directory}/Dockerfile" \
 "${script_directory}"
+
+# Tag Docker image
+
+docker tag "${image_name}:${image_version}" "${image_name}:latest"
 
 ################################################################################################################################################################

@@ -3,28 +3,29 @@
 ################################################################################################################################################################
 
 # @project        Libraries
-# @file           tools/.env
-# @author         Lucas Brémond <lucas@loftorbital.com>
+# @file           tools/development/helpers/build.sh
+# @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
 ################################################################################################################################################################
 
-# Project
+project_directory="$(git rev-parse --show-toplevel)"
+build_directory="${project_directory}/build"
 
-project_name="library-base"
-project_directory=$(git rev-parse --show-toplevel)
+pushd "${build_directory}" > /dev/null
 
-## Version
+if [[ ! -z $1 ]] && [[ $1 == "--debug" ]]; then
 
-version=$(git describe --tags 2>/dev/null || head -n 4096 /dev/urandom | shasum | cut -d' ' -f1)
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
 
-## Image
+else
 
-registry_name="openspacecollective"
+    cmake ..
 
-image_name="${registry_name}/${project_name}"
-image_version="0.1.7"
+fi
 
-container_name="${registry_name}-${project_name}"
+make -j $(nproc)
+
+popd > /dev/null
 
 ################################################################################################################################################################
