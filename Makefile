@@ -17,7 +17,10 @@ export docker_image_version := $(project_version)
 
 ######################################################################################################################################################
 
-build-images: build-image-debian build-image-fedora
+build-images:
+
+	make build-image-debian
+	make build-image-fedora
 
 build-image-debian: linux := debian
 build-image-fedora: linux := fedora
@@ -50,7 +53,10 @@ _run-image: _build_image
 
 ######################################################################################################################################################
 
-deploy-images: deploy-image-debian deploy-image-debian
+deploy-images:
+
+	make deploy-image-debian
+	make deploy-image-debian
 
 deploy-image-debian: linux := debian
 deploy-image-fedora: linux := fedora
