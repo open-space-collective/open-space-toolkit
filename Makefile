@@ -8,7 +8,7 @@
 ######################################################################################################################################################
 
 export project_name := library-base
-export project_version := 0.1.8
+export project_version := $(shell git describe --tags --always)
 export project_directory := $(shell git rev-parse --show-toplevel)
 
 export docker_registry_path := openspacecollective
@@ -25,9 +25,9 @@ build-images:
 build-image-debian: linux := debian
 build-image-fedora: linux := fedora
 
-build-image-debian build-image-fedora: _build_image
+build-image-debian build-image-fedora: _build-image
 
-_build_image:
+_build-image:
 
 	docker build \
 	--file="$(project_directory)/docker/$(linux)/Dockerfile" \
@@ -43,7 +43,7 @@ run-image-fedora: linux := fedora
 
 run-image-debian run-image-fedora: _run-image
 
-_run-image: _build_image
+_run-image: _build-image
 
 	docker run \
 	-it \
@@ -56,7 +56,7 @@ _run-image: _build_image
 deploy-images:
 
 	make deploy-image-debian
-	make deploy-image-debian
+	make deploy-image-fedora
 
 deploy-image-debian: linux := debian
 deploy-image-fedora: linux := fedora
