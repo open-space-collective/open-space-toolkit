@@ -21,6 +21,7 @@ RUN alias ls='ls --color=auto' \
 RUN apt update -y \
  && apt install -y \
     git \
+    curl \
     wget \
     nano \
     htop \

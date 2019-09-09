@@ -21,6 +21,7 @@ RUN alias ls='ls --color=auto' \
 RUN dnf update -y \
  && dnf install -y 'dnf-command(config-manager)' \
  && dnf install -y \
+    curl \
     wget \
     nano \
     htop \
