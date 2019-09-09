@@ -37,7 +37,7 @@ RUN dnf update -y \
     rpm-build \
     ncurses ncurses-devel \
  && dnf group install -y "Development Tools" \
- && dnf install -y gcc-c++ gdb lcov \
+ && dnf install -y gcc-c++ gdb lcov doxygen \
  && dnf clean all
 
 ## Python [3.6, 3.7]

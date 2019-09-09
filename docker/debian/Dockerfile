@@ -32,7 +32,7 @@ RUN apt update -y \
 ## GCC / GDB / lcov
 
 RUN apt update -y \
- && apt install -y gcc gdb lcov \
+ && apt install -y gcc gdb lcov doxygen \
  && apt clean all
 
 ## Python [3.7]
