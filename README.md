@@ -26,7 +26,7 @@
 
 ## Use Cases
 
-Check out some use-cases [here](./docs/Use\ Cases.md)!
+Check out some use-cases [here](./docs/Use%20Cases.md)!
 
 ## FAQ
 
