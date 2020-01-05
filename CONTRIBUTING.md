@@ -1,4 +1,4 @@
-# Open Space Collective :: Contributing
+# Open Space Collective ▸ Contributing
 
 *To be completed...*
 

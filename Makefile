@@ -1,13 +1,13 @@
 ######################################################################################################################################################
 
-# @project        Libraries
+# @project        Open Space Toolkit
 # @file           Makefile
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
 ######################################################################################################################################################
 
-export project_name := library-base
+export project_name := open-space-toolkit-base
 export project_version := $(shell git describe --tags --always)
 export project_directory := $(shell git rev-parse --show-toplevel)
 
@@ -19,8 +19,8 @@ export docker_image_version := $(project_version)
 
 build-images:
 
-	make build-image-debian
-	make build-image-fedora
+	@ make build-image-debian
+	@ make build-image-fedora
 
 build-image-debian: linux := debian
 build-image-fedora: linux := fedora
@@ -55,8 +55,8 @@ _run-image: _build-image
 
 deploy-images:
 
-	make deploy-image-debian
-	make deploy-image-fedora
+	@ make deploy-image-debian
+	@ make deploy-image-fedora
 
 deploy-image-debian: linux := debian
 deploy-image-fedora: linux := fedora

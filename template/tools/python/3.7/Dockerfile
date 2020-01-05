@@ -1,6 +1,6 @@
 ################################################################################################################################################################
 
-# @project        Libraries
+# @project        Open Space Toolkit
 # @file           tools/testing/python/3.7/Dockerfile
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0

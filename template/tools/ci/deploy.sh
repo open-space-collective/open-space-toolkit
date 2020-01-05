@@ -2,7 +2,7 @@
 
 ################################################################################################################################################################
 
-# @project        Libraries
+# @project        Open Space Toolkit
 # @file           tools/ci/deploy.sh
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0

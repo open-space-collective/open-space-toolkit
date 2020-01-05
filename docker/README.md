@@ -1,4 +1,4 @@
-# Open Space Collective ▸ Libraries ▸ Docker
+# Open Space Collective ▸ Open Space Toolkit ▸ Docker
 
 Base images used for development and deployment.
 
