@@ -1,6 +1,6 @@
 ################################################################################################################################################################
 
-# @project        Libraries
+# @project        Open Space Toolkit
 # @file           docs/CMakeLists.txt
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0

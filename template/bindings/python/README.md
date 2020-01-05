@@ -1,4 +1,4 @@
-Libraries ▸ Bindings ▸ Python
+Open Space Toolkit ▸ Bindings ▸ Python
 ==================================
 
 Test!

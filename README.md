@@ -1,30 +1,24 @@
-# Open Space Collective ▸ Libraries
+# Open Space Toolkit
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Warning
 
-**Names** are yet to be defined.
-
-Please check the following projects:
-
-- [Naming Project](https://github.com/orgs/open-space-collective/projects/1)
-
-*⚠ Still under heavy development. Please do not use!*
+*⚠ Still under development.*
 
 ## Rationale
 
 *To be completed...*
 
-## Libraries
+## Components
 
-| Name          | Description                                                   | Link                                                                                    |
-| ------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Core          | Fundamental types, containers and utilities.                  | [library-core](https://github.com/open-space-collective/library-core)                   |
-| I/O           | Addressing, networking, database connectors.                  | [library-io](https://github.com/open-space-collective/library-io)                       |
-| Mathematics   | Geometry, curve fitting, optimization.                        | [library-mathematics](https://github.com/open-space-collective/library-mathematics)     |
-| Physics       | Physical units, time, reference frames, environment modeling. | [library-physics](https://github.com/open-space-collective/library-physics)             |
-| Astrodynamics | Orbit, attitude, access.                                      | [library-astrodynamics](https://github.com/open-space-collective/library-astrodynamics) |
+| Name          | Description                                                   | Link                                                                                                          |
+| ------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Core          | Fundamental types, containers and utilities.                  | [open-space-toolkit-core](https://github.com/open-space-collective/open-space-toolkit-core)                   |
+| I/O           | Addressing, networking, database connectors.                  | [open-space-toolkit-io](https://github.com/open-space-collective/open-space-toolkit-io)                       |
+| Mathematics   | Geometry, curve fitting, optimization.                        | [open-space-toolkit-mathematics](https://github.com/open-space-collective/open-space-toolkit-mathematics)     |
+| Physics       | Physical units, time, reference frames, environment modeling. | [open-space-toolkit-physics](https://github.com/open-space-collective/open-space-toolkit-physics)             |
+| Astrodynamics | Orbit, attitude, access.                                      | [open-space-toolkit-astrodynamics](https://github.com/open-space-collective/open-space-toolkit-astrodynamics) |
 
 ## Examples
 
@@ -75,7 +69,7 @@ will return an `output.json` file as:
 }
 ```
 
-### Unit conversion
+### Unit Conversion
 
 Instead of using real numbers, units can be used to store physical values.
 
@@ -104,7 +98,7 @@ angle.getIn(Angle::Unit::ArcSecond) ;
 // Also available for Mass, Time, Volume, Density, ...
 ```
 
-### Environment modeling
+### Environment Modeling
 
 ```cpp
 // Setup environment model
@@ -149,7 +143,7 @@ Ray satelliteToSunRay(satellitePosition_ECI, satelliteToSunDirection_ECI) ; // R
 bool isSatelliteInEclipse = environment.isRayIntersectingAnyObject(satelliteToSunRay, { sun }) ; // Any object, except the Sun itself
 ```
 
-### Orbit and access computation
+### Orbit and Access Computation
 
 ```cpp
 // Setup TLE file
@@ -195,7 +189,7 @@ for (const auto& access : accessArray)
 }
 ```
 
-### Orbital state filtering
+### Orbital State Filtering
 
 ```cpp
 // Generate orbit using SGP4
@@ -217,7 +211,7 @@ for (const auto& state : satelliteOrbit.getFilteredStates(stateFilter))
 }
 ```
 
-### Sensor modeling
+### Sensor Modeling
 
 ```cpp
 // Setup an environment model
@@ -253,7 +247,7 @@ Intersection sensorIntersectionWithEarth_ECEF = earthEllipsoid_ECEF.getIntersect
 
 if (sensorIntersectionWithEarth_ECEF.isDefined()) // If sensor field of view is intersecting Earth
 {
-    
+
     // Convert intersection into area
 
     Area sensorIntersectionArea = Area::Empty() ;

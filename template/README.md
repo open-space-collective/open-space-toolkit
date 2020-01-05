@@ -1,6 +1,6 @@
-# Open Space Collective ▸ Libraries ▸ Template
+# Open Space Toolkit ▸ Template
 
-Project template for the various Open Space Collective libraries.
+Project template for the various Open Space Toolkit components.
 
 ## License
 
