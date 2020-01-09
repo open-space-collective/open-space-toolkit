@@ -15,7 +15,7 @@ The Open Space Toolkit (**OSTk**) is a collection of generic libraries for aeros
 
 Want to quickly get started? It's pretty simple.
 
-Install [Docker](https://www.docker.com/) and try this:
+Install [Docker](**https**://www.docker.com/) and try this:
 
 ```bash
 docker run -it openspacecollective/open-space-toolkit-astrodynamics-python
@@ -56,13 +56,13 @@ As a result, when running OSTk for the first time, it may take a minute to fetch
 
 ## Components
 
-| Name          | Description                                                   | Link                                                                                                          |
-| ------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Core          | Fundamental types, containers and utilities.                  | [open-space-toolkit-core](https://github.com/open-space-collective/open-space-toolkit-core)                   |
-| I/O           | Addressing, networking, database connectors.                  | [open-space-toolkit-io](https://github.com/open-space-collective/open-space-toolkit-io)                       |
-| Mathematics   | Geometry, curve fitting, optimization.                        | [open-space-toolkit-mathematics](https://github.com/open-space-collective/open-space-toolkit-mathematics)     |
-| Physics       | Physical units, time, reference frames, environment modeling. | [open-space-toolkit-physics](https://github.com/open-space-collective/open-space-toolkit-physics)             |
-| Astrodynamics | Orbit, attitude, access.                                      | [open-space-toolkit-astrodynamics](https://github.com/open-space-collective/open-space-toolkit-astrodynamics) |
+| Name                                                                                       | Description                                                   | Version                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Core](https://github.com/open-space-collective/open-space-toolkit-core)                   | Fundamental types, containers and utilities.                  | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-core.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-core)                   |
+| [I/O](https://github.com/open-space-collective/open-space-toolkit-io)                      | Addressing, networking, database connectors.                  | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-io.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-io)                       |
+| [Mathematics](https://github.com/open-space-collective/open-space-toolkit-mathematics)     | Geometry, curve fitting, optimization.                        | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-mathematics.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-mathematics)     |
+| [Physics](https://github.com/open-space-collective/open-space-toolkit-physics)             | Physical units, time, reference frames, environment modeling. | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-physics.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-physics)             |
+| [Astrodynamics](https://github.com/open-space-collective/open-space-toolkit-astrodynamics) | Orbit, attitude, access.                                      | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-astrodynamics.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-astrodynamics) |
 
 ## Use Cases
 
