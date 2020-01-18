@@ -3,10 +3,10 @@
 [![Gitter](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/open-space-collective/community)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-The Open Space Toolkit (**OSTk**) is a collection of generic libraries for aerospace engineering use, available in:
+The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aerospace engineering use, available in:
 
-- C++ – the reference implementation, for portability and performance.
-- Python – via C++ bindings, formidable for interactive use and prototyping.
+- **C++** – the reference implementation, for portability and performance.
+- **Python** – via C++ bindings, formidable for interactive use and prototyping.
 
 ## Warning
 
@@ -37,7 +37,7 @@ Want to get started? This is the simplest and quickest way:
 | [Physics](https://github.com/open-space-collective/open-space-toolkit-physics)             | Physical units, time, reference frames, environment modeling. | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-physics.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-physics)             |
 | [Astrodynamics](https://github.com/open-space-collective/open-space-toolkit-astrodynamics) | Orbit, attitude, access.                                      | [![GitHub version](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-astrodynamics.svg)](https://badge.fury.io/gh/open-space-collective%2Fopen-space-toolkit-astrodynamics) |
 
-## Documentation
+## Support
 
 - [Use Cases](./docs/Use%20Cases.md)
 - [Frequently Asked Questions](./docs/FAQ.md)
