@@ -54,14 +54,17 @@ _run-image: _build-image
 	$(docker_image_repository):$(docker_image_version)-$(linux) \
 	/bin/bash
 
+pull-jupyter:
+
+	docker pull $(jupyter_image)
+
 run-jupyter:
 
 	docker run \
 		--publish=$(jupyter_port):8888 \
 		--volume=$(project_directory)/notebooks:/notebooks \
 		--workdir=/notebooks \
-		$(jupyter_image) \
-		/bin/bash -c "start-notebook.sh --NotebookApp.token=''"
+		$(jupyter_image)
 
 ######################################################################################################################################################
 
@@ -83,7 +86,8 @@ _deploy-image: _build-image
 ######################################################################################################################################################
 
 .PHONY: build-images build-image-debian build-image-fedora \
-		run-image-debian run-image-fedora run-jupyter \
+		run-image-debian run-image-fedora \
+		pull-jupyter run-jupyter \
 		deploy-images deploy-image-debian deploy-image-fedora
 
 ######################################################################################################################################################
