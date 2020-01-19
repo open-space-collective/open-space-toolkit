@@ -15,6 +15,9 @@ export docker_registry_path := openspacecollective
 export docker_image_repository := $(docker_registry_path)/$(project_name)
 export docker_image_version := $(project_version)
 
+export jupyter_image := openspacecollective/open-space-toolkit-astrodynamics-jupyter:latest
+export jupyter_port := 8888
+
 ######################################################################################################################################################
 
 build-images:
@@ -51,6 +54,15 @@ _run-image: _build-image
 	$(docker_image_repository):$(docker_image_version)-$(linux) \
 	/bin/bash
 
+run-jupyter:
+
+	docker run \
+		--publish=$(jupyter_port):8888 \
+		--volume=$(project_directory)/notebooks:/notebooks \
+		--workdir=/notebooks \
+		$(jupyter_image) \
+		/bin/bash -c "start-notebook.sh --NotebookApp.token=''"
+
 ######################################################################################################################################################
 
 deploy-images:
@@ -71,7 +83,7 @@ _deploy-image: _build-image
 ######################################################################################################################################################
 
 .PHONY: build-images build-image-debian build-image-fedora \
-		run-image-debian run-image-fedora \
+		run-image-debian run-image-fedora run-jupyter \
 		deploy-images deploy-image-debian deploy-image-fedora
 
 ######################################################################################################################################################
