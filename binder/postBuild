@@ -1,0 +1,39 @@
+#!/bin/bash
+
+################################################################################################################################################################
+
+# @project        Open Space Toolkit
+# @file           binder/postBuild
+# @author         Lucas Brémond <lucas@loftorbital.com>
+# @license        Apache License 2.0
+
+################################################################################################################################################################
+
+# Install Jupyter widgets extension
+
+jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
+
+# Install Matplotlib for JupyterLab
+
+jupyter labextension install jupyter-matplotlib --no-build
+
+# Install Plotly for JupyterLab
+
+## FigureWidget support
+
+jupyter labextension install plotlywidget --no-build
+
+## JupyterLab renderer support
+
+jupyter labextension install jupyterlab-plotly --no-build
+
+## Build extensions (must be done to activate extensions since --no-build is used above)
+
+jupyter lab build
+
+# Install Open Space Toolkit default datasets
+
+mkdir -p /home/jovyan/open-space-toolkit/physics
+gsutil -m cp -r gs://open-space-toolkit/physics /home/jovyan/open-space-toolkit/
+
+################################################################################################################################################################

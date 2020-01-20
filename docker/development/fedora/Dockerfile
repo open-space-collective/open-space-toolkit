@@ -1,7 +1,7 @@
 ################################################################################################################################################################
 
 # @project        Open Space Toolkit
-# @file           docker/fedora/Dockerfile
+# @file           docker/development/fedora/Dockerfile
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 

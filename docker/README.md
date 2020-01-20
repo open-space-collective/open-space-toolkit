@@ -2,6 +2,10 @@
 
 Base images used for development and deployment.
 
+## Images
+
+### Development
+
 These images contain the following tools/libraries pre-installed:
 
 - GCC
@@ -11,6 +15,10 @@ These images contain the following tools/libraries pre-installed:
 - CMake
 - GoogleTest
 - Boost
+
+### Jupyter
+
+JupyterLab image with pre-installed OSTk libraries.
 
 ## License
 
