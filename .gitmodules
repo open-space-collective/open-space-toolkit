@@ -1,15 +1,15 @@
 [submodule "core"]
 	path = components/core
-	url = git@github.com:open-space-collective/open-space-toolkit-core.git
+	url = https://github.com/open-space-collective/open-space-toolkit-core.git
 [submodule "components/io"]
 	path = components/io
-	url = git@github.com:open-space-collective/open-space-toolkit-io.git
+	url = https://github.com/open-space-collective/open-space-toolkit-io.git
 [submodule "components/mathematics"]
 	path = components/mathematics
-	url = git@github.com:open-space-collective/open-space-toolkit-mathematics.git
+	url = https://github.com/open-space-collective/open-space-toolkit-mathematics.git
 [submodule "components/physics"]
 	path = components/physics
-	url = git@github.com:open-space-collective/open-space-toolkit-physics.git
+	url = https://github.com/open-space-collective/open-space-toolkit-physics.git
 [submodule "components/astrodynamics"]
 	path = components/astrodynamics
-	url = git@github.com:open-space-collective/open-space-toolkit-astrodynamics.git
+	url = https://github.com/open-space-collective/open-space-toolkit-astrodynamics.git
