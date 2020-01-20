@@ -8,6 +8,8 @@ The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aer
 - **C++** – the reference implementation, for portability and performance.
 - **Python** – via C++ bindings, formidable for interactive use and prototyping.
 
+![Animation](./assets/animation.gif)
+
 ## Warning
 
 *⚠️ Still under development.*
