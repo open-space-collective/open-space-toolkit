@@ -1,0 +1,72 @@
+{
+
+    "editmenu:clear-all":
+    {
+        "command": "editmenu:clear-all",
+        "keys":
+        [
+            "Ctrl Shift Delete"
+        ],
+        "selector": "[data-jp-undoer]",
+        "title": "Clear All",
+        "category": "Editing"
+    },
+
+    "kernelmenu:restart-and-clear":
+    {
+        "command": "kernelmenu:restart-and-clear",
+        "keys":
+        [
+            "1",
+            "1"
+        ],
+        "selector": "[data-jp-kernel-user]:focus",
+        "title": "Restart Kernel and Clear",
+        "category": "Kernel Operations"
+    },
+
+    "notebook:run-all-above":
+    {
+        "command": "notebook:run-all-above",
+        "keys":
+        [
+            "Ctrl Alt Enter"
+        ],
+        "selector": "[data-jp-undoer]",
+        "title": "Clear All",
+        "category": "Editing"
+    },
+
+    "notebook:run-all-below":
+    {
+        "command": "notebook:run-all-below",
+        "keys":
+        [
+            "Ctrl Shift Enter"
+        ],
+        "selector": "[data-jp-undoer]",
+        "title": "Clear All",
+        "category": "Editing"
+    },
+
+    "notebook:move-cell-up":
+    {
+        "selector": ".jp-Notebook:focus",
+        "command": "notebook:move-cell-up",
+        "keys":
+        [
+            "Ctrl ArrowUp"
+        ]
+    },
+
+    "notebook:move-cell-down":
+    {
+        "selector": ".jp-Notebook:focus",
+        "command": "notebook:move-cell-down",
+        "keys":
+        [
+            "Ctrl ArrowDown"
+        ]
+    }
+
+}

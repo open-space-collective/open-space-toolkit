@@ -1,7 +1,7 @@
 ################################################################################################################################################################
 
 # @project        Open Space Toolkit
-# @file           docker/debian/Dockerfile
+# @file           docker/development/debian/Dockerfile
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
