@@ -10,10 +10,6 @@ The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aer
 
 ![Animation](./assets/animation.gif)
 
-## Warning
-
-*⚠️ Still under development.*
-
 ## Getting Started
 
 Want to get started? This is the simplest and quickest way:
