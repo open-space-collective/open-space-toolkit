@@ -18,13 +18,6 @@ Want to get started? This is the simplest and quickest way:
 
 *This will automatically start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment in your web browser with Open Space Toolkit libraries and example notebooks ready to use. Nothing to download or install! 🚀*
 
-## Rationale
-
-![./docs/presentation/Slide2.png](./docs/presentation/Slide2.png)
-![./docs/presentation/Slide3.png](./docs/presentation/Slide3.png)
-![./docs/presentation/Slide5.png](./docs/presentation/Slide5.png)
-![./docs/presentation/Slide6.png](./docs/presentation/Slide6.png)
-
 ## Components
 
 | Name                                                                                       | Description                                                   | Version                                                                                                                                                                                      |
@@ -49,7 +42,7 @@ Please read our [contributing guide](CONTRIBUTING.md) to learn about our develop
 
 ## Special Thanks
 
-*To be completed...*
+[![Loft Orbital](./assets/thanks/loft_orbital.png)](https://www.loftorbital.com/)
 
 ## License
 

@@ -33,11 +33,11 @@ build-image-debian build-image-fedora: _build-image
 _build-image:
 
 	docker build \
-	--file="$(project_directory)/docker/$(linux)/Dockerfile" \
-	--tag=$(docker_image_repository):$(docker_image_version)-$(linux) \
-	--tag=$(docker_image_repository):latest-$(linux) \
-	--build-arg="VERSION=$(docker_image_version)" \
-	"$(project_directory)/docker/$(linux)"
+		--file="$(project_directory)/docker/development/$(linux)/Dockerfile" \
+		--tag=$(docker_image_repository):$(docker_image_version)-$(linux) \
+		--tag=$(docker_image_repository):latest-$(linux) \
+		--build-arg="VERSION=$(docker_image_version)" \
+		"$(project_directory)/docker/development/$(linux)"
 
 ######################################################################################################################################################
 
@@ -49,10 +49,10 @@ run-image-debian run-image-fedora: _run-image
 _run-image: _build-image
 
 	docker run \
-	-it \
-	--rm \
-	$(docker_image_repository):$(docker_image_version)-$(linux) \
-	/bin/bash
+		-it \
+		--rm \
+		$(docker_image_repository):$(docker_image_version)-$(linux) \
+		/bin/bash
 
 pull-jupyter:
 
@@ -62,7 +62,7 @@ run-jupyter:
 
 	docker run \
 		--publish=$(jupyter_port):8888 \
-		--volume=$(project_directory)/notebooks:/notebooks \
+		--volume="$(project_directory)/notebooks:/notebooks" \
 		--workdir=/notebooks \
 		$(jupyter_image)
 
