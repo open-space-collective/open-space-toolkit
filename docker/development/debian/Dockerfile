@@ -33,7 +33,7 @@ RUN apt-get update -y \
 
 # Development Tools
 
-## GCC / GDB / lcov
+## GCC / GDB / lcov / doxygen
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -50,9 +50,11 @@ RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
     python3-dev \
     python3-numpy \
+    python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --user --upgrade setuptools wheel twine pytest
+RUN python3 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest
 
 ## CMake [3.18.4]
 
@@ -91,11 +93,13 @@ RUN cd /tmp \
  && ./b2 -j $(nproc) python=3.8 link=shared cxxflags=-fPIC install \
  && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
 
-## pybind11
+## Pybind11 [2.6.2-1]
 
-RUN apt-get update -y \
- && apt-get install -y --no-install-recommends pybind11-dev \
- && rm -rf /var/lib/apt/lists/*
+RUN mkdir /tmp/pybind11 \
+ && cd /tmp/pybind11 \
+ && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_2.6.2-1_all.deb \
+ && apt-get install -y ./pybind11-dev_2.6.2-1_all.deb \
+ && rm -rf /tmp/pybind11
 
 # Environment
 
