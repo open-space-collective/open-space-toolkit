@@ -7,7 +7,7 @@
 
 ################################################################################################################################################################
 
-FROM fedora:30
+FROM fedora:32
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -27,11 +27,12 @@ RUN dnf update -y \
     htop \
     tree \
     which \
+    openssl-devel \
  && dnf clean all
 
 # Development Tools
 
-## GCC / GDB / lcov
+## GCC / GDB / lcov / doxygen
 
 RUN dnf update -y \
  && dnf install -y \
@@ -41,31 +42,37 @@ RUN dnf update -y \
  && dnf install -y gcc-c++ gdb lcov doxygen \
  && dnf clean all
 
-## Python [3.6, 3.7]
+## Python [3.7, 3.8]
 
 RUN dnf update -y \
  && dnf install -y \
-    python36 python37 python3-devel python3-numpy \
+    python37 \
+    python38 \
+    python3-devel \
+    python3-numpy \
+    python3-pip \
  && dnf clean all
 
-RUN python3 -m pip install --user --upgrade setuptools wheel twine
+RUN python3 -m pip install --user --upgrade setuptools wheel twine pip \
+ && python3.7 -m ensurepip --default-pip \
+ && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest
 
-## CMake [3.15.2]
+## CMake [3.18.4]
 
 RUN pushd /tmp > /dev/null \
- && wget --quiet https://cmake.org/files/v3.15/cmake-3.15.2.tar.gz \
- && tar -xf cmake-3.15.2.tar.gz \
- && cd cmake-3.15.2 \
+ && wget --quiet https://cmake.org/files/v3.18/cmake-3.18.4.tar.gz \
+ && tar -xf cmake-3.18.4.tar.gz \
+ && cd cmake-3.18.4 \
  && ./bootstrap \
  && make -j $(nproc) \
  && make install \
  && popd > /dev/null \
- && rm -rf /tmp/cmake-3.15.2 /tmp/cmake-3.15.2.tar.gz
+ && rm -rf /tmp/cmake-3.18.4 /tmp/cmake-3.18.4.tar.gz
 
-## GoogleTest [1.8.1]
+## GoogleTest [1.10.0]
 
 RUN pushd /tmp > /dev/null \
- && git clone --branch release-1.8.1 --depth 1 https://github.com/google/googletest.git \
+ && git clone --branch release-1.10.0 --depth 1 https://github.com/google/googletest.git \
  && cd googletest \
  && mkdir build \
  && cd build \
@@ -84,12 +91,21 @@ RUN pushd /tmp > /dev/null \
  && tar -xf boost_1_69_0.tar.gz \
  && cd boost_1_69_0 \
  && ./bootstrap.sh \
- && echo "using python : 3.6 : /usr : /usr/include/python3.6m ;" >> project-config.jam \
  && echo "using python : 3.7 : /usr : /usr/include/python3.7m ;" >> project-config.jam \
+ && echo "using python : 3.8 : /usr : /usr/include/python3.8 ;" >> project-config.jam \
  && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
- && ./b2 -j $(nproc) python=3.6,3.7 link=shared cxxflags=-fPIC install \
+ && ./b2 -j $(nproc) python=3.7,3.8 link=shared cxxflags=-fPIC install \
  && popd > /dev/null \
  && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
+
+## Pybind11 [2.6.1-1]
+
+RUN mkdir /tmp/pybind11 \
+ && cd /tmp/pybind11 \
+ && wget https://kojipkgs.fedoraproject.org//packages/pybind11/2.6.1/1.fc32/x86_64/pybind11-devel-2.6.1-1.fc32.x86_64.rpm \
+ && dnf install -y ./pybind11-devel-2.6.1-1.fc32.x86_64.rpm \
+ && rm -rf /tmp/pybind11 \
+ && dnf clean all
 
 # Environment
 

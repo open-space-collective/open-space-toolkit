@@ -20,61 +20,61 @@ export jupyter_port := 8888
 
 ######################################################################################################################################################
 
-build-images:
+build-images: ## Build images
 
 	@ make build-image-debian
 	@ make build-image-fedora
 
-build-image-debian: linux := debian
-build-image-fedora: linux := fedora
+build-image-debian: linux := debian ## Build image debian
+build-image-fedora: linux := fedora ## Build image fedora
 
 build-image-debian build-image-fedora: _build-image
 
 _build-image:
 
 	docker build \
-	--file="$(project_directory)/docker/$(linux)/Dockerfile" \
-	--tag=$(docker_image_repository):$(docker_image_version)-$(linux) \
-	--tag=$(docker_image_repository):latest-$(linux) \
-	--build-arg="VERSION=$(docker_image_version)" \
-	"$(project_directory)/docker/$(linux)"
+		--file="$(project_directory)/docker/development/$(linux)/Dockerfile" \
+		--tag=$(docker_image_repository):$(docker_image_version)-$(linux) \
+		--tag=$(docker_image_repository):latest-$(linux) \
+		--build-arg="VERSION=$(docker_image_version)" \
+		"$(project_directory)/docker/development/$(linux)"
 
 ######################################################################################################################################################
 
-run-image-debian: linux := debian
-run-image-fedora: linux := fedora
+run-image-debian: linux := debian ## Run image debian
+run-image-fedora: linux := fedora ## Run image fedora
 
 run-image-debian run-image-fedora: _run-image
 
 _run-image: _build-image
 
 	docker run \
-	-it \
-	--rm \
-	$(docker_image_repository):$(docker_image_version)-$(linux) \
-	/bin/bash
+		-it \
+		--rm \
+		$(docker_image_repository):$(docker_image_version)-$(linux) \
+		/bin/bash
 
-pull-jupyter:
+pull-jupyter: ## Pull jupyter image
 
 	docker pull $(jupyter_image)
 
-run-jupyter:
+run-jupyter: ## Run jupyter
 
 	docker run \
 		--publish=$(jupyter_port):8888 \
-		--volume=$(project_directory)/notebooks:/notebooks \
+		--volume="$(project_directory)/notebooks:/notebooks" \
 		--workdir=/notebooks \
 		$(jupyter_image)
 
 ######################################################################################################################################################
 
-deploy-images:
+deploy-images: ## Deploy images
 
 	@ make deploy-image-debian
 	@ make deploy-image-fedora
 
-deploy-image-debian: linux := debian
-deploy-image-fedora: linux := fedora
+deploy-image-debian: linux := debian ## Deploy image debian
+deploy-image-fedora: linux := fedora ## Deploy image fedora
 
 deploy-image-debian deploy-image-fedora: _deploy-image
 
@@ -91,3 +91,11 @@ _deploy-image: _build-image
 		deploy-images deploy-image-debian deploy-image-fedora
 
 ######################################################################################################################################################
+
+help:
+
+	@grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.DEFAULT_GOAL := help
+
+################################################################################################################################################################
