@@ -39,8 +39,8 @@ COPY ./shortcuts-extension /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/s
 
 RUN chown -R ${NB_UID}:${NB_UID} /home/jovyan/.jupyter
 
-ENV LD_LIBRARY_PATH "/usr/local/lib:/usr/lib/x86_64-linux-gnu:/opt/conda/lib/python3.7/site-packages:/home/jovyan/lib:/opt/conda/lib"
-ENV PYTHONPATH "/opt/conda/lib/python3.7/site-packages:/home/jovyan/lib"
+ENV LD_LIBRARY_PATH "/usr/local/lib:/usr/lib/x86_64-linux-gnu:/opt/conda/lib/python3.8/site-packages:/home/jovyan/lib:/opt/conda/lib"
+ENV PYTHONPATH "/opt/conda/lib/python3.8/site-packages:/home/jovyan/lib"
 
 # Install Open Space Toolkit
 

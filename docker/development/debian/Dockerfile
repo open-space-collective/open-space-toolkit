@@ -26,7 +26,6 @@ RUN apt-get update -y \
     nano \
     htop \
     tree \
-    wget \
     make \
     libssl-dev \
  && rm -rf /var/lib/apt/lists/*
@@ -44,7 +43,56 @@ RUN apt-get update -y \
     doxygen \
  && rm -rf /var/lib/apt/lists/*
 
-## Python [3.8]
+## Python installing dependencies
+
+RUN apt-get update -y \
+ && apt-get install -y --no-install-recommends \
+    build-essential \
+    libreadline-gplv2-dev \
+    libncursesw5-dev \
+    libsqlite3-dev \
+    tk-dev \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev \
+    libffi-dev \
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+## Python [3.6.12]
+
+RUN mkdir -p /tmp/py36 \
+ && cd /tmp/py36 \
+ && wget --quiet https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz \
+ && tar -xzf Python-3.6.12.tgz \
+ && cd Python-3.6.12 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py36
+
+## Python [3.9.2]
+
+RUN mkdir -p /tmp/py39 \
+ && cd /tmp/py39 \
+ && wget --quiet https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz \
+ && tar -xzf Python-3.9.2.tgz \
+ && cd Python-3.9.2 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py39
+
+## Python [3.10.0a6]
+
+RUN mkdir -p /tmp/py310 \
+ && cd /tmp/py310 \
+ && wget --quiet https://www.python.org/ftp/python/3.10.0/Python-3.10.0a6.tgz \
+ && tar -xzf Python-3.10.0a6.tgz \
+ && cd Python-3.10.0a6 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py310
+
+## Python tools
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
@@ -53,8 +101,16 @@ RUN apt-get update -y \
     python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest
+RUN python3.6 -m pip install --upgrade pip \
+ && python3.7 -m pip install --upgrade pip \
+ && python3.8 -m pip install --upgrade pip \
+ && python3.9 -m pip install --upgrade pip \
+ && python3.10 -m pip install --upgrade pip \
+ && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
+ && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest
 
 ## CMake [3.18.4]
 

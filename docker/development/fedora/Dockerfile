@@ -42,20 +42,32 @@ RUN dnf update -y \
  && dnf install -y gcc-c++ gdb lcov doxygen \
  && dnf clean all
 
-## Python [3.7, 3.8]
+## Python [3.6, 3.7, 3.8, 3.9]
 
 RUN dnf update -y \
  && dnf install -y \
+    python36 \
     python37 \
     python38 \
+    python39 \
     python3-devel \
     python3-numpy \
     python3-pip \
  && dnf clean all
 
-RUN python3 -m pip install --user --upgrade setuptools wheel twine pip \
+RUN python3.6 -m ensurepip --default-pip \
  && python3.7 -m ensurepip --default-pip \
- && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest
+ && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.9 -m ensurepip --default-pip
+
+RUN python3.6 -m pip install --upgrade pip \
+ && python3.7 -m pip install --upgrade pip \
+ && python3.8 -m pip install --upgrade pip \
+ && python3.9 -m pip install --upgrade pip \
+ && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
+ && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest
 
 ## CMake [3.18.4]
 
@@ -91,10 +103,9 @@ RUN pushd /tmp > /dev/null \
  && tar -xf boost_1_69_0.tar.gz \
  && cd boost_1_69_0 \
  && ./bootstrap.sh \
- && echo "using python : 3.7 : /usr : /usr/include/python3.7m ;" >> project-config.jam \
  && echo "using python : 3.8 : /usr : /usr/include/python3.8 ;" >> project-config.jam \
  && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
- && ./b2 -j $(nproc) python=3.7,3.8 link=shared cxxflags=-fPIC install \
+ && ./b2 -j $(nproc) python=3.8 link=shared cxxflags=-fPIC install \
  && popd > /dev/null \
  && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
 

@@ -25,8 +25,8 @@ build-images: ## Build images
 	@ make build-image-debian
 	@ make build-image-fedora
 
-build-image-debian: linux := debian ## Build image debian
-build-image-fedora: linux := fedora ## Build image fedora
+build-image-debian: linux := debian
+build-image-fedora: linux := fedora
 
 build-image-debian build-image-fedora: _build-image
 
@@ -41,8 +41,8 @@ _build-image:
 
 ######################################################################################################################################################
 
-run-image-debian: linux := debian ## Run image debian
-run-image-fedora: linux := fedora ## Run image fedora
+run-image-debian: linux := debian
+run-image-fedora: linux := fedora
 
 run-image-debian run-image-fedora: _run-image
 
@@ -73,8 +73,8 @@ deploy-images: ## Deploy images
 	@ make deploy-image-debian
 	@ make deploy-image-fedora
 
-deploy-image-debian: linux := debian ## Deploy image debian
-deploy-image-fedora: linux := fedora ## Deploy image fedora
+deploy-image-debian: linux := debian
+deploy-image-fedora: linux := fedora
 
 deploy-image-debian deploy-image-fedora: _deploy-image
 
