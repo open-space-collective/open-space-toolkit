@@ -1,0 +1,157 @@
+################################################################################################################################################################
+
+# @project        Open Space Toolkit
+# @file           .github/workflows/release.yml
+# @author         Lucas Brémond <lucas@loftorbital.com>
+# @license        Apache License 2.0
+
+################################################################################################################################################################
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: The name of the project.
+        required: true
+        type: string
+      project_version:
+        description: The version of the project.
+        required: true
+        type: string
+
+env:
+  DOCKER_REGISTRY_PATH: openspacecollective
+  LANG: en_US.UTF-8
+
+jobs:
+  deploy-package-cpp-debian:
+    name: Deploy C++ Package (Debian)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'created'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Download C++ Package (Debian)
+        uses: actions/download-artifact@v3
+        with:
+          name: cpp-package-debian
+          path: packages/cpp/
+      - name: Release C++ Package (Debian)
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: packages/cpp/*
+
+  deploy-package-cpp-fedora:
+    name: Deploy C++ Package (Fedora)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'created'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Download C++ Package (Fedora)
+        uses: actions/download-artifact@v3
+        with:
+          name: cpp-package-fedora
+          path: packages/cpp/
+      - name: Release C++ Package (Fedora)
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: packages/cpp/*
+
+  deploy-package-python-debian:
+    name: Deploy Python Package (Debian)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'created'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Download Python Package (Debian)
+        uses: actions/download-artifact@v3
+        with:
+          name: python-package-debian
+          path: packages/python/
+      - name: Deploy Python Package (Debian)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages_dir: packages/python/
+
+  deploy-documentation:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'created'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Download Documentation
+        uses: actions/download-artifact@v3
+        with:
+          name: docs
+          path: docs/
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs
+
+  deploy-image-jupyter:
+    name: Deploy Jupyter Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Jupyter Image
+        uses: docker/build-push-action@v3
+        with:
+          tags: |
+            ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-jupyter:${{ inputs.project_version }}
+            ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-jupyter:latest
+          context: ./docker/jupyter
+          build-args: |
+            JUPYTER_NOTEBOOK_IMAGE_REPOSITORY=jupyter/scipy-notebook:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+
+################################################################################################################################################################

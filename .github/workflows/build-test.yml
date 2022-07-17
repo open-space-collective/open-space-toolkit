@@ -1,0 +1,239 @@
+################################################################################################################################################################
+
+# @project        Open Space Toolkit
+# @file           .github/workflows/build-test.yml
+# @author         Lucas Brémond <lucas@loftorbital.com>
+# @license        Apache License 2.0
+
+################################################################################################################################################################
+
+name: Build and Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: The name of the project.
+        required: true
+        type: string
+      project_version:
+        description: The version of the project.
+        required: true
+        type: string
+
+env:
+  DOCKER_REGISTRY_PATH: openspacecollective
+  LANG: en_US.UTF-8
+
+jobs:
+  build-image-development-debian:
+    name: Build Development Image (Debian)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Development Image
+        uses: docker/build-push-action@v3
+        with:
+          tags: ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
+          context: ./docker/development/debian
+          build-args: |
+            BASE_IMAGE_SYSTEM=debian
+            VERSION=${{ inputs.project_version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+
+  build-image-development-fedora:
+    name: Build Development Image (Fedora)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Development Image
+        uses: docker/build-push-action@v3
+        with:
+          tags: ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-fedora
+          context: ./docker/development/fedora
+          build-args: |
+            BASE_IMAGE_SYSTEM=fedora
+            VERSION=${{ inputs.project_version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+
+  test-unit-cpp:
+    name: Run C++ Unit Tests
+    runs-on: ubuntu-latest
+    needs:
+      - build-image-development-debian
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
+      - name: Run Unit Tests C++
+        run: make test-coverage-cpp-debian
+      - name: Upload Coverage Results
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage/
+          fail_ci_if_error: true
+
+  test-unit-python:
+    name: Run Python Unit Tests
+    runs-on: ubuntu-latest
+    needs:
+      - build-image-development-debian
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
+      - name: Run Unit Tests Python
+        run: make test-unit-python-debian
+
+  build-package-cpp-debian:
+    name: Build C++ Package (Debian)
+    runs-on: ubuntu-latest
+    needs:
+      - test-unit-cpp
+      - test-unit-python
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
+      - name: Build C++ Package (Debian)
+        run: make build-packages-cpp-debian
+      - name: Upload C++ Package (Debian)
+        uses: actions/upload-artifact@v3
+        with:
+          name: cpp-package-debian
+          path: packages/cpp/
+
+  build-package-cpp-fedora:
+    name: Build C++ Package (Fedora)
+    runs-on: ubuntu-latest
+    needs:
+      - test-unit-cpp
+      - test-unit-python
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-fedora
+      - name: Build C++ Package
+        run: make build-packages-cpp-fedora
+      - name: Upload C++ Package (Fedora)
+        uses: actions/upload-artifact@v3
+        with:
+          name: cpp-package-fedora
+          path: packages/cpp/
+
+  build-package-python-debian:
+    name: Build Python Package (Debian)
+    runs-on: ubuntu-latest
+    needs:
+      - test-unit-cpp
+      - test-unit-python
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-fedora
+      - name: Build Python Package (Debian)
+        run: make build-packages-python-debian
+      - name: Upload Python Package (Debian)
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-package-debian
+          path: packages/python/
+
+  build-documentation:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    needs:
+      - test-unit-cpp
+      - test-unit-python
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Documentation
+        run: make build-documentation
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: docs/
+
+################################################################################################################################################################
