@@ -20,6 +20,11 @@ on:
         description: The version of the project.
         required: true
         type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
 
 env:
   DOCKER_REGISTRY_PATH: openspacecollective
