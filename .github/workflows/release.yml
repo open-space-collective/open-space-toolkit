@@ -34,7 +34,6 @@ jobs:
   deploy-package-cpp-debian:
     name: Deploy C++ Package (Debian)
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
     permissions:
       contents: write
     steps:
@@ -62,7 +61,6 @@ jobs:
   deploy-package-cpp-fedora:
     name: Deploy C++ Package (Fedora)
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -88,7 +86,6 @@ jobs:
   deploy-package-python-debian:
     name: Deploy Python Package (Debian)
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -110,7 +107,6 @@ jobs:
   deploy-documentation:
     name: Deploy Documentation
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
     permissions:
       contents: write
     steps:
