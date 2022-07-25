@@ -38,7 +38,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -66,7 +65,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -96,7 +94,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -123,7 +120,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -145,7 +141,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -172,7 +167,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -199,7 +193,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -226,7 +219,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
         uses: docker/login-action@v2
