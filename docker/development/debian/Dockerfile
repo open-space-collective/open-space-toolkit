@@ -81,13 +81,13 @@ RUN mkdir -p /tmp/py39 \
  && make altinstall \
  && rm -rf /tmp/py39
 
-## Python [3.10.0a6]
+## Python [3.10.6]
 
 RUN mkdir -p /tmp/py310 \
  && cd /tmp/py310 \
- && wget --quiet https://www.python.org/ftp/python/3.10.0/Python-3.10.0a6.tgz \
- && tar -xzf Python-3.10.0a6.tgz \
- && cd Python-3.10.0a6 \
+ && wget --quiet https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz \
+ && tar -xzf Python-3.10.6.tgz \
+ && cd Python-3.10.6 \
  && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py310
@@ -149,12 +149,12 @@ RUN cd /tmp \
  && ./b2 -j $(nproc) python=3.8 link=shared cxxflags=-fPIC install \
  && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
 
-## Pybind11 [2.6.2-1]
+## Pybind11 [2.10.0-2]
 
 RUN mkdir /tmp/pybind11 \
  && cd /tmp/pybind11 \
- && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_2.6.2-1_all.deb \
- && apt-get install -y ./pybind11-dev_2.6.2-1_all.deb \
+ && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_2.10.0-2_all.deb \
+ && apt-get install -y ./pybind11-dev_2.10.0-2_all.deb \
  && rm -rf /tmp/pybind11
 
 # Environment
