@@ -61,14 +61,14 @@ RUN apt-get update -y \
 
 ## Python [3.6.12]
 
-RUN mkdir -p /tmp/py36 \
- && cd /tmp/py36 \
- && wget --quiet https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz \
- && tar -xzf Python-3.6.12.tgz \
- && cd Python-3.6.12 \
- && ./configure --enable-optimizations \
- && make altinstall \
- && rm -rf /tmp/py36
+# RUN mkdir -p /tmp/py36 \
+#  && cd /tmp/py36 \
+#  && wget --quiet https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz \
+#  && tar -xzf Python-3.6.12.tgz \
+#  && cd Python-3.6.12 \
+#  && ./configure --enable-optimizations \
+#  && make altinstall \
+#  && rm -rf /tmp/py36
 
 ## Python [3.9.2]
 
@@ -81,13 +81,13 @@ RUN mkdir -p /tmp/py39 \
  && make altinstall \
  && rm -rf /tmp/py39
 
-## Python [3.10.0a6]
+## Python [3.10.6]
 
 RUN mkdir -p /tmp/py310 \
  && cd /tmp/py310 \
- && wget --quiet https://www.python.org/ftp/python/3.10.0/Python-3.10.0a6.tgz \
- && tar -xzf Python-3.10.0a6.tgz \
- && cd Python-3.10.0a6 \
+ && wget --quiet https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz \
+ && tar -xzf Python-3.10.6.tgz \
+ && cd Python-3.10.6 \
  && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py310
@@ -101,16 +101,19 @@ RUN apt-get update -y \
     python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3.6 -m pip install --upgrade pip \
- && python3.7 -m pip install --upgrade pip \
+RUN python3.7 -m pip install --upgrade pip \
  && python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
  && python3.10 -m pip install --upgrade pip \
  && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
- && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest
+
+## Julia
+
+RUN wget --quiet https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz \
+ && tar zxvf julia-1.7.3-linux-x86_64.tar.gz
 
 ## CMake [3.18.4]
 

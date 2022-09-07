@@ -8,7 +8,8 @@
 ######################################################################################################################################################
 
 export project_name := open-space-toolkit-base
-export project_version := $(shell git describe --tags --always)
+# export project_version := $(shell git describe --tags --always)
+export project_version = 0.3.0
 export project_directory := $(shell git rev-parse --show-toplevel)
 
 export docker_registry_path := openspacecollective
