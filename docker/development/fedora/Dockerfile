@@ -109,12 +109,12 @@ RUN pushd /tmp > /dev/null \
  && popd > /dev/null \
  && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
 
-## Pybind11 [2.6.1-1]
+## Pybind11 [2.10.0-1]
 
 RUN mkdir /tmp/pybind11 \
  && cd /tmp/pybind11 \
- && wget https://kojipkgs.fedoraproject.org//packages/pybind11/2.6.1/1.fc32/x86_64/pybind11-devel-2.6.1-1.fc32.x86_64.rpm \
- && dnf install -y ./pybind11-devel-2.6.1-1.fc32.x86_64.rpm \
+ && wget https://kojipkgs.fedoraproject.org/packages/pybind11/2.10.0/1.fc37/x86_64/pybind11-devel-2.10.0-1.fc37.x86_64.rpm \
+ && dnf install -y ./pybind11-devel-2.10.0-1.fc37.x86_64.rpm \
  && rm -rf /tmp/pybind11 \
  && dnf clean all
 
