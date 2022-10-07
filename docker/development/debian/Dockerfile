@@ -7,7 +7,7 @@
 
 ################################################################################################################################################################
 
-FROM python:3.8-slim-buster
+FROM python:3.8-slim-bullseye
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -48,7 +48,7 @@ RUN apt-get update -y \
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
     build-essential \
-    libreadline-gplv2-dev \
+    libreadline-dev \
     libncursesw5-dev \
     libsqlite3-dev \
     tk-dev \
@@ -59,35 +59,46 @@ RUN apt-get update -y \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 
-## Python [3.6.12]
+## Python [3.6.15]
 
 RUN mkdir -p /tmp/py36 \
  && cd /tmp/py36 \
- && wget --quiet https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz \
- && tar -xzf Python-3.6.12.tgz \
- && cd Python-3.6.12 \
+ && wget --quiet https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz \
+ && tar -xzf Python-3.6.15.tgz \
+ && cd Python-3.6.15 \
  && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py36
 
-## Python [3.9.2]
+## Python [3.7.14]
+
+RUN mkdir -p /tmp/py37 \
+ && cd /tmp/py37 \
+ && wget --quiet https://www.python.org/ftp/python/3.7.14/Python-3.7.14.tgz \
+ && tar -xzf Python-3.7.14.tgz \
+ && cd Python-3.7.14 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py37
+
+## Python [3.9.14]
 
 RUN mkdir -p /tmp/py39 \
  && cd /tmp/py39 \
- && wget --quiet https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz \
- && tar -xzf Python-3.9.2.tgz \
- && cd Python-3.9.2 \
+ && wget --quiet https://www.python.org/ftp/python/3.9.14/Python-3.9.14.tgz \
+ && tar -xzf Python-3.9.14.tgz \
+ && cd Python-3.9.14 \
  && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py39
 
-## Python [3.10.6]
+## Python [3.10.7]
 
 RUN mkdir -p /tmp/py310 \
  && cd /tmp/py310 \
- && wget --quiet https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz \
- && tar -xzf Python-3.10.6.tgz \
- && cd Python-3.10.6 \
+ && wget --quiet https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tgz \
+ && tar -xzf Python-3.10.7.tgz \
+ && cd Python-3.10.7 \
  && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py310
