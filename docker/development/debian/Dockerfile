@@ -92,6 +92,17 @@ RUN mkdir -p /tmp/py310 \
  && make altinstall \
  && rm -rf /tmp/py310
 
+## Python [3.11.1]
+
+RUN mkdir -p /tmp/py311 \
+ && cd /tmp/py311 \
+ && wget --quiet https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz \
+ && tar -xzf Python-3.11.1.tgz \
+ && cd Python-3.11.1 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py311
+
 ## Python tools
 
 RUN apt-get update -y \
@@ -106,11 +117,13 @@ RUN python3.6 -m pip install --upgrade pip \
  && python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
  && python3.10 -m pip install --upgrade pip \
+ && python3.11 -m pip install --upgrade pip \
  && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
  && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest
+ && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.11 -m pip install --user --upgrade setuptools wheel twine pytest
 
 ## CMake [3.18.4]
 
