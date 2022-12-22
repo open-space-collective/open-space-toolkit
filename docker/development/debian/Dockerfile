@@ -174,6 +174,7 @@ RUN mkdir /tmp/pybind11 \
 
 ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
 ENV PYTHONPATH /usr/local/lib:${PYTHONPATH}
+RUN git config --global --add safe.directory /app
 
 # Labels
 
