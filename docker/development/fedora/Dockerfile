@@ -42,7 +42,7 @@ RUN dnf update -y \
  && dnf install -y gcc-c++ gdb lcov doxygen \
  && dnf clean all
 
-## Python [3.6, 3.7, 3.8, 3.9]
+## Python [3.6, 3.7, 3.8, 3.9, 3.10]
 
 RUN dnf update -y \
  && dnf install -y \
@@ -50,6 +50,7 @@ RUN dnf update -y \
     python37 \
     python38 \
     python39 \
+    python310 \
     python3-devel \
     python3-numpy \
     python3-pip \
@@ -58,16 +59,19 @@ RUN dnf update -y \
 RUN python3.6 -m ensurepip --default-pip \
  && python3.7 -m ensurepip --default-pip \
  && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.9 -m ensurepip --default-pip
+ && python3.9 -m ensurepip --default-pip \
+ && python3.10 -m ensurepip --default-pip
 
 RUN python3.6 -m pip install --upgrade pip \
  && python3.7 -m pip install --upgrade pip \
  && python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
+ && python3.10 -m pip install --upgrade pip \
  && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
  && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest
+ && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest
 
 ## CMake [3.18.4]
 
@@ -109,12 +113,12 @@ RUN pushd /tmp > /dev/null \
  && popd > /dev/null \
  && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
 
-## Pybind11 [2.10.0-1]
+## Pybind11 [2.10.1]
 
 RUN mkdir /tmp/pybind11 \
  && cd /tmp/pybind11 \
- && wget https://kojipkgs.fedoraproject.org/packages/pybind11/2.10.0/1.fc37/x86_64/pybind11-devel-2.10.0-1.fc37.x86_64.rpm \
- && dnf install -y ./pybind11-devel-2.10.0-1.fc37.x86_64.rpm \
+ && wget https://kojipkgs.fedoraproject.org/packages/pybind11/2.10.1/1.fc37/x86_64/pybind11-devel-2.10.1-1.fc37.x86_64.rpm \
+ && dnf install -y ./pybind11-devel-2.10.1-1.fc37.x86_64.rpm \
  && rm -rf /tmp/pybind11 \
  && dnf clean all
 
