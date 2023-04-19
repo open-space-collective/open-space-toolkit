@@ -150,24 +150,28 @@ RUN cd /tmp \
 
 # Dependencies
 
-## Boost [1.69.0]
+## Boost [1.82.0]
+
+ARG BOOST_MAJOR_VERSION="1"
+ARG BOOST_MINOR_VERSION="82"
+ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
 
 RUN cd /tmp \
- && wget --quiet http://sourceforge.net/projects/boost/files/boost/1.69.0/boost_1_69_0.tar.gz \
- && tar -xf boost_1_69_0.tar.gz \
- && cd boost_1_69_0 \
+ && wget --quiet -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
+ && tar -xf boost_${BOOST_VERSION}.tar.gz \
+ && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
  && ./bootstrap.sh \
  && echo "using python : 3.8 : /usr : /usr/include/python3.8m ;" >> project-config.jam \
  && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
  && ./b2 -j $(nproc) python=3.8 link=shared cxxflags=-fPIC install \
- && rm -rf /tmp/boost_1_69_0 /tmp/boost_1_69_0.tar.gz
+ && rm -rf /tmp/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 /tmp/boost_${BOOST_VERSION}.tar.gz
 
-## Pybind11 [2.10.1]
+## Pybind11 [2.10.3]
 
 RUN mkdir /tmp/pybind11 \
  && cd /tmp/pybind11 \
- && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_2.10.1-1_all.deb \
- && apt-get install -y ./pybind11-dev_2.10.1-1_all.deb \
+ && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_2.10.3-1_all.deb \
+ && apt-get install -y ./pybind11-dev_2.10.3-1_all.deb \
  && rm -rf /tmp/pybind11
 
 # Environment
