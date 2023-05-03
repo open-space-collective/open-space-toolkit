@@ -7,7 +7,7 @@
 
 ################################################################################################################################################################
 
-FROM python:3.8-slim-buster
+FROM ubuntu:22.04
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -44,17 +44,19 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/*
 
 ## Python installing dependencies
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
     build-essential \
-    libreadline-gplv2-dev \
     libncursesw5-dev \
     libsqlite3-dev \
     tk-dev \
     libgdbm-dev \
     libc6-dev \
     libbz2-dev \
+    autotools-dev \
+    libicu-dev \
     libffi-dev \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
@@ -63,18 +65,40 @@ RUN apt-get update -y \
 
 RUN mkdir -p /tmp/py36 \
  && cd /tmp/py36 \
- && wget --quiet https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz \
+ && wget --no-check-certificate --quiet https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz \
  && tar -xzf Python-3.6.12.tgz \
  && cd Python-3.6.12 \
- && ./configure --enable-optimizations \
+ && ./configure --enable-optimizations -with-lto  --with-pydebug \
  && make altinstall \
  && rm -rf /tmp/py36
+
+## Python [3.7.9]
+
+RUN mkdir -p /tmp/py37 \
+ && cd /tmp/py37 \
+ && wget --no-check-certificate --quiet https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz \
+ && tar -xzf Python-3.7.9.tgz \
+ && cd Python-3.7.9 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py37
+
+## Python [3.8.9]
+
+RUN mkdir -p /tmp/py38 \
+ && cd /tmp/py38 \
+ && wget --no-check-certificate --quiet https://www.python.org/ftp/python/3.8.9/Python-3.8.9.tgz \
+ && tar -xzf Python-3.8.9.tgz \
+ && cd Python-3.8.9 \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && rm -rf /tmp/py38
 
 ## Python [3.9.16]
 
 RUN mkdir -p /tmp/py39 \
  && cd /tmp/py39 \
- && wget --quiet https://www.python.org/ftp/python/3.9.16/Python-3.9.16.tgz \
+ && wget --no-check-certificate --quiet https://www.python.org/ftp/python/3.9.16/Python-3.9.16.tgz \
  && tar -xzf Python-3.9.16.tgz \
  && cd Python-3.9.16 \
  && ./configure --enable-optimizations \
@@ -85,7 +109,7 @@ RUN mkdir -p /tmp/py39 \
 
 RUN mkdir -p /tmp/py310 \
  && cd /tmp/py310 \
- && wget --quiet https://www.python.org/ftp/python/3.10.9/Python-3.10.9.tgz \
+ && wget --no-check-certificate --quiet https://www.python.org/ftp/python/3.10.9/Python-3.10.9.tgz \
  && tar -xzf Python-3.10.9.tgz \
  && cd Python-3.10.9 \
  && ./configure --enable-optimizations \
@@ -96,7 +120,7 @@ RUN mkdir -p /tmp/py310 \
 
 RUN mkdir -p /tmp/py311 \
  && cd /tmp/py311 \
- && wget --quiet https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz \
+ && wget --no-check-certificate --quiet https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz \
  && tar -xzf Python-3.11.1.tgz \
  && cd Python-3.11.1 \
  && ./configure --enable-optimizations \
@@ -127,19 +151,26 @@ RUN python3.6 -m pip install --upgrade pip \
 
 ## CMake [3.18.4]
 
+ARG CMAKE_MAJOR_VERSION="3"
+ARG CMAKE_MINOR_VERSION="26"
+ARG CMAKE_PATCH_VERSION="3"
+ARG CMAKE_VERSION="${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}"
+
 RUN cd /tmp \
- && wget --quiet https://cmake.org/files/v3.18/cmake-3.18.4.tar.gz \
- && tar -xf cmake-3.18.4.tar.gz \
- && cd cmake-3.18.4 \
+ && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
+ && tar -xf cmake-${CMAKE_VERSION}.tar.gz \
+ && cd cmake-${CMAKE_VERSION} \
  && ./bootstrap \
  && make -j $(nproc) \
  && make install \
- && rm -rf /tmp/cmake-3.18.4 /tmp/cmake-3.18.4.tar.gz
+ && rm -rf /tmp/cmake-${CMAKE_VERSION} /tmp/cmake-${CMAKE_VERSION}.tar.gz
 
-## GoogleTest [1.10.0]
+## GoogleTest [1.12.0]
+
+ARG GOOGLE_TEST_VERSION="1.12.0"
 
 RUN cd /tmp \
- && git clone --branch release-1.10.0 --depth 1 https://github.com/google/googletest.git \
+ && git clone --branch release-${GOOGLE_TEST_VERSION} --depth 1 https://github.com/google/googletest.git \
  && cd googletest \
  && mkdir build \
  && cd build \
@@ -150,22 +181,6 @@ RUN cd /tmp \
 
 # Dependencies
 
-## Boost [1.82.0]
-
-ARG BOOST_MAJOR_VERSION="1"
-ARG BOOST_MINOR_VERSION="82"
-ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
-
-RUN cd /tmp \
- && wget --quiet -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
- && tar -xf boost_${BOOST_VERSION}.tar.gz \
- && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
- && ./bootstrap.sh \
- && echo "using python : 3.8 : /usr : /usr/include/python3.8m ;" >> project-config.jam \
- && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
- && ./b2 -j $(nproc) python=3.8 link=shared cxxflags=-fPIC install \
- && rm -rf /tmp/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 /tmp/boost_${BOOST_VERSION}.tar.gz
-
 ## Pybind11 [2.10.3]
 
 RUN mkdir /tmp/pybind11 \
@@ -173,6 +188,36 @@ RUN mkdir /tmp/pybind11 \
  && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_2.10.3-1_all.deb \
  && apt-get install -y ./pybind11-dev_2.10.3-1_all.deb \
  && rm -rf /tmp/pybind11
+
+## Clang-format [16.0.2]
+
+ARG CLANG_FORMAT_VERSION="16.0.2"
+
+RUN mkdir -p /tmp/clang-format \
+ && cd /tmp/clang-format \
+ && wget --quiet https://github.com/llvm/llvm-project/releases/download/llvmorg-${CLANG_FORMAT_VERSION}/clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04.tar.xz \
+ && tar -xf clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04.tar.xz \
+ && cd clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04/bin \
+ && cp clang-format /usr/local/bin \
+ && cp git-clang-format /usr/local/bin \
+ && rm -r /tmp/clang-format
+
+# ## Boost [1.82.0]
+
+ARG BOOST_MAJOR_VERSION="1"
+ARG BOOST_MINOR_VERSION="82"
+ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
+
+RUN mkdir -p /tmp/boost \
+ && cd /tmp/boost \
+ && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
+ && tar -xf boost_${BOOST_VERSION}.tar.gz \
+ && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
+ && ./bootstrap.sh --with-python=/usr/local/bin/python3.10 \
+ && echo "using python : 3.10 : /usr : /usr/include/python3.10m ;" >> project-config.jam \
+ && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
+ && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
+ && rm -rf /tmp/boost
 
 # Environment
 
