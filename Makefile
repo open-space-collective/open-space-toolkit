@@ -20,18 +20,14 @@ export jupyter_port := 8888
 
 ######################################################################################################################################################
 
-build-images: ## Build images
-
-	@ make build-image
-
 build-image:
 
 	docker build \
-		--file="$(project_directory)/docker/development/debian/Dockerfile" \
-		--tag=$(docker_image_repository):$(docker_image_version)-debian \
-		--tag=$(docker_image_repository):latest-debian \
+		--file="$(project_directory)/docker/development/Dockerfile" \
+		--tag=$(docker_image_repository):$(docker_image_version) \
+		--tag=$(docker_image_repository):latest \
 		--build-arg="VERSION=$(docker_image_version)" \
-		"$(project_directory)/docker/development/debian"
+		"$(project_directory)/docker/development"
 
 ######################################################################################################################################################
 
@@ -40,7 +36,7 @@ run-image: build-image
 	docker run \
 		-it \
 		--rm \
-		$(docker_image_repository):$(docker_image_version)-debian \
+		$(docker_image_repository):$(docker_image_version) \
 		/bin/bash
 
 pull-jupyter: ## Pull jupyter image
@@ -63,8 +59,8 @@ deploy-images: ## Deploy images
 
 deploy-image: build-image
 
-	docker push $(docker_image_repository):$(docker_image_version)-debian
-	docker push $(docker_image_repository):latest-debian
+	docker push $(docker_image_repository):$(docker_image_version)
+	docker push $(docker_image_repository):latest
 
 ######################################################################################################################################################
 
