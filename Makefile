@@ -22,36 +22,25 @@ export jupyter_port := 8888
 
 build-images: ## Build images
 
-	@ make build-image-debian
-	@ make build-image-fedora
+	@ make build-image
 
-build-image-debian: linux := debian
-build-image-fedora: linux := fedora
-
-build-image-debian build-image-fedora: _build-image
-
-_build-image:
+build-image:
 
 	docker build \
-		--file="$(project_directory)/docker/development/$(linux)/Dockerfile" \
-		--tag=$(docker_image_repository):$(docker_image_version)-$(linux) \
-		--tag=$(docker_image_repository):latest-$(linux) \
+		--file="$(project_directory)/docker/development/debian/Dockerfile" \
+		--tag=$(docker_image_repository):$(docker_image_version)-debian \
+		--tag=$(docker_image_repository):latest-debian \
 		--build-arg="VERSION=$(docker_image_version)" \
-		"$(project_directory)/docker/development/$(linux)"
+		"$(project_directory)/docker/development/debian"
 
 ######################################################################################################################################################
 
-run-image-debian: linux := debian
-run-image-fedora: linux := fedora
-
-run-image-debian run-image-fedora: _run-image
-
-_run-image: _build-image
+run-image: build-image
 
 	docker run \
 		-it \
 		--rm \
-		$(docker_image_repository):$(docker_image_version)-$(linux) \
+		$(docker_image_repository):$(docker_image_version)-debian \
 		/bin/bash
 
 pull-jupyter: ## Pull jupyter image
@@ -70,25 +59,19 @@ run-jupyter: ## Run jupyter
 
 deploy-images: ## Deploy images
 
-	@ make deploy-image-debian
-	@ make deploy-image-fedora
+	@ make deploy-image
 
-deploy-image-debian: linux := debian
-deploy-image-fedora: linux := fedora
+deploy-image: build-image
 
-deploy-image-debian deploy-image-fedora: _deploy-image
-
-_deploy-image: _build-image
-
-	docker push $(docker_image_repository):$(docker_image_version)-$(linux)
-	docker push $(docker_image_repository):latest-$(linux)
+	docker push $(docker_image_repository):$(docker_image_version)-debian
+	docker push $(docker_image_repository):latest-debian
 
 ######################################################################################################################################################
 
-.PHONY: build-images build-image-debian build-image-fedora \
-		run-image-debian run-image-fedora \
+.PHONY: build-images build-image \
+		run-image \
 		pull-jupyter run-jupyter \
-		deploy-images deploy-image-debian deploy-image-fedora
+		deploy-images deploy-image
 
 ######################################################################################################################################################
 
