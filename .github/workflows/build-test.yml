@@ -31,8 +31,8 @@ env:
   LANG: en_US.UTF-8
 
 jobs:
-  build-image-development-debian:
-    name: Build Development Image (Debian)
+  build-image-development:
+    name: Build Development Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -50,38 +50,10 @@ jobs:
       - name: Build Development Image
         uses: docker/build-push-action@v3
         with:
-          tags: ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
-          context: ./docker/development/debian
+          tags: ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+          context: ./docker/development
           build-args: |
             BASE_IMAGE_SYSTEM=debian
-            VERSION=${{ inputs.project_version }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          push: true
-
-  build-image-development-fedora:
-    name: Build Development Image (Fedora)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          lfs: true
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build Development Image
-        uses: docker/build-push-action@v3
-        with:
-          tags: ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-fedora
-          context: ./docker/development/fedora
-          build-args: |
-            BASE_IMAGE_SYSTEM=fedora
             VERSION=${{ inputs.project_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -91,7 +63,7 @@ jobs:
     name: Run C++ Unit Tests
     runs-on: ubuntu-latest
     needs:
-      - build-image-development-debian
+      - build-image-development
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -104,9 +76,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
-        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run Unit Tests C++
-        run: make test-coverage-cpp-debian
+        run: make test-coverage-cpp
       - name: Upload Coverage Results
         uses: codecov/codecov-action@v3
         with:
@@ -118,7 +90,7 @@ jobs:
     name: Run Python Unit Tests
     runs-on: ubuntu-latest
     needs:
-      - build-image-development-debian
+      - build-image-development
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -131,12 +103,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
-        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run Unit Tests Python
-        run: make test-unit-python-debian
+        run: make test-unit-python
 
-  build-package-cpp-debian:
-    name: Build C++ Package (Debian)
+  build-package-cpp:
+    name: Build C++ Package
     runs-on: ubuntu-latest
     needs:
       - test-unit-cpp
@@ -153,44 +125,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
-        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-debian
-      - name: Build C++ Package (Debian)
-        run: make build-packages-cpp-debian
-      - name: Upload C++ Package (Debian)
-        uses: actions/upload-artifact@v3
-        with:
-          name: cpp-package-debian
-          path: packages/cpp/
-
-  build-package-cpp-fedora:
-    name: Build C++ Package (Fedora)
-    runs-on: ubuntu-latest
-    needs:
-      - test-unit-cpp
-      - test-unit-python
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          lfs: true
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Pull Development Image
-        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-fedora
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build C++ Package
-        run: make build-packages-cpp-fedora
-      - name: Upload C++ Package (Fedora)
+        run: make build-packages-cpp
+      - name: Upload C++ Package
         uses: actions/upload-artifact@v3
         with:
-          name: cpp-package-fedora
+          name: cpp-package
           path: packages/cpp/
 
-  build-package-python-debian:
-    name: Build Python Package (Debian)
+  build-package-python:
+    name: Build Python Package
     runs-on: ubuntu-latest
     needs:
       - test-unit-cpp
@@ -207,13 +152,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
-        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}-fedora
-      - name: Build Python Package (Debian)
-        run: make build-packages-python-debian
-      - name: Upload Python Package (Debian)
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Build Python Package
+        run: make build-packages-python
+      - name: Upload Python Package
         uses: actions/upload-artifact@v3
         with:
-          name: python-package-debian
+          name: python-package
           path: packages/python/
 
   build-documentation:

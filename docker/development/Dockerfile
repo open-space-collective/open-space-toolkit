@@ -1,7 +1,7 @@
 ################################################################################################################################################################
 
 # @project        Open Space Toolkit
-# @file           docker/development/debian/Dockerfile
+# @file           docker/development/Dockerfile
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
@@ -44,6 +44,7 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/*
 
 ## Python installing dependencies
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
@@ -60,32 +61,6 @@ RUN apt-get update -y \
     libffi-dev \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
-
-## Python 3.6
-
-ARG PYTHON_3_6_VERSION="3.6.12"
-
-RUN mkdir -p /tmp/py36 \
- && cd /tmp/py36 \
- && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_6_VERSION}/Python-${PYTHON_3_6_VERSION}.tgz \
- && tar -xzf Python-${PYTHON_3_6_VERSION}.tgz \
- && cd Python-${PYTHON_3_6_VERSION} \
- && ./configure --enable-optimizations \
- && make altinstall \
- && rm -rf /tmp/py36
-
-## Python 3.7
-
-ARG PYTHON_3_7_VERSION="3.7.9"
-
-RUN mkdir -p /tmp/py37 \
- && cd /tmp/py37 \
- && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_7_VERSION}/Python-${PYTHON_3_7_VERSION}.tgz \
- && tar -xzf Python-${PYTHON_3_7_VERSION}.tgz \
- && cd Python-${PYTHON_3_7_VERSION} \
- && ./configure --enable-optimizations \
- && make altinstall \
- && rm -rf /tmp/py37
 
 ## Python 3.8
 
@@ -148,15 +123,11 @@ RUN apt-get update -y \
     python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3.6 -m pip install --upgrade pip \
- && python3.7 -m pip install --upgrade pip \
- && python3.8 -m pip install --upgrade pip \
+RUN python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
  && python3.10 -m pip install --upgrade pip \
  && python3.11 -m pip install --upgrade pip \
  && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
- && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.8 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest \
