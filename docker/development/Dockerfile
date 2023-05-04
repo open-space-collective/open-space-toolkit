@@ -1,7 +1,7 @@
 ################################################################################################################################################################
 
 # @project        Open Space Toolkit
-# @file           docker/development/debian/Dockerfile
+# @file           docker/development/Dockerfile
 # @author         Lucas Brémond <lucas.bremond@gmail.com>
 # @license        Apache License 2.0
 
@@ -44,6 +44,7 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/*
 
 ## Python installing dependencies
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
