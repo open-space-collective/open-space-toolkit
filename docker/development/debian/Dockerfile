@@ -70,7 +70,7 @@ RUN mkdir -p /tmp/py36 \
  && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_6_VERSION}/Python-${PYTHON_3_6_VERSION}.tgz \
  && tar -xzf Python-${PYTHON_3_6_VERSION}.tgz \
  && cd Python-${PYTHON_3_6_VERSION} \
- && ./configure --enable-optimizations -with-lto  --with-pydebug \
+ && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py36
 
@@ -194,7 +194,7 @@ RUN cd /tmp \
 # Dependencies
 
 ## Pybind11
-]
+
 ARG PYBIND_11_VERSION="2.10.3-1"
 
 RUN mkdir /tmp/pybind11 \
