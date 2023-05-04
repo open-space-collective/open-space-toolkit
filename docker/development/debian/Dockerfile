@@ -157,6 +157,7 @@ RUN python3.6 -m pip install --upgrade pip \
  && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
  && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
+ && python3.8 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.11 -m pip install --user --upgrade setuptools wheel twine pytest
