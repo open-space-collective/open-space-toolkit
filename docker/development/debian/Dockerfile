@@ -122,15 +122,11 @@ RUN apt-get update -y \
     python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3.6 -m pip install --upgrade pip \
- && python3.7 -m pip install --upgrade pip \
- && python3.8 -m pip install --upgrade pip \
+RUN python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
  && python3.10 -m pip install --upgrade pip \
  && python3.11 -m pip install --upgrade pip \
  && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
- && python3.6 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.7 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.8 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
  && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest \
