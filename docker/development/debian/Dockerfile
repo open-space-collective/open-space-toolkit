@@ -61,32 +61,6 @@ RUN apt-get update -y \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 
-## Python 3.6
-
-ARG PYTHON_3_6_VERSION="3.6.12"
-
-RUN mkdir -p /tmp/py36 \
- && cd /tmp/py36 \
- && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_6_VERSION}/Python-${PYTHON_3_6_VERSION}.tgz \
- && tar -xzf Python-${PYTHON_3_6_VERSION}.tgz \
- && cd Python-${PYTHON_3_6_VERSION} \
- && ./configure --enable-optimizations \
- && make altinstall \
- && rm -rf /tmp/py36
-
-## Python 3.7
-
-ARG PYTHON_3_7_VERSION="3.7.9"
-
-RUN mkdir -p /tmp/py37 \
- && cd /tmp/py37 \
- && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_7_VERSION}/Python-${PYTHON_3_7_VERSION}.tgz \
- && tar -xzf Python-${PYTHON_3_7_VERSION}.tgz \
- && cd Python-${PYTHON_3_7_VERSION} \
- && ./configure --enable-optimizations \
- && make altinstall \
- && rm -rf /tmp/py37
-
 ## Python 3.8
 
 ARG PYTHON_3_8_VERSION="3.8.9"
