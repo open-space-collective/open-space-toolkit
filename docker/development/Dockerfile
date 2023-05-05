@@ -71,7 +71,8 @@ RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
  && rm llvm-snapshot.gpg.key \
  && add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' \
  && apt-get update \
- && apt-get install -y clang-format
+ && apt-get install -y clang-format \
+ && rm -rf /var/lib/apt/lists/*
 
 ## Python 3.8
 
@@ -203,18 +204,20 @@ RUN mkdir -p /tmp/boost \
  && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
  && rm -rf /tmp/boost
 
-## OpenSSL 3.0
+## OpenSSL
+
+ARG OPENSSL_VERSION="3.0.2"
 
 RUN mkdir /tmp/openssl \
  && cd /tmp/openssl \
- && wget https://www.openssl.org/source/openssl-3.0.2.tar.gz \
- && tar -xvf openssl-3.0.2.tar.gz \
- && cd openssl-3.0.2 \
+ && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
+ && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
+ && cd openssl-${OPENSSL_VERSION} \
  && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
  && make \
  && make install \
- && touch /etc/ld.so.conf.d/openssl-3.0.2.conf \
- && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-3.0.2.conf \
+ && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+ && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
  && ldconfig \
  && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
  && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
