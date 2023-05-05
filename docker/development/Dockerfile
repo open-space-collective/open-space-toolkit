@@ -49,6 +49,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
+    software-properties-common \
     build-essential \
     libncursesw5-dev \
     libsqlite3-dev \
@@ -60,7 +61,17 @@ RUN apt-get update -y \
     libicu-dev \
     libffi-dev \
     zlib1g-dev \
+    gnupg \
  && rm -rf /var/lib/apt/lists/*
+
+## Clang-format
+
+RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
+ && apt-key add llvm-snapshot.gpg.key \
+ && rm llvm-snapshot.gpg.key \
+ && add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' \
+ && apt-get update \
+ && apt-get install -y clang-format
 
 ## Python 3.8
 
@@ -174,19 +185,6 @@ RUN mkdir /tmp/pybind11 \
  && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_${PYBIND_11_VERSION}_all.deb \
  && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
  && rm -rf /tmp/pybind11
-
-## Clang-format
-
-ARG CLANG_FORMAT_VERSION="16.0.2"
-
-RUN mkdir -p /tmp/clang-format \
- && cd /tmp/clang-format \
- && wget --quiet https://github.com/llvm/llvm-project/releases/download/llvmorg-${CLANG_FORMAT_VERSION}/clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04.tar.xz \
- && tar -xf clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04.tar.xz \
- && cd clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04/bin \
- && cp clang-format /usr/local/bin \
- && cp git-clang-format /usr/local/bin \
- && rm -r /tmp/clang-format
 
 ## Boost
 
