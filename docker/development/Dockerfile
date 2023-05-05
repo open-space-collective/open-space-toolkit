@@ -203,6 +203,23 @@ RUN mkdir -p /tmp/boost \
  && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
  && rm -rf /tmp/boost
 
+## OpenSSL 3.0
+
+RUN mkdir /tmp/openssl \
+ && cd /tmp/openssl \
+ && wget https://www.openssl.org/source/openssl-3.0.2.tar.gz \
+ && tar -xvf openssl-3.0.2.tar.gz \
+ && cd openssl-3.0.2 \
+ && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
+ && make \
+ && make install \
+ && touch /etc/ld.so.conf.d/openssl-3.0.2.conf \
+ && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-3.0.2.conf \
+ && ldconfig \
+ && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
+ && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
+ && rm -rf /tmp/openssl
+
 # Environment
 
 ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
