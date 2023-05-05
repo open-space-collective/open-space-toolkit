@@ -7,7 +7,7 @@
 
 ################################################################################################################################################################
 
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -49,6 +49,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
+    software-properties-common \
     build-essential \
     libncursesw5-dev \
     libsqlite3-dev \
@@ -60,6 +61,17 @@ RUN apt-get update -y \
     libicu-dev \
     libffi-dev \
     zlib1g-dev \
+    gnupg \
+ && rm -rf /var/lib/apt/lists/*
+
+## Clang-format
+
+RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
+ && apt-key add llvm-snapshot.gpg.key \
+ && rm llvm-snapshot.gpg.key \
+ && add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' \
+ && apt-get update \
+ && apt-get install -y clang-format \
  && rm -rf /var/lib/apt/lists/*
 
 ## Python 3.8
@@ -175,19 +187,6 @@ RUN mkdir /tmp/pybind11 \
  && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
  && rm -rf /tmp/pybind11
 
-## Clang-format
-
-ARG CLANG_FORMAT_VERSION="16.0.2"
-
-RUN mkdir -p /tmp/clang-format \
- && cd /tmp/clang-format \
- && wget --quiet https://github.com/llvm/llvm-project/releases/download/llvmorg-${CLANG_FORMAT_VERSION}/clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04.tar.xz \
- && tar -xf clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04.tar.xz \
- && cd clang+llvm-${CLANG_FORMAT_VERSION}-x86_64-linux-gnu-ubuntu-22.04/bin \
- && cp clang-format /usr/local/bin \
- && cp git-clang-format /usr/local/bin \
- && rm -r /tmp/clang-format
-
 ## Boost
 
 ARG BOOST_MAJOR_VERSION="1"
@@ -204,6 +203,25 @@ RUN mkdir -p /tmp/boost \
  && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
  && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
  && rm -rf /tmp/boost
+
+## OpenSSL
+
+ARG OPENSSL_VERSION="3.0.2"
+
+RUN mkdir /tmp/openssl \
+ && cd /tmp/openssl \
+ && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
+ && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
+ && cd openssl-${OPENSSL_VERSION} \
+ && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
+ && make \
+ && make install \
+ && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+ && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+ && ldconfig \
+ && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
+ && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
+ && rm -rf /tmp/openssl
 
 # Environment
 
