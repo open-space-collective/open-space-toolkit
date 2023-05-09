@@ -225,7 +225,7 @@ RUN mkdir /tmp/openssl \
 
 ## Black
 
-RUN python3.11 -m pip install black black[jupyter]
+RUN python3.11 -m pip install --user black black[jupyter]
 
 # Environment
 
