@@ -20,7 +20,7 @@ export jupyter_port := 8888
 
 ######################################################################################################################################################
 
-build-image:
+build-image: ## Build image
 
 	docker build \
 		--file="$(project_directory)/docker/development/Dockerfile" \
@@ -31,7 +31,7 @@ build-image:
 
 ######################################################################################################################################################
 
-run-image: build-image
+run-image: build-image ## Run image
 
 	docker run \
 		-it \
@@ -53,21 +53,18 @@ run-jupyter: ## Run jupyter
 
 ######################################################################################################################################################
 
-deploy-images: ## Deploy images
-
-	@ make deploy-image
-
-deploy-image: build-image
+deploy-image: build-image ## Deploy image
 
 	docker push $(docker_image_repository):$(docker_image_version)
 	docker push $(docker_image_repository):latest
 
 ######################################################################################################################################################
 
-.PHONY: build-images build-image \
+.PHONY: build-image \
 		run-image \
-		pull-jupyter run-jupyter \
-		deploy-images deploy-image
+		pull-jupyter \
+		run-jupyter \
+		deploy-image
 
 ######################################################################################################################################################
 
