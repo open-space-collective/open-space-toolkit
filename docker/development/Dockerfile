@@ -223,6 +223,10 @@ RUN mkdir /tmp/openssl \
  && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
  && rm -rf /tmp/openssl
 
+## Black
+
+RUN python3.11 -m pip install --user black black[jupyter]
+
 # Environment
 
 ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
