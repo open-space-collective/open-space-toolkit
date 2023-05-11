@@ -78,7 +78,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run Unit Tests C++
-        run: make test-coverage-cpp
+        run: make test-coverage-cpp-standalone
       - name: Upload Coverage Results
         uses: codecov/codecov-action@v3
         with:
@@ -105,7 +105,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run Unit Tests Python
-        run: make test-unit-python
+        run: make test-unit-python-standalone
 
   build-package-cpp:
     name: Build C++ Package
@@ -127,7 +127,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build C++ Package
-        run: make build-packages-cpp
+        run: make build-packages-cpp-standalone
       - name: Upload C++ Package
         uses: actions/upload-artifact@v3
         with:
@@ -154,7 +154,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build Python Package
-        run: make build-packages-python
+        run: make build-packages-python-standalone
       - name: Upload Python Package
         uses: actions/upload-artifact@v3
         with:
@@ -179,7 +179,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Documentation
-        run: make build-documentation
+        run: make build-documentation-standalone
       - name: Upload Documentation
         uses: actions/upload-artifact@v3
         with:
