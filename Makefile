@@ -1,11 +1,4 @@
-######################################################################################################################################################
-
-# @project        Open Space Toolkit
-# @file           Makefile
-# @author         Lucas Brémond <lucas.bremond@gmail.com>
-# @license        Apache License 2.0
-
-######################################################################################################################################################
+# Apache License 2.0
 
 export project_name := open-space-toolkit-base
 export project_version := $(shell git describe --tags --always)
@@ -18,8 +11,6 @@ export docker_image_version := $(project_version)
 export jupyter_image := openspacecollective/open-space-toolkit-astrodynamics-jupyter:latest
 export jupyter_port := 8888
 
-######################################################################################################################################################
-
 build-image: ## Build image
 
 	docker build \
@@ -29,7 +20,7 @@ build-image: ## Build image
 		--build-arg="VERSION=$(docker_image_version)" \
 		"$(project_directory)/docker/development"
 
-######################################################################################################################################################
+.PHONY: build-image
 
 run-image: build-image ## Run image
 
@@ -39,9 +30,13 @@ run-image: build-image ## Run image
 		$(docker_image_repository):$(docker_image_version) \
 		/bin/bash
 
+.PHONY: run-image
+
 pull-jupyter: ## Pull jupyter image
 
 	docker pull $(jupyter_image)
+
+.PHONY: pull-jupyter
 
 run-jupyter: ## Run jupyter
 
@@ -51,27 +46,17 @@ run-jupyter: ## Run jupyter
 		--workdir=/notebooks \
 		$(jupyter_image)
 
-######################################################################################################################################################
+.PHONY: run-jupyter
 
 deploy-image: build-image ## Deploy image
 
 	docker push $(docker_image_repository):$(docker_image_version)
 	docker push $(docker_image_repository):latest
 
-######################################################################################################################################################
-
-.PHONY: build-image \
-		run-image \
-		pull-jupyter \
-		run-jupyter \
-		deploy-image
-
-######################################################################################################################################################
+.PHONY: deploy-image
 
 help:
 
 	@grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
-
-################################################################################################################################################################
