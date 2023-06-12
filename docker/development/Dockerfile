@@ -1,11 +1,4 @@
-################################################################################################################################################################
-
-# @project        Open Space Toolkit
-# @file           docker/development/Dockerfile
-# @author         Lucas Brémond <lucas.bremond@gmail.com>
-# @license        Apache License 2.0
-
-################################################################################################################################################################
+# Apache License 2.0
 
 FROM ubuntu:20.04
 
@@ -139,11 +132,11 @@ RUN python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
  && python3.10 -m pip install --upgrade pip \
  && python3.11 -m pip install --upgrade pip \
- && python3 -m pip install --user --upgrade pip setuptools wheel twine pytest \
- && python3.8 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.9 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.10 -m pip install --user --upgrade setuptools wheel twine pytest \
- && python3.11 -m pip install --user --upgrade setuptools wheel twine pytest
+ && python3 -m pip install --user --upgrade pip setuptools build wheel twine pytest \
+ && python3.8 -m pip install --user --upgrade setuptools build wheel twine pytest \
+ && python3.9 -m pip install --user --upgrade setuptools build wheel twine pytest \
+ && python3.10 -m pip install --user --upgrade setuptools build wheel twine pytest \
+ && python3.11 -m pip install --user --upgrade setuptools build wheel twine pytest
 
 ## CMake
 
@@ -244,5 +237,3 @@ LABEL VERSION="${VERSION}"
 # Execution
 
 CMD ["/bin/bash"]
-
-################################################################################################################################################################
