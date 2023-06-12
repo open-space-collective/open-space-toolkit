@@ -71,7 +71,7 @@ RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
  && rm llvm-snapshot.gpg.key \
  && add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' \
  && apt-get update \
- && apt-get install -y clang-format \
+ && apt-get install -y clang-format clang \
  && rm -rf /var/lib/apt/lists/*
 
 ## Python 3.8
