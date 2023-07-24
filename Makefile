@@ -48,6 +48,22 @@ run-jupyter: ## Run jupyter
 
 .PHONY: run-jupyter
 
+run-and-edit-jupyter: ## Run and edit jupyter notebooks
+
+	docker run \
+		-it \
+		--rm \
+		--user=root \
+		--publish=$(jupyter_port):8888 \
+		--volume="$(project_directory)/notebooks:/notebooks" \
+		--workdir=/notebooks \
+		$(jupyter_image) \
+		bash -c "chown -R jovyan:users /notebooks ; start-notebook.sh --ServerApp.token=''"
+
+	bash -c "sudo chown -R $(shell id -u):$(shell id -g) $(CURDIR)/notebooks"
+
+.PHONY: run-and-edit-jupyter
+
 deploy-image: build-image ## Deploy image
 
 	docker push $(docker_image_repository):$(docker_image_version)
