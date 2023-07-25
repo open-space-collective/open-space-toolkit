@@ -5,64 +5,65 @@ First off, thanks for taking the time to contribute! :rocket::rocket::rocket:
 The following is a set of guidelines for contributing to the **Open Space Toolkit** (OSTk) libraries, which are hosted in [Open Space Collective](https://github.com/open-space-collective) on GitHub.
 These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-##  1. <a name='TableOfContents'></a>Table Of Contents
+## Table Of Contents
 
-<!-- vscode-markdown-toc -->
-* 1. [Table Of Contents](#TableOfContents)
-* 2. [Code of Conduct](#CodeofConduct)
-* 3. [I Have a Question!](#IHaveaQuestion)
-* 4. [How Can I Contribute?](#HowCanIContribute)
-	* 4.1. [Reporting Bugs](#ReportingBugs)
-		* 4.1.1. [Before Submitting A Bug Report](#BeforeSubmittingABugReport)
-		* 4.1.2. [How Do I Submit A (Good) Bug Report?](#HowDoISubmitAGoodBugReport)
-	* 4.2. [Suggesting Enhancements](#SuggestingEnhancements)
-		* 4.2.1. [How Do I Submit A (Good) Enhancement Suggestion?](#HowDoISubmitAGoodEnhancementSuggestion)
-	* 4.3. [Your First Code Contribution](#YourFirstCodeContribution)
-	* 4.4. [Pull Requests](#PullRequests)
-	* 4.5. [Git Flow](#GitFlow)
-	* 4.6. [Commit Messages](#CommitMessages)
-* 5. [Styleguides](#Styleguides)
-	* 5.1. [C++ Styleguide](#CStyleguide)
-		* 5.1.1. [File Formatting](#FileFormatting)
-		* 5.1.2. [Class Structure](#ClassStructure)
-		* 5.1.3. [Method Structure](#MethodStructure)
-		* 5.1.4. [Coding Rules](#CodingRules)
-		* 5.1.5. [Code Format](#CodeFormat)
-		* 5.1.6. [Idioms](#Idioms)
-	* 5.2. [Python Styleguide](#PythonStyleguide)
-		* 5.2.1. [Python Bindings](#PythonBindings)
-	* 5.3. [Documentation Styleguide](#DocumentationStyleguide)
-* 6. [Development Setup](#DevelopmentSetup)
-	* 6.1. [Development Environment](#DevelopmentEnvironment)
-		* 6.1.1. [Development Across OSTk Libraries](#DevelopmentAcrossOSTkLibraries)
-	* 6.2. [Build](#Build)
-	* 6.3. [Test](#Test)
-	* 6.4. [Python](#Python)
-	* 6.5. [JupyterLab](#JupyterLab)
-	* 6.6. [Packages](#Packages)
-* 7. [Additional Notes](#AdditionalNotes)
-	* 7.1. [Issue and Pull Request Labels](#IssueandPullRequestLabels)
-		* 7.1.1. [Type of Issue and Issue State](#TypeofIssueandIssueState)
-* 8. [References](#References)
+<!-- toc -->
+- [Code Of Conduct](#code-of-conduct)
+- [I Have a Question!](#i-have-a-question)
+- [How Can I Contribute?](#how-can-i-contribute)
+  * [Reporting Bugs](#reporting-bugs)
+    + [Before Submitting A Bug Report](#before-submitting-a-bug-report)
+    + [How Do I Submit A (Good) Bug Report?](#how-do-i-submit-a-good-bug-report)
+  * [Suggesting Enhancements](#suggesting-enhancements)
+    + [How Do I Submit A (Good) Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
+  * [Your First Code Contribution](#your-first-code-contribution)
+  * [Pull Requests](#pull-requests)
+  * [Git Flow](#git-flow)
+  * [Commit Messages](#commit-messages)
+- [Styleguides](#styleguides)
+  * [C++ Styleguide](#c-styleguide)
+    + [File Formatting](#file-formatting)
+    + [Class Structure](#class-structure)
+    + [Method Structure](#method-structure)
+    + [Coding Rules](#coding-rules)
+      - [Acronyms](#acronyms)
+      - [Types](#types)
+    + [Code Format](#code-format)
+    + [Idioms](#idioms)
+      - [Named Constructor](#named-constructor)
+      - [PIMPL](#pimpl)
+      - [OSTk wrapper types and low-level methods/functions found in OSTk-core](#ostk-wrapper-types-and-low-level-methodsfunctions-found-in-ostk-core)
+      - [Pointers](#pointers)
+      - [Templates](#templates)
+  * [Python Styleguide](#python-styleguide)
+    + [Python Bindings](#python-bindings)
+  * [Documentation Styleguide](#documentation-styleguide)
+- [Development Setup](#development-setup)
+  * [Development Environment](#development-environment)
+    + [Development Across OSTk Libraries](#development-across-ostk-libraries)
+  * [Build](#build)
+  * [Test](#test)
+  * [Python](#python)
+  * [JupyterLab](#jupyterlab)
+  * [Packages](#packages)
+- [Additional Notes](#additional-notes)
+  * [Issue and Pull Request Labels](#issue-and-pull-request-labels)
+    + [Type of Issue and Issue State](#type-of-issue-and-issue-state)
+- [References](#references)
+<!-- tocstop -->
 
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
-
-##  2. <a name='CodeofConduct'></a>Code of Conduct
+## Code Of Conduct
 
 This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [contact@open-space-collective.com](mailto:contact@open-space-collective).
 
-##  3. <a name='IHaveaQuestion'></a>I Have a Question!
+## I Have a Question!
 
 Please don't file an issue to ask a question.
 You'll get faster results by reaching out on our [Gitter](https://gitter.im/open-space-collective/community).
 
-##  4. <a name='HowCanIContribute'></a>How Can I Contribute?
+## How Can I Contribute?
 
-###  4.1. <a name='ReportingBugs'></a>Reporting Bugs
+### Reporting Bugs
 
 This section guides you through submitting a bug report. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behavior :computer: :computer:, and find related reports :mag_right:.
 
@@ -70,13 +71,13 @@ Before creating bug reports, please check [this list](#before-submitting-a-bug-r
 
 > **Note:** If you find a **Closed** issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the body of your new one.
 
-####  4.1.1. <a name='BeforeSubmittingABugReport'></a>Before Submitting A Bug Report
+#### Before Submitting A Bug Report
 
 - Check the FAQ for a list of common questions and problems.
 - Determine which repository the problem should be reported in.
 - Perform a search to see if the problem has already been reported. If it has and the issue is still open, add a comment to the existing issue instead of opening a new one.
 
-####  4.1.2. <a name='HowDoISubmitAGoodBugReport'></a>How Do I Submit A (Good) Bug Report?
+#### How Do I Submit A (Good) Bug Report?
 
 Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/).
 After you've determined which repository your bug is related to, create an issue on that repository.
@@ -101,13 +102,13 @@ Include details about your configuration and environment:
 - Which version of OSTk are you using?
 - What's the name and version of the OS you're using?
 
-###  4.2. <a name='SuggestingEnhancements'></a>Suggesting Enhancements
+### Suggesting Enhancements
 
 This section guides you through submitting an enhancement suggestion for OSTk, including completely new features and minor improvements to existing functionality. Following these guidelines helps maintainers and the community understand your suggestion :pencil: and find related suggestions :mag_right:.
 
 Before creating enhancement suggestions, please check [this list](#before-submitting-an-enhancement-suggestion) as you might find out that you don't need to create one. When you are creating an enhancement suggestion, please [include as many details as possible](#how-do-i-submit-a-good-enhancement-suggestion).
 
-####  4.2.1. <a name='HowDoISubmitAGoodEnhancementSuggestion'></a>How Do I Submit A (Good) Enhancement Suggestion?
+#### How Do I Submit A (Good) Enhancement Suggestion?
 
 Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com/features/issues/).
 After you've determined which repository your enhancement suggestion is related to, create an issue on that repository and provide the following information:
@@ -120,7 +121,7 @@ After you've determined which repository your enhancement suggestion is related 
 - Specify **which version** of OSTk you're using.
 - Specify **the name and version of the OS** you're using.
 
-###  4.3. <a name='YourFirstCodeContribution'></a>Your First Code Contribution
+### Your First Code Contribution
 
 Unsure where to begin contributing to OSTk? You can start by looking through these `beginner` and `help-wanted` issues:
 
@@ -129,7 +130,7 @@ Unsure where to begin contributing to OSTk? You can start by looking through the
 
 Both issue lists are sorted by total number of comments. While not perfect, number of comments is a reasonable proxy for impact a given change will have.
 
-###  4.4. <a name='PullRequests'></a>Pull Requests
+### Pull Requests
 
 The process described here has several goals:
 
@@ -146,12 +147,12 @@ Please follow these steps to have your contribution considered by the maintainer
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
 
-###  4.5. <a name='GitFlow'></a>Git Flow
+### Git Flow
 
 We follow the linear git history standard where we prefer to rebase and squash instead of do merge commits in order to maintain a clean and organized commit history. \
 [How to Develop with a Tidy, Linear Git History](https://www.bitsnbites.eu/a-tidy-linear-git-history/)
 
-###  4.6. <a name='CommitMessages'></a>Commit Messages
+### Commit Messages
 
 When developing OSTk, please use the Conventional Commit standard for writing commits. \
 [How to Write a Git Commit Message](https://www.conventionalcommits.org/en/v1.0.0/)
@@ -162,11 +163,11 @@ Here are some additional tips:
 - Limit the first line to 72 characters or less
 - Reference issues and pull requests liberally after the first line
 
-##  5. <a name='Styleguides'></a>Styleguides
+## Styleguides
 
-###  5.1. <a name='CStyleguide'></a>C++ Styleguide
+### C++ Styleguide
 
-####  5.1.1. <a name='FileFormatting'></a>File Formatting
+#### File Formatting
 
 Consistent formatting greatly helps searching into files.
 
@@ -268,7 +269,7 @@ For example, because: `STL >> Boost >> OpenSpaceToolkit`
 #include <OpenSpaceToolkit/Core/MyClass.hpp>
 ```
 
-####  5.1.2. <a name='ClassStructure'></a>Class Structure
+#### Class Structure
 
 Respecting the following members / methods order improves searchability.
 
@@ -292,7 +293,7 @@ Respecting the following members / methods order improves searchability.
         └── Same as public
 ```
 
-####  5.1.3. <a name='MethodStructure'></a>Method Structure
+#### Method Structure
 
 - Try to avoid passing non-const types as arguments.
 - Better returning values (single or tuple).
@@ -317,7 +318,7 @@ MyReturnType MyClass::MyMethod (const MyType& aType)
 }
 ```
 
-####  5.1.4. <a name='CodingRules'></a>Coding Rules
+#### Coding Rules
 
 ##### Acronyms
 
@@ -339,12 +340,12 @@ MyClass* aPointer
 const MyClass* aConstPointer
 ```
 
-####  5.1.5. <a name='CodeFormat'></a>Code Format
+#### Code Format
 
 We follow the Google inspired c++ clang coding style and have a tool that can format all the code in each ostk repo. \
 Simply run a `make format` from the project top level directory to format all the cpp and python files. The formatting is enforced by the CI, so if you fail to run that command the CI won't pass.
 
-####  5.1.6. <a name='Idioms'></a>Idioms
+#### Idioms
 
 ##### Named Constructor
 
@@ -422,14 +423,14 @@ std::unique_ptr<Model> aModelUPtr;
 
 Only use templates outside of ostk-core/ostk-io if really necessary so as the keep code easily readable by newcomers to c++.
 
-###  5.2. <a name='PythonStyleguide'></a>Python Styleguide
+### Python Styleguide
 
 We follow the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide.
 
 We follow the Google inspired c++ clang coding style and have a tool that can format all the code in each ostk repo. \
 Simply run a `make format` from the project top level directory to format all the cpp and python files.
 
-####  5.2.1. <a name='PythonBindings'></a>Python Bindings
+#### Python Bindings
 
 The source code for OSTk is written in C++, but it can be leveraged in Python due to the use of Python bindings. We use [Pybind11](https://github.com/pybind/pybind11)  for this, which is a C++ header-only library containing code to easily map C++ core features into Python and “translate” your C++ code into its Python version.
 
@@ -447,12 +448,12 @@ The majority of the functions and methods existing in C++ can be translated in P
 - The C++ types do not have pre-defined casting to Python (in which case manual casting functions need to be defined to specifically detail how the C++ type should be rendered in Python).
 - The function has a particular return value or policy which is not straight forward to be reproduced in Python.
 
-###  5.3. <a name='DocumentationStyleguide'></a>Documentation Styleguide
+### Documentation Styleguide
 
 Use [Markdown](https://daringfireball.net/projects/markdown).
-##  6. <a name='DevelopmentSetup'></a>Development Setup
+## Development Setup
 
-###  6.1. <a name='DevelopmentEnvironment'></a>Development Environment
+### Development Environment
 
 Using [Docker](https://www.docker.com) for development is recommended, to simplify the installation of the necessary build tools and dependencies.
 Instructions on how to install Docker are available [here](https://docs.docker.com/install/).
@@ -475,13 +476,13 @@ This will:
 
 If developing in VSCode, we recommend developing inside a VSCode Dev Container, which can be done according to the documentation [here](https://code.visualstudio.com/docs/devcontainers/containers). Simply hit Ctrl+Shift+P and type `Dev Containers: Reopen in Dev Container` to launch the development environment. This allows you to Ctrl+Click on classes and be taken to their source code in C++.
 
-####  6.1.1. <a name='DevelopmentAcrossOSTkLibraries'></a>Development Across OSTk Libraries
+#### Development Across OSTk Libraries
 Please note that the development environment above only allows you to build an executable from the current ostk repo you are working on, not the other ostk repos that are part of the whole library. If you would like to do that, you can run the make recipe below which will mount another ostk library into your development image so you can make changes to multiple ostk repos at a time and test them out together.
 ```shell
-make start-developlepment-link links="/your/path/to/another/ostk/repo/you/would/to/mount"
+make start-developlepment-link links="/your/path/to/another/ostk/repo/you/would/like/to/mount"
 ```
 
-###  6.2. <a name='Build'></a>Build
+### Build
 
 From the `./build` directory:
 
@@ -490,25 +491,25 @@ cmake ..
 make
 ```
 
-*Tip: `helpers/build.sh` simplifies building from within the development environment.* \
+*Tip: `helpers/build.sh` simplifies building from within the development environment.*
 
-*Tip: `helpers/debug.sh` allows you to debug your code from within the development environment using `gdb`.* \
+*Tip: `helpers/debug.sh` allows you to debug your code from within the development environment using `gdb`.*
 
 *Tip: The `ccmake` tool is installed in the dev container and can be used to configure CMake project options to speed up your build time. It can be run with the `cmake ../` command from the `./build` directory*
 
-*Tip: `helpers/clean.sh` cleans the entire build directory.* \
+*Tip: `helpers/clean.sh` cleans the entire build directory.*
 
-###  6.3. <a name='Test'></a>Test
+### Test
 
 *Tip: `helpers/test.sh` simplifies running C++ tests from within the development environment. The name of the desired test to be run can be added afterwords according to documentation [here.](http://google.github.io/googletest/advanced.html#running-a-subset-of-the-tests)*
 
-###  6.4. <a name='Python'></a>Python
+### Python
 
-*Tip: `helpers/install-python.sh` installs the currently build shared object libraries as a python package within the development environment so that you can use your most recent changes to OSTk in python.
+*Tip: `helpers/install-python.sh` installs the currently build shared object libraries as a python package within the development environment so that you can use your most recent changes to OSTk in python.*
 
-*Tip: `helpers/test-python.sh` runs the suite of python unit tests from within the development environment after you have installed python.
+*Tip: `helpers/test-python.sh` runs the suite of python unit tests from within the development environment after you have installed python.*
 
-###  6.5. <a name='JupyterLab'></a>JupyterLab
+### JupyterLab
 
 There are two options for spinning up a jupyterlab instance to test out OSTk code in Python.
 
@@ -523,7 +524,7 @@ make debug-jupyter-notebook
 ```
 Before you run this command, you need to start a development environment and run `helpers/build.sh` as well as `helpers/install-python.sh`
 
-###  6.6. <a name='Packages'></a>Packages
+### Packages
 
 If you would like to build the C++ or Python OSTk packages based on the currently compiled binaries in your repo you can run the make commands below:
 ```shell
@@ -533,9 +534,9 @@ make build-packages-cpp
 make build-packages-python
 ```
 
-##  7. <a name='AdditionalNotes'></a>Additional Notes
+## Additional Notes
 
-###  7.1. <a name='IssueandPullRequestLabels'></a>Issue and Pull Request Labels
+### Issue and Pull Request Labels
 
 This section lists the labels we use to help us track and manage issues and pull requests. Most labels are used across all OSTk repositories.
 
@@ -546,7 +547,7 @@ The labels are loosely grouped by their purpose, but it's not required that ever
 
 Please open an issue if you have suggestions for new labels, and if you notice some labels are missing on some repositories, then please open an issue on that repository.
 
-####  7.1.1. <a name='TypeofIssueandIssueState'></a>Type of Issue and Issue State
+#### Type of Issue and Issue State
 
 | Label name                | Description                                                                                                                          |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -565,7 +566,7 @@ Please open an issue if you have suggestions for new labels, and if you notice s
 | `package-idea`            | Feature request which might be good candidates for new packages, instead of extending OSTk or core OSTk packages.                    |
 | `wrong-repo`              | Issues reported on the wrong repository.                                                                                             |
 
-##  8. <a name='References'></a>References
+## References
 
 - [Open Source Guides](https://opensource.guide)
 - [Atom Contributing Guide](https://github.com/atom/atom/blob/master/CONTRIBUTING.md)
