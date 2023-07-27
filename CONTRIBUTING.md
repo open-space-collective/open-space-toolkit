@@ -7,39 +7,52 @@ These are mostly guidelines, not rules. Use your best judgment, and feel free to
 
 ## Table Of Contents
 
-- [Open Space Toolkit ▸ Contributing](#open-space-toolkit-%e2%96%b8-contributing)
-  - [Table Of Contents](#table-of-contents)
-  - [Code of Conduct](#code-of-conduct)
-  - [I Have a Question!](#i-have-a-question)
-  - [How Can I Contribute?](#how-can-i-contribute)
-    - [Reporting Bugs](#reporting-bugs)
-      - [Before Submitting A Bug Report](#before-submitting-a-bug-report)
-      - [How Do I Submit A (Good) Bug Report?](#how-do-i-submit-a-good-bug-report)
-    - [Suggesting Enhancements](#suggesting-enhancements)
-      - [How Do I Submit A (Good) Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
-    - [Your First Code Contribution](#your-first-code-contribution)
-    - [Pull Requests](#pull-requests)
-  - [Styleguides](#styleguides)
-    - [Git Commit Messages](#git-commit-messages)
-    - [C++ Styleguide](#c-styleguide)
-      - [File Formatting](#file-formatting)
-      - [Class Structure](#class-structure)
-      - [Method Structure](#method-structure)
-      - [Coding Rules](#coding-rules)
-        - [Acronyms](#acronyms)
-        - [Types](#types)
-      - [Syntax](#syntax)
-      - [Idioms](#idioms)
-        - [Named Constructor](#named-constructor)
-        - [PIMPL](#pimpl)
-    - [Python Styleguide](#python-styleguide)
-    - [Documentation Styleguide](#documentation-styleguide)
-  - [Additional Notes](#additional-notes)
-    - [Issue and Pull Request Labels](#issue-and-pull-request-labels)
-      - [Type of Issue and Issue State](#type-of-issue-and-issue-state)
-  - [References](#references)
+<!-- toc -->
+- [Code Of Conduct](#code-of-conduct)
+- [I Have a Question!](#i-have-a-question)
+- [How Can I Contribute?](#how-can-i-contribute)
+  * [Reporting Bugs](#reporting-bugs)
+    + [Before Submitting A Bug Report](#before-submitting-a-bug-report)
+    + [How Do I Submit A (Good) Bug Report?](#how-do-i-submit-a-good-bug-report)
+  * [Suggesting Enhancements](#suggesting-enhancements)
+    + [How Do I Submit A (Good) Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
+  * [Your First Code Contribution](#your-first-code-contribution)
+  * [Pull Requests](#pull-requests)
+  * [Git Flow](#git-flow)
+  * [Commit Messages](#commit-messages)
+- [Styleguides](#styleguides)
+  * [C++ Styleguide](#c-styleguide)
+    + [File Formatting](#file-formatting)
+    + [Class Structure](#class-structure)
+    + [Method Structure](#method-structure)
+    + [Coding Rules](#coding-rules)
+      - [Acronyms](#acronyms)
+      - [Types](#types)
+    + [Code Format](#code-format)
+    + [Idioms](#idioms)
+      - [Named Constructor](#named-constructor)
+      - [PIMPL](#pimpl)
+      - [OSTk wrapper types and low-level methods/functions found in OSTk-core](#ostk-wrapper-types-and-low-level-methodsfunctions-found-in-ostk-core)
+      - [Pointers](#pointers)
+      - [Templates](#templates)
+  * [Python Styleguide](#python-styleguide)
+    + [Python Bindings](#python-bindings)
+  * [Documentation Styleguide](#documentation-styleguide)
+- [Development Setup](#development-setup)
+  * [Development Environment](#development-environment)
+    + [Development Across OSTk Libraries](#development-across-ostk-libraries)
+  * [Build](#build)
+  * [Test](#test)
+  * [Python](#python)
+  * [JupyterLab](#jupyterlab)
+  * [Packages](#packages)
+- [Additional Notes](#additional-notes)
+  * [Issue and Pull Request Labels](#issue-and-pull-request-labels)
+    + [Type of Issue and Issue State](#type-of-issue-and-issue-state)
+- [References](#references)
+<!-- tocstop -->
 
-## Code of Conduct
+## Code Of Conduct
 
 This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [contact@open-space-collective.com](mailto:contact@open-space-collective).
 
@@ -133,30 +146,24 @@ Please follow these steps to have your contribution considered by the maintainer
 
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
-## Styleguides
 
-### Git Commit Messages
+### Git Flow
 
+We follow the linear git history standard where we prefer to rebase and squash instead of do merge commits in order to maintain a clean and organized commit history. \
+[How to Develop with a Tidy, Linear Git History](https://www.bitsnbites.eu/a-tidy-linear-git-history/)
+
+### Commit Messages
+
+When developing OSTk, please use the Conventional Commit standard for writing commits. \
+[How to Write a Git Commit Message](https://www.conventionalcommits.org/en/v1.0.0/)
+
+Here are some additional tips:
 - Use the present tense ("Add feature" not "Added feature")
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
 - Limit the first line to 72 characters or less
 - Reference issues and pull requests liberally after the first line
-- Consider starting the commit message with an applicable emoji:
-  - :art: `:art:` when improving the format/structure of the code
-  - :racehorse: `:racehorse:` when improving performance
-  - :non-potable_water: `:non-potable_water:` when plugging memory leaks
-  - :memo: `:memo:` when writing docs
-  - :penguin: `:penguin:` when fixing something on Linux
-  - :apple: `:apple:` when fixing something on macOS
-  - :checkered_flag: `:checkered_flag:` when fixing something on Windows
-  - :bug: `:bug:` when fixing a bug
-  - :fire: `:fire:` when removing code or files
-  - :green_heart: `:green_heart:` when fixing the CI build
-  - :white_check_mark: `:white_check_mark:` when adding tests
-  - :lock: `:lock:` when dealing with security
-  - :arrow_up: `:arrow_up:` when upgrading dependencies
-  - :arrow_down: `:arrow_down:` when downgrading dependencies
-  - :shirt: `:shirt:` when removing linter warnings
+
+## Styleguides
 
 ### C++ Styleguide
 
@@ -165,30 +172,22 @@ While the prerequisites above must be satisfied prior to having your pull reques
 Consistent formatting greatly helps searching into files.
 
 ```cpp
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @project        Open Space Toolkit ▸ Core
-/// @file           OpenSpaceToolkit/Core/MyClass.hpp
-/// @author         Lucas Brémond <lucas.bremond@gmail.com>
-/// @license        Apache License 2.0
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Apache License 2.0
+
 
 #ifndef __OpenSpaceToolkit_Core_MyClass__
 #define __OpenSpaceToolkit_Core_MyClass__
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#include <OpenSpaceToolkit/Core/AClass.hpp>
 #include <OpenSpaceToolkit/Core/AnotherClass.hpp>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace ostk
 {
 namespace core
 {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+using ostk::core::AClass;
+using ostk::core::AnotherClass;
 
 /// @brief MyClass class
 ///
@@ -203,64 +202,58 @@ class MyClass
         {
             First, ///< A first enum
             Second ///< A second enum
-        } ;
+        };
 
         /// @brief Constructors
 
-        MyClass ( ) ;
+        MyClass();
 
         /// @brief Operators
 
-        bool operator == (const MyClass& aMyClass) const ;
+        bool operator==(const MyClass& aMyClass) const;
 
-        friend std::ostream& operator << (std::ostream& anOutputStream, const MyClass& aMyClass) ;
+        friend std::ostream& operator << (std::ostream& anOutputStream, const MyClass& aMyClass);
 
         /// @brief Testers
 
-        bool isDefined ( ) const ;
+        bool isDefined() const;
 
         /// @brief Accessors
 
-        const int& accessInteger ( ) const ;
+        const int& accessInteger() const;
 
         /// @brief Getters
 
-        int getInteger ( ) const ;
+        int getInteger() const;
 
         /// @brief Setters
 
-        void setInteger (const int& anInteger) ;
+        void setInteger (const int& anInteger);
 
         /// @brief Public methods
 
-        void doSomething ( ) ;
+        void doSomething();
 
         /// @brief Named constructors
 
-        static MyClass Integer (const int& anInteger) ;
+        static MyClass Integer(const int& anInteger);
 
     private:
 
-        int integer_ ; ///< An integer
+        int integer_; ///< An integer
 
-        std::string myString_ ; ///< A string.
+        std::string myString_; ///< A string.
 
         /// @brief Private methods
 
-        void doSomethingPrivate ( ) ;
+        void doSomethingPrivate();
 
-} ;
+};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}  // namespace astro
+}  // namespace ostk
 
 #endif
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ```
 
 Use #include following a generic to specific order.
@@ -312,15 +305,15 @@ MyReturnType MyClass::MyMethod (const MyType& aType)
 
     // Define shortcuts
 
-    using mynamespace::MyOtherClass ;
+    using mynamespace::MyOtherClass;
 
     // Define return type
 
-    MyReturnType myReturnValue ;
+    MyReturnType myReturnValue;
 
     // Do something...
 
-    return myReturnValue ;
+    return myReturnValue;
 
 }
 ```
@@ -347,36 +340,10 @@ MyClass* aPointer
 const MyClass* aConstPointer
 ```
 
-#### Syntax
+#### Code Format
 
-Add a space before `;`:
-
-```cpp
-int myInt = 123 ;
-```
-
-Put curly braces onto a new line ([Allman style](https://en.wikipedia.org/wiki/Indentation_style#Allman_style)):
-
-```cpp
-if (A && B)
-{
-    ...
-}
-else if (...)
-{
-    ...
-}
-else
-{
-    ...
-}
-```
-
-Separate operators with single space:
-
-```cpp
-a + b * c / (d - e) ;
-```
+We follow the Google inspired c++ clang coding style and have a tool that can format all the code in each ostk repo. \
+Simply run a `make format` from the project top level directory to format all the cpp and python files. The formatting is enforced by the CI, so if you fail to run that command the CI won't pass.
 
 #### Idioms
 
@@ -407,13 +374,165 @@ MyClass myThirdClass = MyClass::String("abc") ;
 
 We use the [Pointer to implementation (pImpl)](https://en.cppreference.com/w/cpp/language/pimpl) C++ programming technique.
 
+##### OSTk wrapper types and low-level methods/functions found in OSTk-core
+
+Stick to using the wrapper types and containers defined in ostk-core (and ostk-io) instead of c++'s elementary types whenever possible. The majority of these are found inside ostk-core `Types`
+```cpp
+using ostk::core::types::Integer;
+using ostk::core::types::Real;
+
+// Use these
+Real aReal = 1.0;
+Integer anInteger = 1;
+
+// Instead of these
+double aDouble = 1.0;
+int anInteger = 1;
+```
+and ostk-core `Container`
+```cpp
+using ostk::core::ctnr::Array;
+using ostk::core::ctnr::Pair;
+
+// Use these
+Pair<bool, Real> aPair;
+Array<Integer> aVector;
+
+// Instead of these
+std::pair<bool, double> aPair;
+std::vector<int> aVector;
+```
+
+##### Pointers
+
+Avoid using raw pointers or manual memory allocation/de-allocation as much as possible. Stick to using shared/unique/weak pointers inline with modern C++ development.
+```cpp
+using ostk::core::types::Shared;
+using ostk::core::types::Unique;
+
+// Use these
+Shared<Celestial> aCelestialObjectSPtr;
+Unique<Model> aModelUPtr;
+
+// Instead of these
+std::shared_ptr<Celestial> aCelestialObjectSPtr;
+std::unique_ptr<Model> aModelUPtr;
+```
+
+##### Templates
+
+Only use templates outside of ostk-core/ostk-io if really necessary so as the keep code easily readable by newcomers to c++.
+
 ### Python Styleguide
 
 We follow the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide.
 
+We follow the Google inspired c++ clang coding style and have a tool that can format all the code in each ostk repo. \
+Simply run a `make format` from the project top level directory to format all the cpp and python files.
+
+#### Python Bindings
+
+The source code for OSTk is written in C++, but it can be leveraged in Python due to the use of Python bindings. We use [Pybind11](https://github.com/pybind/pybind11)  for this, which is a C++ header-only library containing code to easily map C++ core features into Python and “translate” your C++ code into its Python version.
+
+The mapping between C++ classes and python classes is as follows:
+```
+C++                     -->     Python
+Object::setAttribute    -->     Object.set_attribute
+Object::getAttribute    -->     Object.get_attribute
+Object::method          -->     Object.method
+```
+
+In each OSTk library, the binding code can be found in the /bindings/ folder.
+
+The majority of the functions and methods existing in C++ can be translated in Python extremely easily (typically with a one-liner) defining the Python function based on the existing code in C++. A couple of exceptions can render the binding process a little bit more involved:
+- The C++ types do not have pre-defined casting to Python (in which case manual casting functions need to be defined to specifically detail how the C++ type should be rendered in Python).
+- The function has a particular return value or policy which is not straight forward to be reproduced in Python.
+
 ### Documentation Styleguide
 
 Use [Markdown](https://daringfireball.net/projects/markdown).
+## Development Setup
+
+### Development Environment
+
+Using [Docker](https://www.docker.com) for development is recommended, to simplify the installation of the necessary build tools and dependencies.
+Instructions on how to install Docker are available [here](https://docs.docker.com/install/).
+If installing Docker is not an option, you can manually install the development tools (GCC, CMake) and all required dependencies,
+by following a procedure similar to the one described in the [Development Dockerfile](./docker/development/Dockerfile).
+
+The GNU Make tool is used to control the generation of executable in order to build OSTk docker containers and libraries. All the make recipes that are used can be found in the `Makefile` in the project level directory of each OSTk library.
+
+To start the development environment:
+
+```shell
+make start-development
+```
+
+This will:
+
+1. Build the `openspacecollective/open-space-toolkit-astrodynamics-development` Docker image.
+2. Create a development environment container with local source files and helper scripts mounted.
+3. Start a `bash` shell from the `./build` working directory.
+
+If developing in VSCode, we recommend developing inside a VSCode Dev Container, which can be done according to the documentation [here](https://code.visualstudio.com/docs/devcontainers/containers). Simply hit Ctrl+Shift+P and type `Dev Containers: Reopen in Dev Container` to launch the development environment. This allows you to Ctrl+Click on classes and be taken to their source code in C++.
+
+#### Development Across OSTk Libraries
+Please note that the development environment above only allows you to build an executable from the current ostk repo you are working on, not the other ostk repos that are part of the whole library. If you would like to do that, you can run the make recipe below which will mount another ostk library into your development image so you can make changes to multiple ostk repos at a time and test them out together.
+```shell
+make start-developlepment-link links="/your/path/to/another/ostk/repo/you/would/like/to/mount"
+```
+
+### Build
+
+From the `./build` directory:
+
+```shell
+cmake ..
+make
+```
+
+*Tip: `helpers/build.sh` simplifies building from within the development environment.*
+
+*Tip: `helpers/debug.sh` allows you to debug your code from within the development environment using `gdb`.*
+
+*Tip: The `ccmake` tool is installed in the dev container and can be used to configure CMake project options to speed up your build time. It can be run with the `cmake ../` command from the `./build` directory*
+
+*Tip: `helpers/clean.sh` cleans the entire build directory.*
+
+### Test
+
+*Tip: `helpers/test.sh` simplifies running C++ tests from within the development environment. The name of the desired test to be run can be added afterwords according to documentation [here.](http://google.github.io/googletest/advanced.html#running-a-subset-of-the-tests)*
+
+### Python
+
+*Tip: `helpers/install-python.sh` installs the currently build shared object libraries as a python package within the development environment so that you can use your most recent changes to OSTk in python.*
+
+*Tip: `helpers/test-python.sh` runs the suite of python unit tests from within the development environment after you have installed python.*
+
+### JupyterLab
+
+There are two options for spinning up a jupyterlab instance to test out OSTk code in Python.
+
+If you want to test a tagged release of OSTk code from your library (not reflecting your local changes to the repo) you can:
+```shell
+make start-jupyter-notebook
+```
+
+If you want to debug a version of your OSTk that you just built (reflecting your local changes to the repo) you can:
+```shell
+make debug-jupyter-notebook
+```
+Before you run this command, you need to start a development environment and run `helpers/build.sh` as well as `helpers/install-python.sh`
+
+### Packages
+
+If you would like to build the C++ or Python OSTk packages based on the currently compiled binaries in your repo you can run the make commands below:
+```shell
+make build-packages-cpp
+```
+```shell
+make build-packages-python
+```
 
 ## Additional Notes
 
