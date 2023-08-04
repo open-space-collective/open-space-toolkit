@@ -52,7 +52,7 @@ jobs:
         with:
           tags: ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
           context: .
-          file: {context}/docker/development/Dockerfile
+          file: ./docker/development/Dockerfile
           build-args: |
             BASE_IMAGE_SYSTEM=debian
             VERSION=${{ inputs.project_version }}
