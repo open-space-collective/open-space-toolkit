@@ -18,7 +18,7 @@ build-image: ## Build image
 		--tag=$(docker_image_repository):$(docker_image_version) \
 		--tag=$(docker_image_repository):latest \
 		--build-arg="VERSION=$(docker_image_version)" \
-		"$(project_directory)/docker/development"
+		"$(project_directory)"
 
 .PHONY: build-image
 

@@ -226,6 +226,19 @@ ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
 ENV PYTHONPATH /usr/local/lib:${PYTHONPATH}
 RUN git config --global --add safe.directory /app
 
+# Install development helpers
+
+COPY tools/development/helpers/build.sh /usr/bin/ostk-build
+COPY tools/development/helpers/test.sh /usr/bin/ostk-test
+COPY tools/development/helpers/test-python.sh /usr/bin/ostk-test-python
+COPY tools/development/helpers/format-cpp.sh /usr/bin/ostk-format-cpp
+COPY tools/development/helpers/format-python.sh /usr/bin/ostk-format-python
+COPY tools/development/helpers/check-format-cpp.sh /usr/bin/ostk-check-format-cpp
+COPY tools/development/helpers/check-format-python.sh /usr/bin/ostk-check-format-python
+COPY tools/development/helpers/clean.sh /usr/bin/ostk-clean
+COPY tools/development/helpers/install-python.sh /usr/bin/ostk-install-python
+COPY tools/development/helpers/debug.sh /usr/bin/ostk-debug
+
 # Labels
 
 ARG VERSION
