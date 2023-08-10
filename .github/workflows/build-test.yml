@@ -175,11 +175,6 @@ jobs:
         with:
           path: ./cache
           key: ${{ runner.os }}-benchmark
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          lfs: true
       - uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'googlecpp'
