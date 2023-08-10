@@ -170,7 +170,6 @@ jobs:
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run C++ Benchmark
         run: make benchmark-cpp
-      - uses: actions/checkout@v2
       - name: Download previous benchmark
         uses: actions/cache@v1
         with:
