@@ -79,7 +79,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Check C++ Format
-        run: make format-check-cpp
+        run: make format-check-cpp-standalone
 
   test-unit-cpp:
     name: Run C++ Unit Tests
@@ -127,7 +127,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Check Python Format
-        run: make format-check-python
+        run: make format-check-python-standalone
 
   test-unit-python:
     name: Run Python Unit Tests
