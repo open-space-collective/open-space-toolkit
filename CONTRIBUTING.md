@@ -465,7 +465,7 @@ The GNU Make tool is used to control the generation of executable in order to bu
 To start the development environment:
 
 ```shell
-make start-development
+make dev
 ```
 
 This will:
@@ -491,23 +491,23 @@ cmake ..
 make
 ```
 
-*Tip: `helpers/build.sh` simplifies building from within the development environment.*
+*Tip: `ostk-build` simplifies building from within the development environment.*
 
-*Tip: `helpers/debug.sh` allows you to debug your code from within the development environment using `gdb`.*
+*Tip: `ostk-debug` allows you to debug your code from within the development environment using `gdb`.*
 
 *Tip: The `ccmake` tool is installed in the dev container and can be used to configure CMake project options to speed up your build time. It can be run with the `cmake ../` command from the `./build` directory*
 
-*Tip: `helpers/clean.sh` cleans the entire build directory.*
+*Tip: `ostk-clean` cleans the entire build directory.*
 
 ### Test
 
-*Tip: `helpers/test.sh` simplifies running C++ tests from within the development environment. The name of the desired test to be run can be added afterwords according to documentation [here.](http://google.github.io/googletest/advanced.html#running-a-subset-of-the-tests)*
+*Tip: `ostk-test` simplifies running C++ tests from within the development environment. A [specific test](http://google.github.io/googletest/advanced.html#running-a-subset-of-the-tests) can be run by matching patterns `ostk-test *TEST-NAME*`.*
 
 ### Python
 
-*Tip: `helpers/install-python.sh` installs the currently build shared object libraries as a python package within the development environment so that you can use your most recent changes to OSTk in python.*
+*Tip: `ostk-install-python` installs the currently build shared object libraries as a python package within the development environment so that you can use your most recent changes to OSTk in python.*
 
-*Tip: `helpers/test-python.sh` runs the suite of python unit tests from within the development environment after you have installed python.*
+*Tip: `ostk-test-python` runs the suite of python unit tests from within the development environment after you have installed python.*
 
 ### JupyterLab
 
