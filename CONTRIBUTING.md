@@ -491,7 +491,7 @@ cmake ..
 make
 ```
 
-*Tip: `ostk-b uild` simplifies building from within the development environment.*
+*Tip: `ostk-build` simplifies building from within the development environment.*
 
 *Tip: `ostk-debug` allows you to debug your code from within the development environment using `gdb`.*
 
