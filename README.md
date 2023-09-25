@@ -32,7 +32,6 @@ Want to get started? This is the simplest and quickest way:
 
 - [Use Cases](./docs/Use%20Cases.md)
 - [Frequently Asked Questions](./docs/FAQ.md)
-- [Discussion Channels](https://gitter.im/open-space-collective/community)
 
 ## Contributing
 
