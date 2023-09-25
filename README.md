@@ -1,7 +1,7 @@
 # Open Space Toolkit
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Discord](https://dcbadge.vercel.app/api/server/tuHRnjuzWS?style=flat-square)](https://discord.gg/tuHRnjuzWS)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aerospace engineering use, available in:
 
