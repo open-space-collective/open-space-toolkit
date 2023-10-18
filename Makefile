@@ -53,14 +53,13 @@ run-and-edit-jupyter: ## Run and edit jupyter notebooks
 	docker run \
 		-it \
 		--rm \
-		--user=root \
+		--user=$(shell id -u) \
+		--group-add=users \
 		--publish=$(jupyter_port):8888 \
 		--volume="$(project_directory)/notebooks:/notebooks" \
 		--workdir=/notebooks \
 		$(jupyter_image) \
-		bash -c "chown -R jovyan:users /notebooks ; start-notebook.sh --ServerApp.token=''"
-
-	bash -c "sudo chown -R $(shell id -u):$(shell id -g) $(CURDIR)/notebooks"
+		bash -c "start-notebook.py --ServerApp.token=''"
 
 .PHONY: run-and-edit-jupyter
 
