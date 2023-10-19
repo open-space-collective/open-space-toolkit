@@ -8,8 +8,6 @@ LABEL maintainer="lucas@loftorbital.com"
 
 ENV JUPYTER_ENABLE_LAB yes
 
-ARG PORT=9000
-
 # Set user to root
 
 USER root
@@ -39,4 +37,4 @@ USER ${NB_UID}
 
 # Disable token
 
-CMD ["start-notebook.sh --port ${PORT}", "--NotebookApp.token=''"]
+CMD ["start-notebook.sh", "--NotebookApp.token=''"]
