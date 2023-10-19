@@ -54,11 +54,11 @@ run-and-edit-jupyter: ## Run and edit jupyter notebooks
 		-it \
 		--rm \
 		--user=root \
-		--publish=$(jupyter_port):8888 \
+		--publish=$(jupyter_port):9000 \
 		--volume="$(project_directory)/notebooks:/notebooks" \
 		--workdir=/notebooks \
 		$(jupyter_image) \
-		bash -c "chown -R jovyan:users /notebooks ; start-notebook.sh --ServerApp.token=''"
+		bash -c "chown -R jovyan:users /notebooks ; start-notebook.sh --port=9000 --ServerApp.token=''"
 
 	bash -c "sudo chown -R $(shell id -u):$(shell id -g) $(CURDIR)/notebooks"
 
