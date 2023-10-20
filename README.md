@@ -16,7 +16,7 @@ Want to get started? This is the simplest and quickest way:
 
 [![JupyterHosted](https://img.shields.io/badge/JupyterLab-white?logo=jupyter)](https://open-space-toolkit-r22wh5qixa-uc.a.run.app/lab/tree/notebooks)
 
-*Theis will automatically start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment in your web browser with Open Space Toolkit libraries and example notebooks ready to use. Nothing to download or install! 🚀*
+*This will automatically start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment in your web browser with Open Space Toolkit libraries and example notebooks ready to use. Nothing to download or install! 🚀*
 
 ## Components
 
