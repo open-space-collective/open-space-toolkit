@@ -6,7 +6,7 @@ ARG JUPYTER_NOTEBOOK_IMAGE_REPOSITORY=jupyter/scipy-notebook:x86_64-python-3.11.
 
 FROM ${JUPYTER_NOTEBOOK_IMAGE_REPOSITORY}
 
-LABEL maintainer="kyle.ray.cochran@gmail.com"
+LABEL maintainer="kyle.cochran@loftorbital.com"
 
 ENV JUPYTER_ENABLE_LAB yes
 
