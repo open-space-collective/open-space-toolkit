@@ -14,7 +14,7 @@ The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aer
 
 Want to get started? This is the simplest and quickest way:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/open-space-collective/open-space-toolkit/main?urlpath=lab/tree/notebooks)
+[![JupyterHosted](https://img.shields.io/badge/JupyterLab-white?logo=jupyter)](https://open-space-toolkit-r22wh5qixa-uc.a.run.app/lab/tree/notebooks)
 
 *This will automatically start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment in your web browser with Open Space Toolkit libraries and example notebooks ready to use. Nothing to download or install! 🚀*
 
