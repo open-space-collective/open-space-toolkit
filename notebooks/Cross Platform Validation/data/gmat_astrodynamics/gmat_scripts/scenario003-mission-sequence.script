@@ -1,0 +1,142 @@
+% Copyright Loft Orbital Solutions Inc.
+% Created: 2023-12-05 10:45:28.945788
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft Spacecraft1;
+GMAT Spacecraft1.DateFormat = UTCGregorian;
+GMAT Spacecraft1.Epoch = '01 Jan 2023 00:00:00.000';
+GMAT Spacecraft1.CoordinateSystem = EarthICRF;
+GMAT Spacecraft1.DisplayStateType = Cartesian;
+GMAT Spacecraft1.X = -4283.387412456234;
+GMAT Spacecraft1.Y = -4451.4267761251;
+GMAT Spacecraft1.Z = -2967.617850750064;
+GMAT Spacecraft1.VX = 4.948074939732173;
+GMAT Spacecraft1.VY = -0.9573429532772123;
+GMAT Spacecraft1.VZ = -5.721173027553034;
+GMAT Spacecraft1.DryMass = 100;
+GMAT Spacecraft1.Cd = 2.2;
+GMAT Spacecraft1.Cr = 1.8;
+GMAT Spacecraft1.DragArea = 1;
+GMAT Spacecraft1.SRPArea = 1;
+GMAT Spacecraft1.SPADDragScaleFactor = 1;
+GMAT Spacecraft1.SPADSRPScaleFactor = 1;
+GMAT Spacecraft1.AtmosDensityScaleFactor = 1;
+GMAT Spacecraft1.ExtendedMassPropertiesModel = 'None';
+GMAT Spacecraft1.NAIFId = -10000001;
+GMAT Spacecraft1.NAIFIdReferenceFrame = -9000001;
+GMAT Spacecraft1.OrbitColor = Red;
+GMAT Spacecraft1.TargetColor = Teal;
+GMAT Spacecraft1.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+GMAT Spacecraft1.CdSigma = 1e+70;
+GMAT Spacecraft1.CrSigma = 1e+70;
+GMAT Spacecraft1.Id = 'SatId';
+GMAT Spacecraft1.Attitude = CoordinateSystemFixed;
+GMAT Spacecraft1.SPADSRPInterpolationMethod = Bilinear;
+GMAT Spacecraft1.SPADSRPScaleFactorSigma = 1e+70;
+GMAT Spacecraft1.SPADDragInterpolationMethod = Bilinear;
+GMAT Spacecraft1.SPADDragScaleFactorSigma = 1e+70;
+GMAT Spacecraft1.AtmosDensityScaleFactorSigma = 1e+70;
+GMAT Spacecraft1.ModelFile = 'aura.3ds';
+GMAT Spacecraft1.ModelOffsetX = 0;
+GMAT Spacecraft1.ModelOffsetY = 0;
+GMAT Spacecraft1.ModelOffsetZ = 0;
+GMAT Spacecraft1.ModelRotationX = 0;
+GMAT Spacecraft1.ModelRotationY = 0;
+GMAT Spacecraft1.ModelRotationZ = 0;
+GMAT Spacecraft1.ModelScale = 1;
+GMAT Spacecraft1.AttitudeDisplayStateType = 'Quaternion';
+GMAT Spacecraft1.AttitudeRateDisplayStateType = 'AngularVelocity';
+GMAT Spacecraft1.AttitudeCoordinateSystem = EarthMJ2000Eq;
+GMAT Spacecraft1.EulerAngleSequence = '321';
+
+
+%----------------------------------------
+%---------- Force Model + Prop
+%----------------------------------------
+
+Create ForceModel ForceModel1;
+GMAT ForceModel1.CentralBody = Earth;
+GMAT ForceModel1.PrimaryBodies = {Earth};
+GMAT ForceModel1.SRP = Off;
+GMAT ForceModel1.RelativisticCorrection = Off;
+GMAT ForceModel1.ErrorControl = RSSStep;
+GMAT ForceModel1.GravityField.Earth.Degree = 0;
+GMAT ForceModel1.GravityField.Earth.Order = 0;
+GMAT ForceModel1.GravityField.Earth.StmLimit = 100;
+GMAT ForceModel1.GravityField.Earth.PotentialFile = 'EGM96.cof';
+GMAT ForceModel1.GravityField.Earth.TideModel = 'None';
+GMAT ForceModel1.Drag.AtmosphereModel = Exponential;
+GMAT ForceModel1.Drag.DragModel = 'Spherical';
+
+Create Propagator Propagator1;
+GMAT Propagator1.FM = ForceModel1;
+GMAT Propagator1.Type = PrinceDormand45;
+GMAT Propagator1.InitialStepSize = 30;
+GMAT Propagator1.Accuracy = 1e-12;
+GMAT Propagator1.MinStep = 0.001;
+GMAT Propagator1.MaxStep = 2700;
+GMAT Propagator1.MaxStepAttempts = 100;
+GMAT Propagator1.StopIfAccuracyIsViolated = true;
+
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create ReportFile ReportFile1;
+GMAT ReportFile1.SolverIterations = Current;
+GMAT ReportFile1.UpperLeft = [ 0 0 ];
+GMAT ReportFile1.Size = [ 0 0 ];
+GMAT ReportFile1.RelativeZOrder = 0;
+GMAT ReportFile1.Maximized = false;
+GMAT ReportFile1.Filename = '/builds/loft-orbital/engineering/flight-dynamics/gmat-tooling/app/../gmat_astrodynamics/scenario003-mission-sequence.csv';
+GMAT ReportFile1.Precision = 16;
+GMAT ReportFile1.WriteHeaders = false;
+GMAT ReportFile1.LeftJustify = On;
+GMAT ReportFile1.ZeroFill = On;
+GMAT ReportFile1.FixedWidth = false;
+GMAT ReportFile1.Delimiter = ',';
+GMAT ReportFile1.ColumnWidth = 23;
+GMAT ReportFile1.WriteReport = false;
+
+
+%----------------------------------------
+%---------- Variables
+%----------------------------------------
+
+Create Variable max_duration_timestamp;
+Create String headers;
+Create Variable i;
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+
+%---------- Setup Output File Format ----------
+
+headers = 'Spacecraft1.ElapsedSecs,Spacecraft1.EarthICRF.X,Spacecraft1.EarthICRF.Y,Spacecraft1.EarthICRF.Z,Spacecraft1.EarthICRF.VX,Spacecraft1.EarthICRF.VY,Spacecraft1.EarthICRF.VZ';
+Write headers {ReportFile = ReportFile1};
+Report ReportFile1 Spacecraft1.ElapsedSecs Spacecraft1.EarthICRF.X Spacecraft1.EarthICRF.Y Spacecraft1.EarthICRF.Z Spacecraft1.EarthICRF.VX Spacecraft1.EarthICRF.VY Spacecraft1.EarthICRF.VZ;
+
+%---------- Setup Maximum Duration Limit ----------
+
+max_duration_timestamp = Spacecraft1.UTCModJulian + 1.0000011574074075; % days
+
+%---------- Coast ----------
+
+%%% Segment Prop Duration: 86400.0s
+For i = 0:120.0:86400.0;
+If i < 86400.0;
+Propagate Propagator1(Spacecraft1) {Spacecraft1.ElapsedSecs = 120.0};
+If Spacecraft1.UTCModJulian <= max_duration_timestamp;
+Report ReportFile1 Spacecraft1.ElapsedSecs Spacecraft1.EarthICRF.X Spacecraft1.EarthICRF.Y Spacecraft1.EarthICRF.Z Spacecraft1.EarthICRF.VX Spacecraft1.EarthICRF.VY Spacecraft1.EarthICRF.VZ;
+EndIf;
+EndIf;
+EndFor;
