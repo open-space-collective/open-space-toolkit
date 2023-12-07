@@ -1,5 +1,5 @@
 % Copyright Loft Orbital Solutions Inc.
-% Created: 2023-12-06 13:04:23.185021
+% Created: 2023-12-06 13:04:27.938925
 
 
 %----------------------------------------
@@ -61,25 +61,24 @@ GMAT Spacecraft1.EulerAngleSequence = '321';
 Create ForceModel ForceModel1;
 GMAT ForceModel1.CentralBody = Earth;
 GMAT ForceModel1.PrimaryBodies = {Earth};
+GMAT ForceModel1.Drag = None;
 GMAT ForceModel1.SRP = Off;
 GMAT ForceModel1.RelativisticCorrection = Off;
-GMAT ForceModel1.ErrorControl = RSSStep;
+GMAT ForceModel1.ErrorControl = None;
 GMAT ForceModel1.GravityField.Earth.Degree = 0;
 GMAT ForceModel1.GravityField.Earth.Order = 0;
 GMAT ForceModel1.GravityField.Earth.StmLimit = 100;
 GMAT ForceModel1.GravityField.Earth.PotentialFile = 'EGM96.cof';
 GMAT ForceModel1.GravityField.Earth.TideModel = 'None';
-GMAT ForceModel1.Drag.AtmosphereModel = Exponential;
-GMAT ForceModel1.Drag.DragModel = 'Spherical';
 
 Create Propagator Propagator1;
 GMAT Propagator1.FM = ForceModel1;
-GMAT Propagator1.Type = PrinceDormand45;
+GMAT Propagator1.Type = RungeKutta4;
 GMAT Propagator1.InitialStepSize = 30;
-GMAT Propagator1.Accuracy = 1e-12;
+GMAT Propagator1.Accuracy = 9.999999999999999e-12;
 GMAT Propagator1.MinStep = 0.001;
-GMAT Propagator1.MaxStep = 2700;
-GMAT Propagator1.MaxStepAttempts = 100;
+GMAT Propagator1.MaxStep = 30;
+GMAT Propagator1.MaxStepAttempts = 50;
 GMAT Propagator1.StopIfAccuracyIsViolated = true;
 
 
@@ -93,7 +92,7 @@ GMAT ReportFile1.UpperLeft = [ 0 0 ];
 GMAT ReportFile1.Size = [ 0 0 ];
 GMAT ReportFile1.RelativeZOrder = 0;
 GMAT ReportFile1.Maximized = false;
-GMAT ReportFile1.Filename = '/builds/loft-orbital/engineering/flight-dynamics/gmat-tooling/app/../gmat_astrodynamics/scenario003-mission-sequence.csv';
+GMAT ReportFile1.Filename = '/builds/loft-orbital/engineering/flight-dynamics/gmat-tooling/app/../gmat_astrodynamics/scenario005-mission-sequence.csv';
 GMAT ReportFile1.Precision = 16;
 GMAT ReportFile1.WriteHeaders = false;
 GMAT ReportFile1.LeftJustify = On;
