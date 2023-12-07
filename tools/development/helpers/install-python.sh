@@ -12,6 +12,7 @@ python_directory="${project_directory}/build/bindings/python/OpenSpaceToolkit*Py
 pushd ${python_directory} > /dev/null
 
 python${PYTHON_VERSION} -m pip install plotly pandas
+python${PYTHON_VERSION} -m pip install git+https://github.com/lucas-bremond/cesiumpy.git#egg=cesiumpy
 python${PYTHON_VERSION} -m pip install . --force-reinstall
 
 popd > /dev/null
