@@ -1,5 +1,4 @@
 #!/bin/bash
-# Apache License 2.0
 
 export LD_LIBRARY_PATH=/srv/conda/lib/
 
