@@ -132,11 +132,10 @@ RUN python3.8 -m pip install --upgrade pip \
  && python3.9 -m pip install --upgrade pip \
  && python3.10 -m pip install --upgrade pip \
  && python3.11 -m pip install --upgrade pip \
- && python3 -m pip install --user --upgrade pip setuptools build wheel twine pytest \
- && python3.8 -m pip install --user --upgrade setuptools build wheel twine pytest \
- && python3.9 -m pip install --user --upgrade setuptools build wheel twine pytest \
- && python3.10 -m pip install --user --upgrade setuptools build wheel twine pytest \
- && python3.11 -m pip install --user --upgrade setuptools build wheel twine pytest
+ && python3.8 -m pip install --upgrade setuptools build wheel twine pytest \
+ && python3.9 -m pip install --upgrade setuptools build wheel twine pytest \
+ && python3.10 -m pip install --upgrade setuptools build wheel twine pytest \
+ && python3.11 -m pip install --upgrade setuptools build wheel twine pytest
 
 ## CMake
 
@@ -218,7 +217,7 @@ RUN mkdir /tmp/openssl \
 
 ## Black
 
-RUN python3.11 -m pip install --user black black[jupyter]
+RUN python3.11 -m pip install black black[jupyter]
 
 # Environment
 
@@ -246,7 +245,3 @@ ARG VERSION
 ENV VERSION ${VERSION}
 
 LABEL VERSION="${VERSION}"
-
-# Execution
-
-CMD ["/bin/bash"]
