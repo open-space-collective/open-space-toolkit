@@ -108,7 +108,7 @@ RUN mkdir -p /tmp/py310 \
 
 ## Python 3.11
 
-ARG PYTHON_3_11_VERSION="3.11.1"
+ARG PYTHON_3_11_VERSION="3.11.7"
 
 RUN mkdir -p /tmp/py311 \
  && cd /tmp/py311 \
