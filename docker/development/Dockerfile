@@ -245,3 +245,7 @@ ARG VERSION
 ENV VERSION ${VERSION}
 
 LABEL VERSION="${VERSION}"
+
+# Execution
+
+CMD ["/bin/bash"]
