@@ -58,6 +58,7 @@ jobs:
             VERSION=${{ inputs.project_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          target: root-user
           push: true
 
   format-check-cpp:

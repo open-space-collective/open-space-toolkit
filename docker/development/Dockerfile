@@ -108,7 +108,7 @@ RUN mkdir -p /tmp/py310 \
 
 ## Python 3.11
 
-ARG PYTHON_3_11_VERSION="3.11.1"
+ARG PYTHON_3_11_VERSION="3.11.7"
 
 RUN mkdir -p /tmp/py311 \
  && cd /tmp/py311 \
@@ -128,15 +128,14 @@ RUN apt-get update -y \
     python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python3.8 -m pip install --upgrade pip \
- && python3.9 -m pip install --upgrade pip \
- && python3.10 -m pip install --upgrade pip \
- && python3.11 -m pip install --upgrade pip \
- && python3 -m pip install --user --upgrade pip setuptools build wheel twine pytest \
- && python3.8 -m pip install --user --upgrade setuptools build wheel twine pytest \
- && python3.9 -m pip install --user --upgrade setuptools build wheel twine pytest \
- && python3.10 -m pip install --user --upgrade setuptools build wheel twine pytest \
- && python3.11 -m pip install --user --upgrade setuptools build wheel twine pytest
+RUN python3.8 -m pip install --upgrade pip ipython \
+ && python3.9 -m pip install --upgrade pip ipython \
+ && python3.10 -m pip install --upgrade pip ipython \
+ && python3.11 -m pip install --upgrade pip ipython \
+ && python3.8 -m pip install --upgrade setuptools build wheel twine pytest \
+ && python3.9 -m pip install --upgrade setuptools build wheel twine pytest \
+ && python3.10 -m pip install --upgrade setuptools build wheel twine pytest \
+ && python3.11 -m pip install --upgrade setuptools build wheel twine pytest
 
 ## CMake
 
@@ -218,7 +217,7 @@ RUN mkdir /tmp/openssl \
 
 ## Black
 
-RUN python3.11 -m pip install --user black black[jupyter]
+RUN python3.11 -m pip install black black[jupyter]
 
 # Environment
 
