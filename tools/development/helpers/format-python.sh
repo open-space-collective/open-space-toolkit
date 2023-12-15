@@ -6,6 +6,6 @@ project_directory="$(git rev-parse --show-toplevel)"
 
 pushd "${project_directory}" > /dev/null
 
-    python3.11 -m black --line-length=90 bindings/python/
+    python3.11 -m black bindings/python/
 
 popd > /dev/null
