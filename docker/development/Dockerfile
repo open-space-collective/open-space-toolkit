@@ -230,6 +230,7 @@ RUN git config --global --add safe.directory /app
 COPY tools/development/helpers/build.sh /usr/bin/ostk-build
 COPY tools/development/helpers/test.sh /usr/bin/ostk-test
 COPY tools/development/helpers/test-python.sh /usr/bin/ostk-test-python
+COPY tools/development/helpers/validate.sh /usr/bin/ostk-validate
 COPY tools/development/helpers/format-cpp.sh /usr/bin/ostk-format-cpp
 COPY tools/development/helpers/format-python.sh /usr/bin/ostk-format-python
 COPY tools/development/helpers/check-format-cpp.sh /usr/bin/ostk-check-format-cpp
