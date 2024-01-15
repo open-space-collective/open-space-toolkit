@@ -239,6 +239,18 @@ COPY tools/development/helpers/clean.sh /usr/bin/ostk-clean
 COPY tools/development/helpers/install-python.sh /usr/bin/ostk-install-python
 COPY tools/development/helpers/debug.sh /usr/bin/ostk-debug
 
+RUN chmod +x /usr/bin/ostk-build \
+ && chmod +x /usr/bin/ostk-test \
+ && chmod +x /usr/bin/ostk-test-python \
+ && chmod +x /usr/bin/ostk-validate \
+ && chmod +x /usr/bin/ostk-format-cpp \
+ && chmod +x /usr/bin/ostk-format-python \
+ && chmod +x /usr/bin/ostk-check-format-cpp \
+ && chmod +x /usr/bin/ostk-check-format-python \
+ && chmod +x /usr/bin/ostk-clean \
+ && chmod +x /usr/bin/ostk-install-python \
+ && chmod +x /usr/bin/ostk-debug
+
 # Labels
 
 ARG VERSION
