@@ -1,0 +1,13 @@
+type: FIELD_DATA_GENERATION
+data:
+  sweep:
+    altitude:
+      start: 230000
+      end: 980000
+      step: 50000
+
+  output:
+    include:
+      - ELAPSED_SECONDS
+      - GEODETIC_POSITION
+      - EARTH_ATMOSPHERIC_DENSITY_EXPONENTIAL
