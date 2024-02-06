@@ -59,7 +59,7 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ## I Have a Question!
 
 Please don't file an issue to ask a question.
-You'll get faster results by reaching out on our [Gitter](https://gitter.im/open-space-collective/community).
+You'll get faster results by reaching out on our [Discord](https://discord.gg/tuHRnjuzWS).
 
 ## How Can I Contribute?
 
