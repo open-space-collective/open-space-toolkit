@@ -224,10 +224,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Documentation
         run: make build-documentation-standalone
+      - name: Tar files
+        run: tar -cvf docs.tar.gz docs/
       - name: Upload Documentation
         uses: actions/upload-artifact@v3
         with:
           name: docs
-          path: docs/
+          path: docs.tar.gz
 
 ################################################################################################################################################################
