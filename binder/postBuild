@@ -1,14 +1,5 @@
 #!/bin/bash
 
-################################################################################################################################################################
-
-# @project        Open Space Toolkit
-# @file           binder/postBuild
-# @author         Lucas Brémond <lucas@loftorbital.com>
-# @license        Apache License 2.0
-
-################################################################################################################################################################
-
 # Install Jupyter widgets extension
 
 jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
