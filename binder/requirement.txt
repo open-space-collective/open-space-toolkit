@@ -1,0 +1,14 @@
+# Apache License 2.0
+
+gsutil~=4.47
+
+jupyterlab_launcher>=0.5
+
+ipywidgets~=7.5
+ipympl~=0.4
+plotly~=5.5
+plotly-geo~=1.0
+
+pandas~=2.1
+
+open-space-toolkit-astrodynamics~=7.0
