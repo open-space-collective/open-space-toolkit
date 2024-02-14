@@ -94,9 +94,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: docs
-          path: docs.tar.gz
       - name: Untar Files
-        run: echo "$(pwd)" && echo "$(ls -l)" && tar -xvf docs.tar.gz && rm docs.tar.gz
+        run: tar -xvf docs.tar.gz && rm docs.tar.gz
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
