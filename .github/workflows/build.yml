@@ -1,13 +1,6 @@
-################################################################################################################################################################
+# Apache License 2.0
 
-# @project        Open Space Toolkit
-# @file           .github/workflows/build-test.yml
-# @author         Lucas Brémond <lucas@loftorbital.com>
-# @license        Apache License 2.0
-
-################################################################################################################################################################
-
-name: Build and Test
+name: Build
 
 on:
   workflow_call:
