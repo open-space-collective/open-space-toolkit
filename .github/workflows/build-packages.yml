@@ -1,0 +1,97 @@
+# Apache License 2.0
+
+name: Build Packages
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        description: The name of the project.
+        required: true
+        type: string
+      project_version:
+        description: The version of the project.
+        required: true
+        type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
+
+env:
+  DOCKER_REGISTRY_PATH: openspacecollective
+  LANG: en_US.UTF-8
+
+jobs:
+  build-package-cpp:
+    name: Build C++ Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Build C++ Package
+        run: make build-packages-cpp-standalone
+      - name: Upload C++ Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: cpp-package
+          path: packages/cpp/
+
+  build-package-python:
+    name: Build Python Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Build Python Package
+        run: make build-packages-python-standalone
+      - name: Upload Python Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-package
+          path: packages/python/
+
+  build-documentation:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Documentation
+        run: make build-documentation-standalone
+      - name: Tar files
+        run: tar -cvf docs.tar.gz docs/
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: docs.tar.gz

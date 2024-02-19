@@ -1,0 +1,107 @@
+# Apache License 2.0
+
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        description: The name of the project.
+        required: true
+        type: string
+      project_version:
+        description: The version of the project.
+        required: true
+        type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
+
+env:
+  DOCKER_REGISTRY_PATH: openspacecollective
+  LANG: en_US.UTF-8
+
+jobs:
+  format-check-cpp:
+    name: Check C++ Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Check C++ Format
+        run: make format-check-cpp-standalone
+
+  test-unit-cpp:
+    name: Run C++ Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Run Unit Tests C++
+        run: make test-coverage-cpp-standalone
+      - name: Upload Coverage Results
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage/
+          fail_ci_if_error: true
+
+  format-check-python:
+    name: Check Python Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Check Python Format
+        run: make format-check-python-standalone
+
+  test-unit-python:
+    name: Run Python Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Pull Development Image
+        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      - name: Run Unit Tests Python
+        run: make test-unit-python-standalone
