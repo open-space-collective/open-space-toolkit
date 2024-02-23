@@ -27,6 +27,7 @@ jobs:
   build-image-development:
     name: Build Development Image
     runs-on: ubuntu-latest
+    timeout-minutes: 600
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3

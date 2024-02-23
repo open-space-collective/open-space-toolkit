@@ -1,6 +1,6 @@
 # Apache License 2.0
 
-name: Build
+name: Build Base Development Image
 
 on:
   push:
