@@ -81,7 +81,7 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build Python Package
-        run: make build-packages-python-standalone
+        run: make build-packages-python-standalone PLATFORM=${{ matrix.architecture }}
       - name: Upload Python Package
         uses: actions/upload-artifact@v3
         with:

@@ -171,49 +171,49 @@ RUN cd /tmp \
 
 # ## Pybind11
 
-# ARG PYBIND_11_VERSION="2.10.3-1"
+ARG PYBIND_11_VERSION="2.10.3-1"
 
-# RUN mkdir /tmp/pybind11 \
-#  && cd /tmp/pybind11 \
-#  && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_${PYBIND_11_VERSION}_all.deb \
-#  && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
-#  && rm -rf /tmp/pybind11
+RUN mkdir /tmp/pybind11 \
+ && cd /tmp/pybind11 \
+ && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_${PYBIND_11_VERSION}_all.deb \
+ && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
+ && rm -rf /tmp/pybind11
 
-# ## Boost
+## Boost
 
-# ARG BOOST_MAJOR_VERSION="1"
-# ARG BOOST_MINOR_VERSION="82"
-# ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
+ARG BOOST_MAJOR_VERSION="1"
+ARG BOOST_MINOR_VERSION="82"
+ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
 
-# RUN mkdir -p /tmp/boost \
-#  && cd /tmp/boost \
-#  && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
-#  && tar -xf boost_${BOOST_VERSION}.tar.gz \
-#  && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
-#  && ./bootstrap.sh --with-python=/usr/local/bin/python3.10 \
-#  && echo "using python : 3.10 : /usr : /usr/include/python3.10m ;" >> project-config.jam \
-#  && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
-#  && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
-#  && rm -rf /tmp/boost
+RUN mkdir -p /tmp/boost \
+ && cd /tmp/boost \
+ && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
+ && tar -xf boost_${BOOST_VERSION}.tar.gz \
+ && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
+ && ./bootstrap.sh --with-python=/usr/local/bin/python3.10 \
+ && echo "using python : 3.10 : /usr : /usr/include/python3.10m ;" >> project-config.jam \
+ && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
+ && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
+ && rm -rf /tmp/boost
 
-# ## OpenSSL
+## OpenSSL
 
-# ARG OPENSSL_VERSION="3.0.2"
+ARG OPENSSL_VERSION="3.0.2"
 
-# RUN mkdir /tmp/openssl \
-#  && cd /tmp/openssl \
-#  && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
-#  && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
-#  && cd openssl-${OPENSSL_VERSION} \
-#  && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
-#  && make \
-#  && make install \
-#  && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
-#  && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
-#  && ldconfig \
-#  && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
-#  && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
-#  && rm -rf /tmp/openssl
+RUN mkdir /tmp/openssl \
+ && cd /tmp/openssl \
+ && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
+ && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
+ && cd openssl-${OPENSSL_VERSION} \
+ && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
+ && make \
+ && make install \
+ && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+ && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+ && ldconfig \
+ && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
+ && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
+ && rm -rf /tmp/openssl
 
 ## Black
 
