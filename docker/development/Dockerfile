@@ -169,7 +169,7 @@ RUN cd /tmp \
 
 # Dependencies
 
-# ## Pybind11
+## Pybind11
 
 ARG PYBIND_11_VERSION="2.10.3-1"
 
