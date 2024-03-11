@@ -13,6 +13,16 @@ on:
         description: The version of the project.
         required: true
         type: string
+      push:
+        description: Push the image to the registry.
+        default: true
+        required: false
+        type: boolean
+      target:
+        description: The target to build.
+        default: root-user
+        required: false
+        type: string
     secrets:
       DOCKERHUB_USERNAME:
         required: true
@@ -27,7 +37,6 @@ jobs:
   build-image-development:
     name: Build Development Image
     runs-on: ubuntu-latest
-    timeout-minutes: 600
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -54,6 +63,6 @@ jobs:
             VERSION=${{ inputs.project_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          target: root-user
+          target: ${{ inputs.target }}
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ inputs.push }}

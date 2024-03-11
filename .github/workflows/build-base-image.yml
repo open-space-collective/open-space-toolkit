@@ -41,10 +41,49 @@ jobs:
           echo "Project version: ${project_version}"
           echo "value=${project_version}" >> $GITHUB_OUTPUT
 
+  build-base1-image:
+    name: Build Base1 Image
+    needs:
+      - prepare-environment
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: false
+      target: base1
+    secrets: inherit
+  
+  build-base2-image:
+    name: Build Base2 Image
+    needs:
+      - prepare-environment
+      - build-base1-image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: false
+      target: base2
+    secrets: inherit
+
+  build-base3-image:
+    name: Build Base3 Image
+    needs:
+      - prepare-environment
+      - build-base2-image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: false
+      target: base3
+    secrets: inherit
+
   build-development-image:
     name: Build Development Image
     needs:
       - prepare-environment
+      - build-base3-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
