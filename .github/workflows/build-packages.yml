@@ -30,6 +30,7 @@ jobs:
     strategy:
       matrix:
         architecture: [amd64, arm64]
+      fail-fast: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
