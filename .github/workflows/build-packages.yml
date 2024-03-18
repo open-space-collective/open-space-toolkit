@@ -28,29 +28,35 @@ jobs:
     name: Build C++ Package
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         architecture: [amd64, arm64]
     steps:
       - name: Checkout Repository
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           lfs: true
-      - name: Set up QEMU
+      - name: Set up QEMU for ARM64
+        if: matrix.architecture == 'arm64' && (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: docker/setup-qemu-action@v2
-        if: matrix.architecture == 'arm64' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           platforms: arm64
       - name: Login to DockerHub
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build C++ Package
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: make build-packages-cpp-standalone PLATFORM=${{ matrix.architecture }}
       - name: Upload C++ Package
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: actions/upload-artifact@v3
         with:
           name: cpp-package
@@ -60,29 +66,35 @@ jobs:
     name: Build Python Package
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         architecture: [amd64, arm64]
     steps:
       - name: Checkout Repository
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           lfs: true
-      - name: Set up QEMU
+      - name: Set up QEMU for ARM64
+        if: matrix.architecture == 'arm64' && (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: docker/setup-qemu-action@v2
-        if: matrix.architecture == 'arm64' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           platforms: arm64
       - name: Login to DockerHub
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build Python Package
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: make build-packages-python-standalone PLATFORM=${{ matrix.architecture }}
       - name: Upload Python Package
+        if: matrix.architecture != 'arm64' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: actions/upload-artifact@v3
         with:
           name: python-package
