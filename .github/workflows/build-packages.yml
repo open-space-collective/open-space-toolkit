@@ -38,7 +38,7 @@ jobs:
           lfs: true
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-        if: matrix.architecture == 'arm64'
+        if: matrix.architecture == 'arm64' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           platforms: arm64
       - name: Login to DockerHub
@@ -70,7 +70,7 @@ jobs:
           lfs: true
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-        if: matrix.architecture == 'arm64'
+        if: matrix.architecture == 'arm64' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           platforms: arm64
       - name: Login to DockerHub

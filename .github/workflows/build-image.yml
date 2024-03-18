@@ -1,6 +1,6 @@
 # Apache License 2.0
 
-name: Build Image
+name: Build Development Image
 
 on:
   workflow_call:

@@ -219,8 +219,6 @@ RUN mkdir /tmp/openssl \
  && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
  && rm -rf /tmp/openssl
 
-FROM base3 as root-user
-
 ## Black
 
 RUN python3.11 -m pip install black black[jupyter]

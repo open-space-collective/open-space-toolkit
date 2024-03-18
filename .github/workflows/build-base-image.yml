@@ -52,7 +52,7 @@ jobs:
       push: false
       target: base1
     secrets: inherit
-  
+
   build-base2-image:
     name: Build Base2 Image
     needs:
@@ -75,17 +75,6 @@ jobs:
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: ${{ needs.prepare-environment.outputs.project_version }}
-      push: false
+      push: true
       target: base3
-    secrets: inherit
-
-  build-development-image:
-    name: Build Development Image
-    needs:
-      - prepare-environment
-      - build-base3-image
-    uses: ./.github/workflows/build-image.yml
-    with:
-      project_name: ${{ needs.prepare-environment.outputs.project_name }}
-      project_version: ${{ needs.prepare-environment.outputs.project_version }}
     secrets: inherit
