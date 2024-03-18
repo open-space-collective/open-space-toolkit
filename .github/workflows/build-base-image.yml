@@ -75,6 +75,19 @@ jobs:
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: false
+      target: base3
+    secrets: inherit
+
+  push-and-tag-base-image-as-latest:
+    name: Push and Tag Base Image as Latest
+    needs:
+      - prepare-environment
+      - build-base3-image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: latest
       push: true
       target: base3
     secrets: inherit
