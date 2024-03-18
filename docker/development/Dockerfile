@@ -1,6 +1,6 @@
 # Apache License 2.0
 
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as base1
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -93,6 +93,7 @@ RUN mkdir -p /tmp/py39 \
  && make altinstall \
  && rm -rf /tmp/py39
 
+FROM base1 as base2
 ## Python 3.10
 
 ARG PYTHON_3_10_VERSION="3.10.9"
@@ -118,6 +119,9 @@ RUN mkdir -p /tmp/py311 \
  && ./configure --enable-optimizations \
  && make altinstall \
  && rm -rf /tmp/py311
+
+
+FROM base2 as base3
 
 ## Python tools
 

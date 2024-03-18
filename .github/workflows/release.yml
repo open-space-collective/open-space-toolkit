@@ -70,7 +70,7 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: packages/python/
+          packages-dir: packages/python/
 
   deploy-documentation:
     name: Deploy Documentation

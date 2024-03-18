@@ -1,0 +1,80 @@
+# Apache License 2.0
+
+name: Build Base Development Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+concurrency:
+  group: main-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROJECT_NAME: open-space-toolkit-base
+
+jobs:
+  prepare-environment:
+    name: Prepare Environment Variables
+    runs-on: ubuntu-latest
+    outputs:
+      project_name: ${{ steps.project-name.outputs.value }}
+      project_version: ${{ steps.project-version.outputs.value }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - id: project-name
+        name: Get Project Name
+        run: |
+          echo "Project name: ${{ env.PROJECT_NAME }}"
+          echo "value=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+      - id: project-version
+        name: Get Project Version
+        run: |
+          project_version=$(git describe --tags --always)
+          echo "Project version: ${project_version}"
+          echo "value=${project_version}" >> $GITHUB_OUTPUT
+
+  build-base1-image:
+    name: Build Base1 Image
+    needs:
+      - prepare-environment
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: false
+      target: base1
+    secrets: inherit
+
+  build-base2-image:
+    name: Build Base2 Image
+    needs:
+      - prepare-environment
+      - build-base1-image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: false
+      target: base2
+    secrets: inherit
+
+  build-base3-image:
+    name: Build Base3 Image
+    needs:
+      - prepare-environment
+      - build-base2-image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      project_name: ${{ needs.prepare-environment.outputs.project_name }}
+      project_version: ${{ needs.prepare-environment.outputs.project_version }}
+      push: true
+      target: base3
+    secrets: inherit
