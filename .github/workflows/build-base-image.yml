@@ -7,6 +7,8 @@ on:
     branches:
       - main
   pull_request:
+  release:
+    types: [published]
 
 
 concurrency:
@@ -41,8 +43,8 @@ jobs:
           echo "Project version: ${project_version}"
           echo "value=${project_version}" >> $GITHUB_OUTPUT
 
-  build-base1-image:
-    name: Build Base1 Image
+  build-part1-of-base-image:
+    name: Build Part 1 of Base Image
     needs:
       - prepare-environment
     uses: ./.github/workflows/build-image.yml
@@ -53,11 +55,11 @@ jobs:
       target: base1
     secrets: inherit
 
-  build-base2-image:
-    name: Build Base2 Image
+  build-part2-of-base-image:
+    name: Build Part 2 of Base Image
     needs:
       - prepare-environment
-      - build-base1-image
+      - build-part1-of-base-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
@@ -66,11 +68,11 @@ jobs:
       target: base2
     secrets: inherit
 
-  build-base3-image:
-    name: Build Base3 Image
+  build-part3-and-push-and-tag-base-image:
+    name: Build Part 3 and Push and Tag Base Image with Version
     needs:
       - prepare-environment
-      - build-base2-image
+      - build-part2-of-base-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
@@ -80,11 +82,11 @@ jobs:
     secrets: inherit
 
   push-and-tag-base-image-as-latest:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     name: Push and Tag Base Image as Latest
     needs:
       - prepare-environment
-      - build-base3-image
+      - build-part3-and-push-and-tag-base-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
