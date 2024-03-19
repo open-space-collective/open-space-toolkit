@@ -75,7 +75,7 @@ jobs:
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: ${{ needs.prepare-environment.outputs.project_version }}
-      push: false
+      push: true
       target: base3
     secrets: inherit
 
