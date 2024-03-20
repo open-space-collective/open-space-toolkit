@@ -82,7 +82,7 @@ jobs:
     secrets: inherit
 
   push-and-tag-base-image-as-latest:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'release' && github.event.action == 'published'
     name: Push and Tag Base Image as Latest
     needs:
       - prepare-environment
