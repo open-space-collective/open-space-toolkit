@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        architecture: [amd64, arm64]
+        platform-specific-package-name: [x86_64, aarch64]
     steps:
       - name: Checkout Repository
         if: matrix.architecture != 'arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
@@ -54,7 +54,7 @@ jobs:
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build C++ Package
         if: matrix.architecture != 'arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        run: make build-packages-cpp-standalone PLATFORM=${{ matrix.architecture }}
+        run: make build-packages-cpp-standalone PLATFORM_SPECIFIC_PACKAGE_NAME=${{ matrix.platform-specific-package-name }}
       - name: Upload C++ Package
         if: matrix.architecture != 'arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/upload-artifact@v3
@@ -68,7 +68,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        architecture: [amd64, arm64]
+        platform-specific-package-name: [x86_64, aarch64]
     steps:
       - name: Checkout Repository
         if: matrix.architecture != 'arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
@@ -92,7 +92,7 @@ jobs:
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build Python Package
         if: matrix.architecture != 'arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        run: make build-packages-python-standalone PLATFORM=${{ matrix.architecture }}
+        run: make build-packages-python-standalone PLATFORM_SPECIFIC_PACKAGE_NAME=${{ matrix.platform-specific-package-name }}
       - name: Upload Python Package
         if: matrix.architecture != 'arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/upload-artifact@v3
