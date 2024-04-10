@@ -9,13 +9,13 @@ mkdir -p "${build_directory}"
 
 pushd "${build_directory}" > /dev/null
 
-if [[ ! -z $1 ]] && [[ $1 == "--debug" ]]; then
+if [[ ! -z $1 ]] && [[ $1 == "--release" ]]; then
 
-    cmake -DCMAKE_BUILD_TYPE=Debug ..
+    cmake -DCMAKE_BUILD_TYPE=Release ..
 
 else
 
-    cmake ..
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 fi
 
