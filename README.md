@@ -14,9 +14,30 @@ The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aer
 
 Want to get started? This is the simplest and quickest way:
 
-[![JupyterHosted](https://img.shields.io/badge/JupyterLab-white?logo=jupyter)](https://open-space-toolkit-r22wh5qixa-uc.a.run.app/lab/tree/notebooks)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/open-space-collective/open-space-toolkit/main?urlpath=lab/tree/notebooks)
 
 *This will automatically start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment in your web browser with Open Space Toolkit libraries and example notebooks ready to use. Nothing to download or install! 🚀*
+
+
+### Local JupyterLab in Docker
+
+Alternatively, you can run a pre-installed OSTk environment on your local machine. This process has the following requirements:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Git](https://git-scm.com/downloads)
+- [GNU Make](https://www.gnu.org/software/make/)
+
+The following commands will start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) server within a Docker container where the OSTk components are already installed:
+
+```shell
+# clone this repo
+git clone https://github.com/open-space-collective/open-space-toolkit.git && cd open-space-toolkit
+
+# Run the jupyter server inside of Docker
+make run-jupyter
+```
+
+Once the container is running, access [http://localhost:8888/lab](http://localhost:8888/lab) and create a Python 3 Notebook.
+
 
 ## Components
 
