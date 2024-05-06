@@ -242,6 +242,7 @@ COPY tools/development/helpers/check-format-python.sh /usr/bin/ostk-check-format
 COPY tools/development/helpers/clean.sh /usr/bin/ostk-clean
 COPY tools/development/helpers/install-python.sh /usr/bin/ostk-install-python
 COPY tools/development/helpers/debug.sh /usr/bin/ostk-debug
+COPY tools/development/helpers/docs.sh /usr/bin/ostk-build-docs
 
 RUN chmod +x /usr/bin/ostk-build \
  && chmod +x /usr/bin/ostk-test \
@@ -253,7 +254,8 @@ RUN chmod +x /usr/bin/ostk-build \
  && chmod +x /usr/bin/ostk-check-format-python \
  && chmod +x /usr/bin/ostk-clean \
  && chmod +x /usr/bin/ostk-install-python \
- && chmod +x /usr/bin/ostk-debug
+ && chmod +x /usr/bin/ostk-debug \
+ && chmod +x /usr/bin/ostk-build-docs
 
 # Labels
 
