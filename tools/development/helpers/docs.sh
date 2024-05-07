@@ -1,14 +1,32 @@
 #!/bin/bash
 
 project_directory="$(git rev-parse --show-toplevel)"
-project_name_camel_case=$(echo "$project_directory" | cut -d '-' -f4- | sed -r 's/(^|-)([a-z])/\U\2/g')
 docs_directory="${project_directory}/docs"
 
 pushd "${docs_directory}" > /dev/null
 
+help() {
+    echo "Usage: ./docs.sh [--notebooks PROJECT_NAME]"
+    echo "Generate documentation for the project."
+    echo ""
+    echo "Options:"
+    echo "  --notebooks PROJECT_NAME   Generate documentation for notebooks of the specified project."
+}
+
+if [[ $1 == "--help" ]]; then
+    help
+    exit 0
+fi
+
 pip install -r requirements.txt
 
 if [[ ! -z $1 ]] && [[ $1 == "--notebooks" ]]; then
+    if [[ -z $2 ]]; then
+        echo "Error: PROJECT_NAME is required when using --notebooks option."
+        exit 1
+    fi
+
+    project_name_camel_case="$2"
 
     mkdir -p _notebooks
     cd _notebooks
