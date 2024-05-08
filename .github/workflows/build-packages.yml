@@ -109,14 +109,14 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - env:
-          CESIUM_TOKEN: ${{ secrets.CESIUM_TOKEN }}
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Documentation
+        env:
+          CESIUM_TOKEN: ${{ secrets.CESIUM_TOKEN }}
         run: make build-documentation-standalone
       - name: Tar files
         run: tar -cvf docs.tar.gz docs/
