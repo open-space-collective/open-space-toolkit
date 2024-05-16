@@ -56,7 +56,7 @@ Once the container is running, access [http://localhost:8888/lab](http://localho
 
 ## Using OSTk in your applications
 
-To help jump-start using OSTk, here is a simple docker image that you can use to create your applications.
+To help jump-start using OSTk, here is a simple Docker image that you can use to create your applications.
 
 ### Docker
 
@@ -123,7 +123,6 @@ requires-python = ">=3.11"
 dynamic = ["version"]
 
 dependencies = [
-    # Public libraries
     "open-space-toolkit-simulation~=X.Y.Z",
 ]
 
@@ -138,12 +137,11 @@ dev = [
 
 You can then build the Docker image via:
 ```
-docker build . -t my_OSTk_app
-docker run -it --rm my_OSTk_app
+docker build . -t my-app
+docker run -it --rm my-app
 ```
 
 Enjoy!
-
 
 ## Contributing
 
