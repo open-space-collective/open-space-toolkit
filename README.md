@@ -94,6 +94,8 @@ ARG USER_GID=${USER_UID}
 RUN sudo groupmod --gid ${USER_GID} ${USERNAME} && \
     sudo usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
 
+USER ${USERNAME}
+
 ## Install dependencies
 
 COPY --chown=${USER_UID}:${USER_GID} pyproject.toml /home/${USERNAME}/tmp/
