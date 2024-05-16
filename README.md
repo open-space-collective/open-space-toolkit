@@ -71,9 +71,9 @@ ARG OSTK_DATA_LOCAL_CACHE="/var/cache/open-space-toolkit-data"
 
 ## Install OSTk data install dependencies
 
-RUN apt-get update \
-    && apt-get install -y git-lfs \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y git-lfs && \
+    rm -rf /var/lib/apt/lists/*
 
 ## Seed OSTk Data
 
