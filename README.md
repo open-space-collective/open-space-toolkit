@@ -54,6 +54,95 @@ Once the container is running, access [http://localhost:8888/lab](http://localho
 - [Use Cases](./docs/Use%20Cases.md)
 - [Frequently Asked Questions](./docs/FAQ.md)
 
+## Using OSTk in your applications
+
+To help jump-start using OSTk, here is a simple Docker image that you can use to create your applications.
+
+### Docker
+
+```docker
+ARG PYTHON_BASE_VERSION="3.11"
+
+# Open Space Toolkit install image
+
+FROM mcr.microsoft.com/vscode/devcontainers/python:${PYTHON_BASE_VERSION}
+
+ARG OSTK_DATA_LOCAL_CACHE="/var/cache/open-space-toolkit-data"
+
+## Install OSTk data install dependencies
+
+RUN apt-get update && \
+    apt-get install -y git-lfs && \
+    rm -rf /var/lib/apt/lists/*
+
+## Seed OSTk Data
+
+ENV OSTK_PHYSICS_DATA_LOCAL_REPOSITORY="${OSTK_DATA_LOCAL_CACHE}/data"
+
+RUN git clone \
+    --branch=v1 \
+    --single-branch \
+    --depth=1 \
+    https://github.com/open-space-collective/open-space-toolkit-data.git ${OSTK_DATA_LOCAL_CACHE} && \
+    chmod -R g+w ${OSTK_DATA_LOCAL_CACHE}
+
+## Update user id and group id with local ones
+
+ARG USERNAME="vscode"
+ARG USER_UID="1000"
+ARG USER_GID=${USER_UID}
+RUN sudo groupmod --gid ${USER_GID} ${USERNAME} && \
+    sudo usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
+
+## Install dependencies
+
+COPY --chown=${USER_UID}:${USER_GID} pyproject.toml /home/${USERNAME}/tmp/
+
+RUN cd /home/${USERNAME}/tmp/ && \
+    pip --no-cache-dir install --user .[dev] && \
+    rm -rf /home/${USERNAME}/tmp/
+
+## Change default entrypoint to bin/zsh
+
+ENTRYPOINT ["/bin/zsh"]
+
+## Change default entrypoint folder to /app
+
+WORKDIR /app
+```
+
+### pyproject.toml
+
+And an accompanying `pyproject.toml` file that should be in the same folder.
+
+```toml
+[project]
+name = "my-app"
+requires-python = ">=3.11"
+
+dynamic = ["version"]
+
+dependencies = [
+    "open-space-toolkit-simulation~=X.Y.Z",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Development libraries
+    "ipython~=8.24",
+]
+```
+
+### Build and Run
+
+You can then build the Docker image via:
+```
+docker build . -t my-app
+docker run -it --rm my-app
+```
+
+Enjoy!
+
 ## Contributing
 
 Contributions are more than welcome!
