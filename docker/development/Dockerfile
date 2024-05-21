@@ -76,10 +76,15 @@ RUN add-apt-repository ppa:deadsnakes/ppa
 
 RUN apt-get update && apt-get install -y \
     python3.8 \
+    python3.8-distutils \
     python3.9 \
+    python3.9-distutils \
     python3.10 \
+    python3.10-distutils \
     python3.11 \
-    python3.12
+    python3.11-distutils \
+    python3.12 \
+    python3.12-distutils
 
 FROM base2 as base3
 
@@ -90,6 +95,7 @@ RUN apt-get update -y \
    python3-dev \
    python3-numpy \
    python3-pip \
+   
    && rm -rf /var/lib/apt/lists/*
 
 RUN python3.8 -m pip install --upgrade pip ipython \
