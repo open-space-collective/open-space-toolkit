@@ -70,6 +70,8 @@ RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
 
 ## Python
 
+FROM base1 as base2
+
 RUN add-apt-repository ppa:deadsnakes/ppa
 
 RUN apt-get update && apt-get install -y \
