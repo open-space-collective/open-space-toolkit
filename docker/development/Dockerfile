@@ -68,59 +68,16 @@ RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
    && apt-get install -y clang-format clang \
    && rm -rf /var/lib/apt/lists/*
 
-## Python 3.8
+## Python
 
-ARG PYTHON_3_8_VERSION="3.8.9"
+RUN add-apt-repository ppa:deadsnakes/ppa
 
-RUN mkdir -p /tmp/py38 \
-   && cd /tmp/py38 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_8_VERSION}/Python-${PYTHON_3_8_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_8_VERSION}.tgz \
-   && cd Python-${PYTHON_3_8_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py38
-
-## Python 3.9
-
-ARG PYTHON_3_9_VERSION="3.9.16"
-
-RUN mkdir -p /tmp/py39 \
-   && cd /tmp/py39 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_9_VERSION}/Python-${PYTHON_3_9_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_9_VERSION}.tgz \
-   && cd Python-${PYTHON_3_9_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py39
-
-FROM base1 as base2
-## Python 3.10
-
-ARG PYTHON_3_10_VERSION="3.10.9"
-
-RUN mkdir -p /tmp/py310 \
-   && cd /tmp/py310 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_10_VERSION}/Python-${PYTHON_3_10_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_10_VERSION}.tgz \
-   && cd Python-${PYTHON_3_10_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py310
-
-## Python 3.11
-
-ARG PYTHON_3_11_VERSION="3.11.7"
-
-RUN mkdir -p /tmp/py311 \
-   && cd /tmp/py311 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_11_VERSION}/Python-${PYTHON_3_11_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_11_VERSION}.tgz \
-   && cd Python-${PYTHON_3_11_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py311
-
+RUN apt-get update && apt-get install -y \
+    python3.8 \
+    python3.9 \
+    python3.10 \
+    python3.11 \
+    python3.12
 
 FROM base2 as base3
 
@@ -176,7 +133,7 @@ RUN cd /tmp \
 
 ## Pybind11
 
-ARG PYBIND_11_VERSION="2.10.3-1"
+ARG PYBIND_11_VERSION="2.12.0"
 
 RUN mkdir /tmp/pybind11 \
    && cd /tmp/pybind11 \
@@ -187,7 +144,7 @@ RUN mkdir /tmp/pybind11 \
 ## Boost
 
 ARG BOOST_MAJOR_VERSION="1"
-ARG BOOST_MINOR_VERSION="82"
+ARG BOOST_MINOR_VERSION="85"
 ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
 
 RUN mkdir -p /tmp/boost \
