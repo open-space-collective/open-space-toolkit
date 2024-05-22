@@ -86,6 +86,12 @@ RUN apt-get update && apt-get install -y \
     python3.12 \
     python3.12-distutils
 
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.8 && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
+
 FROM base2 as base3
 
 ## Python tools
@@ -102,10 +108,12 @@ RUN python3.8 -m pip install --upgrade pip ipython \
    && python3.9 -m pip install --upgrade pip ipython \
    && python3.10 -m pip install --upgrade pip ipython \
    && python3.11 -m pip install --upgrade pip ipython \
-   && python3.8 -m pip install --upgrade setuptools build wheel twine pytest \
-   && python3.9 -m pip install --upgrade setuptools build wheel twine pytest \
-   && python3.10 -m pip install --upgrade setuptools build wheel twine pytest \
-   && python3.11 -m pip install --upgrade setuptools build wheel twine pytest
+   && python3.12 -m pip install --upgrade pip ipython \
+   && python3.8 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.9 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen\
+   && python3.10 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen\
+   && python3.11 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.12 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen
 
 ## CMake
 
