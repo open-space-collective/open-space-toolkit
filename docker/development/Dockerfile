@@ -75,22 +75,22 @@ FROM base1 as base2
 RUN add-apt-repository ppa:deadsnakes/ppa
 
 RUN apt-get update && apt-get install -y \
-    python3.8 \
-    python3.8-distutils \
-    python3.9 \
-    python3.9-distutils \
-    python3.10 \
-    python3.10-distutils \
-    python3.11 \
-    python3.11-distutils \
-    python3.12 \
-    python3.12-distutils
+   python3.8 \
+   python3.8-distutils \
+   python3.9 \
+   python3.9-distutils \
+   python3.10 \
+   python3.10-distutils \
+   python3.11 \
+   python3.11-distutils \
+   python3.12 \
+   python3.12-distutils
 
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.8 && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
 
 FROM base2 as base3
 
@@ -101,7 +101,7 @@ RUN apt-get update -y \
    python3-dev \
    python3-numpy \
    python3-pip \
-   
+
    && rm -rf /var/lib/apt/lists/*
 
 RUN python3.8 -m pip install --upgrade pip ipython \
@@ -149,7 +149,7 @@ RUN cd /tmp \
 
 ## Pybind11
 
-ARG PYBIND_11_VERSION="2.12.0"
+ARG PYBIND_11_VERSION="2.12.0-1"
 
 RUN mkdir /tmp/pybind11 \
    && cd /tmp/pybind11 \
