@@ -101,7 +101,6 @@ RUN apt-get update -y \
    python3-dev \
    python3-numpy \
    python3-pip \
-
    && rm -rf /var/lib/apt/lists/*
 
 RUN python3.8 -m pip install --upgrade pip ipython \
@@ -168,10 +167,9 @@ RUN mkdir -p /tmp/boost \
    && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
    && tar -xf boost_${BOOST_VERSION}.tar.gz \
    && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
-   && ./bootstrap.sh --with-python=/usr/local/bin/python3.10 \
-   && echo "using python : 3.10 : /usr : /usr/include/python3.10m ;" >> project-config.jam \
+   && ./bootstrap.sh \
+   && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
    && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
-   && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
    && rm -rf /tmp/boost
 
 ## OpenSSL
