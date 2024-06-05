@@ -68,59 +68,29 @@ RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
    && apt-get install -y clang-format clang \
    && rm -rf /var/lib/apt/lists/*
 
-## Python 3.8
-
-ARG PYTHON_3_8_VERSION="3.8.9"
-
-RUN mkdir -p /tmp/py38 \
-   && cd /tmp/py38 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_8_VERSION}/Python-${PYTHON_3_8_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_8_VERSION}.tgz \
-   && cd Python-${PYTHON_3_8_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py38
-
-## Python 3.9
-
-ARG PYTHON_3_9_VERSION="3.9.16"
-
-RUN mkdir -p /tmp/py39 \
-   && cd /tmp/py39 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_9_VERSION}/Python-${PYTHON_3_9_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_9_VERSION}.tgz \
-   && cd Python-${PYTHON_3_9_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py39
+## Python
 
 FROM base1 as base2
-## Python 3.10
 
-ARG PYTHON_3_10_VERSION="3.10.9"
+RUN add-apt-repository ppa:deadsnakes/ppa
 
-RUN mkdir -p /tmp/py310 \
-   && cd /tmp/py310 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_10_VERSION}/Python-${PYTHON_3_10_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_10_VERSION}.tgz \
-   && cd Python-${PYTHON_3_10_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py310
+RUN apt-get update && apt-get install -y \
+   python3.8 \
+   python3.8-distutils \
+   python3.9 \
+   python3.9-distutils \
+   python3.10 \
+   python3.10-distutils \
+   python3.11 \
+   python3.11-distutils \
+   python3.12 \
+   python3.12-distutils
 
-## Python 3.11
-
-ARG PYTHON_3_11_VERSION="3.11.7"
-
-RUN mkdir -p /tmp/py311 \
-   && cd /tmp/py311 \
-   && wget --no-check-certificate --quiet https://www.python.org/ftp/python/${PYTHON_3_11_VERSION}/Python-${PYTHON_3_11_VERSION}.tgz \
-   && tar -xzf Python-${PYTHON_3_11_VERSION}.tgz \
-   && cd Python-${PYTHON_3_11_VERSION} \
-   && ./configure --enable-optimizations \
-   && make altinstall \
-   && rm -rf /tmp/py311
-
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.8 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
 
 FROM base2 as base3
 
@@ -137,10 +107,12 @@ RUN python3.8 -m pip install --upgrade pip ipython \
    && python3.9 -m pip install --upgrade pip ipython \
    && python3.10 -m pip install --upgrade pip ipython \
    && python3.11 -m pip install --upgrade pip ipython \
-   && python3.8 -m pip install --upgrade setuptools build wheel twine pytest \
-   && python3.9 -m pip install --upgrade setuptools build wheel twine pytest \
-   && python3.10 -m pip install --upgrade setuptools build wheel twine pytest \
-   && python3.11 -m pip install --upgrade setuptools build wheel twine pytest
+   && python3.12 -m pip install --upgrade pip ipython \
+   && python3.8 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.9 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen\
+   && python3.10 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen\
+   && python3.11 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.12 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen
 
 ## CMake
 
@@ -176,7 +148,7 @@ RUN cd /tmp \
 
 ## Pybind11
 
-ARG PYBIND_11_VERSION="2.10.3-1"
+ARG PYBIND_11_VERSION="2.12.0-1"
 
 RUN mkdir /tmp/pybind11 \
    && cd /tmp/pybind11 \
@@ -195,10 +167,9 @@ RUN mkdir -p /tmp/boost \
    && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
    && tar -xf boost_${BOOST_VERSION}.tar.gz \
    && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
-   && ./bootstrap.sh --with-python=/usr/local/bin/python3.10 \
-   && echo "using python : 3.10 : /usr : /usr/include/python3.10m ;" >> project-config.jam \
+   && ./bootstrap.sh \
+   && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
    && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
-   && ./b2 -j $(nproc) python=3.10 link=shared cxxflags=-fPIC install \
    && rm -rf /tmp/boost
 
 ## OpenSSL
