@@ -55,8 +55,8 @@ jobs:
       target: base1
     secrets: inherit
 
-  build-part2-of-base-image:
-    name: Build Part 2 of Base Image
+  build-part2-and-push-and-tag-base-image:
+    name: Build Part 2 and Push and Tag Base Image with Version
     needs:
       - prepare-environment
       - build-part1-of-base-image
@@ -64,21 +64,8 @@ jobs:
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: ${{ needs.prepare-environment.outputs.project_version }}
-      push: false
-      target: base2
-    secrets: inherit
-
-  build-part3-and-push-and-tag-base-image:
-    name: Build Part 3 and Push and Tag Base Image with Version
-    needs:
-      - prepare-environment
-      - build-part2-of-base-image
-    uses: ./.github/workflows/build-image.yml
-    with:
-      project_name: ${{ needs.prepare-environment.outputs.project_name }}
-      project_version: ${{ needs.prepare-environment.outputs.project_version }}
       push: true
-      target: base3
+      target: base2
     secrets: inherit
 
   push-and-tag-base-image-as-latest:
@@ -86,11 +73,11 @@ jobs:
     name: Push and Tag Base Image as Latest
     needs:
       - prepare-environment
-      - build-part3-and-push-and-tag-base-image
+      - build-part2-and-push-and-tag-base-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: latest
       push: true
-      target: base3
+      target: base2
     secrets: inherit
