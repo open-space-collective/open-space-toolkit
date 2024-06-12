@@ -1,6 +1,6 @@
 # Apache License 2.0
 
-FROM ubuntu:20.04 as base1
+FROM ubuntu:20.04 as base
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -93,8 +93,6 @@ RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.13
-
-FROM base1 as base2
 
 ## Python tools
 
