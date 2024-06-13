@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export LD_LIBRARY_PATH=/srv/conda/lib/
+export OSTK_PHYSICS_DATA_LOCAL_REPOSITORY=/var/cache/open-space-toolkit
+
+exec "$@"
