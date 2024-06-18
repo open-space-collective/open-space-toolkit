@@ -185,8 +185,10 @@ RUN mkdir /tmp/openssl \
    && rm -rf /tmp/openssl
 
 ## Black
+ARG OSTK_PYTHON_VERSION
+ENV OSTK_PYTHON_VERSION 3.11
 
-RUN python3.11 -m pip install black black[jupyter]
+RUN python${OSTK_PYTHON_VERSION} -m pip install black black[jupyter]
 
 # Environment
 
