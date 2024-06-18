@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Apache License 2.0
+
 project_directory="$(git rev-parse --show-toplevel)"
 docs_directory="${project_directory}/docs"
 
@@ -18,7 +20,7 @@ if [[ $1 == "--help" ]]; then
     exit 0
 fi
 
-pip install -r requirements.txt
+python${OSTK_PYTHON_VERSION} -m pip install -r requirements.txt
 
 if [[ ! -z $1 ]] && [[ $1 == "--notebooks" ]]; then
     if [[ -z $2 ]]; then
