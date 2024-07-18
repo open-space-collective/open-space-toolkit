@@ -74,7 +74,8 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
    && apt-get update \
    && apt-get install -y gcc-13 g++-13 \
    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \
-   && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+   && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
+   && update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-13 130
 
 ## Python
 
