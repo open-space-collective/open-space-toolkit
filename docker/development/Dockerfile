@@ -86,13 +86,15 @@ RUN apt-get update && apt-get install -y \
    python3.9 python3.9-distutils python3.9-dev \
    python3.10 python3.10-distutils python3.10-dev \
    python3.11 python3.11-distutils python3.11-dev \
-   python3.12 python3.12-distutils python3.12-dev
+   python3.12 python3.12-dev \
+   python3.13 python3.13-dev
 
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.8 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
-   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 && \
+   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.13
 
 FROM base1 as base2
 
@@ -114,7 +116,8 @@ RUN python3.8 -m pip install --upgrade pip ipython \
    && python3.9 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
    && python3.10 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
    && python3.11 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.12 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen
+   && python3.12 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.13 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen
 
 ## CMake
 
@@ -150,7 +153,7 @@ RUN cd /tmp \
 
 ## Pybind11
 
-ARG PYBIND_11_VERSION="2.12.0-1"
+ARG PYBIND_11_VERSION="2.13.6-1"
 
 RUN mkdir /tmp/pybind11 \
    && cd /tmp/pybind11 \
@@ -194,6 +197,7 @@ RUN mkdir /tmp/openssl \
    && rm -rf /tmp/openssl
 
 ## Black
+
 ARG OSTK_PYTHON_VERSION
 ENV OSTK_PYTHON_VERSION 3.11
 
