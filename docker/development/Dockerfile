@@ -103,7 +103,6 @@ FROM base1 as base2
 RUN apt-get update -y \
    && apt-get install -y --no-install-recommends \
    python3-dev \
-   python3-numpy \
    python3-pip \
    && rm -rf /var/lib/apt/lists/*
 
