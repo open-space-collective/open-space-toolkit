@@ -13,6 +13,10 @@ on:
         description: The version of the project.
         required: true
         type: string
+      test_python_version: 
+        description: The version of Python used in unit tests.
+        required: false
+        type: string
     secrets:
       DOCKERHUB_USERNAME:
         required: true
@@ -104,4 +108,5 @@ jobs:
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run Unit Tests Python
-        run: make test-unit-python-standalone
+        run: make test-unit-python-standalone ${{ inputs.test_python_version == '' && '' || 'test_python_version='inputs.test_python_version }}
+
