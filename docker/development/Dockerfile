@@ -82,15 +82,13 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
 RUN add-apt-repository ppa:deadsnakes/ppa
 
 RUN apt-get update && apt-get install -y \
-   python3.8 python3.8-distutils python3.8-dev \
    python3.9 python3.9-distutils python3.9-dev \
    python3.10 python3.10-distutils python3.10-dev \
    python3.11 python3.11-distutils python3.11-dev \
    python3.12 python3.12-dev \
    python3.13 python3.13-dev
 
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.8 && \
-   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 && \
@@ -106,12 +104,11 @@ RUN apt-get update -y \
    python3-pip \
    && rm -rf /var/lib/apt/lists/*
 
-RUN python3.8 -m pip install --upgrade pip ipython \
-   && python3.9 -m pip install --upgrade pip ipython \
+RUN python3.9 -m pip install --upgrade pip ipython \
    && python3.10 -m pip install --upgrade pip ipython \
    && python3.11 -m pip install --upgrade pip ipython \
    && python3.12 -m pip install --upgrade pip ipython \
-   && python3.8 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.13 -m pip install --upgrade pip ipython \
    && python3.9 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
    && python3.10 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
    && python3.11 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
