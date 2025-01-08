@@ -104,7 +104,7 @@ RUN apt-get update -y \
    python3-pip \
    && rm -rf /var/lib/apt/lists/*
 
-RUN && python3.9 -m pip install --upgrade pip ipython \
+RUN python3.9 -m pip install --upgrade pip ipython \
    && python3.10 -m pip install --upgrade pip ipython \
    && python3.11 -m pip install --upgrade pip ipython \
    && python3.12 -m pip install --upgrade pip ipython \
