@@ -43,29 +43,16 @@ jobs:
           echo "Project version: ${project_version}"
           echo "value=${project_version}" >> $GITHUB_OUTPUT
 
-  build-part1-of-base-image:
-    name: Build Part 1 of Base Image
+  build-and-push-and-tag-base-image:
+    name: Build and Push and Tag Base Image with Version
     needs:
       - prepare-environment
-    uses: ./.github/workflows/build-image.yml
-    with:
-      project_name: ${{ needs.prepare-environment.outputs.project_name }}
-      project_version: ${{ needs.prepare-environment.outputs.project_version }}
-      push: false
-      target: base1
-    secrets: inherit
-
-  build-part2-and-push-and-tag-base-image:
-    name: Build Part 2 and Push and Tag Base Image with Version
-    needs:
-      - prepare-environment
-      - build-part1-of-base-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: ${{ needs.prepare-environment.outputs.project_version }}
       push: true
-      target: base2
+      target: base
     secrets: inherit
 
   push-and-tag-base-image-as-latest:
@@ -73,11 +60,11 @@ jobs:
     name: Push and Tag Base Image as Latest
     needs:
       - prepare-environment
-      - build-part2-and-push-and-tag-base-image
+      - build-and-push-and-tag-base-image
     uses: ./.github/workflows/build-image.yml
     with:
       project_name: ${{ needs.prepare-environment.outputs.project_name }}
       project_version: latest
       push: true
-      target: base2
+      target: base
     secrets: inherit
