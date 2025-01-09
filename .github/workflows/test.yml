@@ -122,7 +122,7 @@ jobs:
       volumes:
         - ${{ github.workspace }}:/app:delegated
         - /app/build
-      options: --workdir /app/build --user root
+      options: --user root
     steps: 
       - name: TMP install lfs
         run: apt-get update && apt-get install -y --no-install-recommends git-lfs
@@ -132,7 +132,7 @@ jobs:
           fetch-depth: 0
           lfs: true
       - name: Try to install ostk
-        run: ostk-build && ostk-install
+        run: cd /app/build && ostk-build && ostk-install
 
   # test-unit-python-matrix:
   #   name: Run Python Unit Tests With Multiple Python Versions
