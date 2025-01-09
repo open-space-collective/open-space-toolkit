@@ -125,7 +125,7 @@ jobs:
       options: --workdir /app/build
     steps: 
       - name: TMP install lfs
-        run: apt-get install -y --no-install-recommends git-lfs
+        run: apt-get update && apt-get install -y --no-install-recommends git-lfs
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
