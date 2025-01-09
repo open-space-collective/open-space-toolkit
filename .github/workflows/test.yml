@@ -110,6 +110,27 @@ jobs:
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Run Unit Tests Python
         run: make test-unit-python-standalone
+  
+  test-unit-python-container:
+    name: Run Python Unit Tests in Container
+    runs-on: ubuntu-latest 
+    container:
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }} ## !!
+      credentials: 
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      volumes:
+        - ${{ github.workspace }}:/app:delegated
+        - /app/build
+      options: --workdir /app/build
+    steps: 
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Try to install ostk
+        run: ostk-build && ostk-install
 
   test-unit-python-matrix:
     name: Run Python Unit Tests With Multiple Python Versions
