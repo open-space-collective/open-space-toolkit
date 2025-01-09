@@ -61,7 +61,6 @@ jobs:
         with:
           name: cpp-package
           path: packages/cpp/
-          overwrite: true
 
   build-package-python:
     name: Build Python Package
@@ -100,7 +99,6 @@ jobs:
         with:
           name: python-package
           path: packages/python/
-          overwrite: true
 
   build-documentation:
     name: Build Documentation
@@ -127,4 +125,3 @@ jobs:
         with:
           name: docs
           path: docs.tar.gz
-          overwrite: true
