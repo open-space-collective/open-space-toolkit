@@ -57,10 +57,11 @@ jobs:
         run: make build-packages-cpp-standalone TARGETPLATFORM=${{ matrix.architecture }}
       - name: Upload C++ Package
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cpp-package
           path: packages/cpp/
+          overwrite: true
 
   build-package-python:
     name: Build Python Package
@@ -95,10 +96,11 @@ jobs:
         run: make build-packages-python-standalone TARGETPLATFORM=${{ matrix.architecture }}
       - name: Upload Python Package
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: python-package
           path: packages/python/
+          overwrite: true
 
   build-documentation:
     name: Build Documentation
@@ -121,7 +123,8 @@ jobs:
       - name: Tar files
         run: tar -cvf docs.tar.gz docs/
       - name: Upload Documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docs
           path: docs.tar.gz
+          overwrite: true

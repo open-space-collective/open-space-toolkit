@@ -41,7 +41,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Download C++ Package
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: cpp-package
           path: packages/cpp/
@@ -61,7 +61,7 @@ jobs:
           fetch-depth: 0
           lfs: true
       - name: Download Python Package
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: python-package
           path: packages/python/
@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 0
           lfs: true
       - name: Download Documentation
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: docs
       - name: Untar Files
