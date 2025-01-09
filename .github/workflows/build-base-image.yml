@@ -27,7 +27,7 @@ jobs:
       project_version: ${{ steps.project-version.outputs.value }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true

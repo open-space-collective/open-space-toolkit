@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Checkout Repository
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
@@ -45,7 +45,7 @@ jobs:
           platforms: linux/arm64
       - name: Login to DockerHub
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Checkout Repository
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
@@ -83,7 +83,7 @@ jobs:
           platforms: linux/arm64
       - name: Login to DockerHub
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -105,12 +105,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
