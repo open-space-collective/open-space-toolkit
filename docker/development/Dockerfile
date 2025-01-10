@@ -93,13 +93,13 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
 ## Pip
 
 RUN curl -sSo /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py && \
-   parallel -j5 "python{} /tmp/get-pip.py" ::: 3.9 3.10 3.11 3.12 3.13 && \
+   parallel -j$(nproc) "python{} /tmp/get-pip.py" ::: 3.9 3.10 3.11 3.12 3.13 && \
    rm /tmp/get-pip.py
 
 ## Python tools
 
-RUN parallel -j5 "python{} -m pip install --upgrade pip ipython" ::: 3.9 3.10 3.11 3.12 3.13 && \
-    parallel -j5 "python{} -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen" ::: 3.9 3.10 3.11 3.12 3.13
+RUN parallel -j$(nproc) "python{} -m pip install --upgrade pip ipython" ::: 3.9 3.10 3.11 3.12 3.13 && \
+    parallel -j$(nproc) "python{} -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen" ::: 3.9 3.10 3.11 3.12 3.13
 
 ## CMake
 
