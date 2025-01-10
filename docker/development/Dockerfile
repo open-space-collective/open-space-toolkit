@@ -21,6 +21,7 @@ RUN apt-get update -y \
    tree \
    make \
    libssl-dev \
+   parallel \
    && rm -rf /var/lib/apt/lists/*
 
 # Development Tools
@@ -79,39 +80,26 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
 
 ## Python
 
-RUN add-apt-repository ppa:deadsnakes/ppa
-
-RUN apt-get update && apt-get install -y \
+RUN add-apt-repository ppa:deadsnakes/ppa && \
+   apt-get update && apt-get install -y --no-install-recommends \
    python3.9 python3.9-distutils python3.9-dev \
    python3.10 python3.10-distutils python3.10-dev \
    python3.11 python3.11-distutils python3.11-dev \
    python3.12 python3.12-dev \
-   python3.13 python3.13-dev
+   python3.13 python3.13-dev \
+   python3-dev \
+   && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 && \
-   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 && \
-   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
-   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 && \
-   curl -sS https://bootstrap.pypa.io/get-pip.py | python3.13
+## Pip
+
+RUN curl -sSo /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py && \
+   parallel -j5 "python{} /tmp/get-pip.py" ::: 3.9 3.10 3.11 3.12 3.13 && \
+   rm /tmp/get-pip.py
 
 ## Python tools
 
-RUN apt-get update -y \
-   && apt-get install -y --no-install-recommends \
-   python3-dev \
-   python3-pip \
-   && rm -rf /var/lib/apt/lists/*
-
-RUN python3.9 -m pip install --upgrade pip ipython \
-   && python3.10 -m pip install --upgrade pip ipython \
-   && python3.11 -m pip install --upgrade pip ipython \
-   && python3.12 -m pip install --upgrade pip ipython \
-   && python3.13 -m pip install --upgrade pip ipython \
-   && python3.9 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.10 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.11 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.12 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.13 -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen
+RUN parallel -j5 "python{} -m pip install --upgrade pip ipython" ::: 3.9 3.10 3.11 3.12 3.13 && \
+    parallel -j5 "python{} -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen" ::: 3.9 3.10 3.11 3.12 3.13
 
 ## CMake
 
