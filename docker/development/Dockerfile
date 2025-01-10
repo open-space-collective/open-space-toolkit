@@ -21,7 +21,6 @@ RUN apt-get update -y \
    tree \
    make \
    libssl-dev \
-   parallel \
    && rm -rf /var/lib/apt/lists/*
 
 # Development Tools
@@ -88,19 +87,25 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
    python3.12 python3.12-dev \
    python3.13 python3.13-dev \
    python3-dev \
-   python3-pip \
    && rm -rf /var/lib/apt/lists/*
 
 ## Pip
 
-RUN curl -sSo /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py && \
-   parallel "python{} /tmp/get-pip.py" ::: 3.9 3.10 3.11 3.12 3.13 && \
-   rm /tmp/get-pip.py
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 \
+   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 \
+   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
+   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 \
+   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.13 \
+   & wait
 
 ## Python tools
 
-RUN parallel "python{} -m pip install --upgrade pip ipython" ::: 3.9 3.10 3.11 3.12 3.13
-RUN parallel "python{} -m pip install --upgrade setuptools build wheel twine pytest pybind11-stubgen" ::: 3.9 3.10 3.11 3.12 3.13
+RUN python3.9 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.10 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.11 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.12 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.13 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & wait
 
 ## CMake
 
