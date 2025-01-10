@@ -120,7 +120,7 @@ jobs:
           echo "value=${python_versions}" >> $GITHUB_OUTPUT
 
   test-unit-python:
-    name: Test Python
+    name: Run Python Unit Tests
     runs-on: ubuntu-latest
     needs:
       - build-python
@@ -145,5 +145,5 @@ jobs:
         with:
           name: python-bindings
           path: packages/python/
-      - name: Run Python Unit Tests
+      - name: Run Unit Tests Python
         run: make ci-test-python ${{ format('test_python_version={0}', matrix.python-version) }}
