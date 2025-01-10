@@ -43,7 +43,8 @@ jobs:
       - name: Download C++ Package
         uses: actions/download-artifact@v4
         with:
-          name: cpp-package
+          pattern: cpp-package-*
+          merge-multiple: true
           path: packages/cpp/
       - name: Release C++ Package
         uses: softprops/action-gh-release@v1
@@ -63,7 +64,8 @@ jobs:
       - name: Download Python Package
         uses: actions/download-artifact@v4
         with:
-          name: python-package
+          pattern: python-package-*
+          merge-multiple: true
           path: packages/python/
       - name: Deploy Python Package
         uses: pypa/gh-action-pypi-publish@release/v1
