@@ -59,7 +59,7 @@ jobs:
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/upload-artifact@v4
         with:
-          name: cpp-package
+          name: cpp-package-${{ matrix.architecture }}
           path: packages/cpp/
 
   build-package-python:
@@ -97,7 +97,7 @@ jobs:
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/upload-artifact@v4
         with:
-          name: python-package
+          name: python-package-${{ matrix.architecture }}
           path: packages/python/
 
   build-documentation:
