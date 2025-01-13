@@ -55,11 +55,19 @@ jobs:
       - name: Build C++ Package
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: make build-packages-cpp-standalone TARGETPLATFORM=${{ matrix.architecture }}
+      - name: Format artifact name
+        id: format-artifact-name
+        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        run: |
+          artifact_name=$(echo "${{ matrix.architecture }}" | tr / -)
+          echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload C++ Package
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        env:
+          ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
         uses: actions/upload-artifact@v4
         with:
-          name: cpp-package-${{ matrix.architecture }}
+          name: cpp-package-$ARTIFACT_NAME
           path: packages/cpp/
 
   build-package-python:
@@ -93,11 +101,19 @@ jobs:
       - name: Build Python Package
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: make build-packages-python-standalone TARGETPLATFORM=${{ matrix.architecture }}
+      - name: Format artifact name
+        id: format-artifact-name
+        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        run: |
+          artifact_name=$(echo "${{ matrix.architecture }}" | tr / -)
+          echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload Python Package
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        env:
+          ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
         uses: actions/upload-artifact@v4
         with:
-          name: python-package-${{ matrix.architecture }}
+          name: python-package-$ARTIFACT_NAME
           path: packages/python/
 
   build-documentation:
