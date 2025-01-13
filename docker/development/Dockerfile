@@ -1,6 +1,6 @@
 # Apache License 2.0
 
-FROM ubuntu:20.04 as base
+FROM ubuntu:20.04 AS base
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
@@ -187,14 +187,14 @@ RUN mkdir /tmp/openssl \
 ## Black
 
 ARG OSTK_PYTHON_VERSION
-ENV OSTK_PYTHON_VERSION 3.11
+ENV OSTK_PYTHON_VERSION="3.11"
 
 RUN python${OSTK_PYTHON_VERSION} -m pip install black black[jupyter]
 
 # Environment
 
-ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
-ENV PYTHONPATH /usr/local/lib:${PYTHONPATH}
+ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+ENV PYTHONPATH="/usr/local/lib:${PYTHONPATH}"
 RUN git config --global --add safe.directory /app
 
 # Install development helpers
@@ -229,7 +229,7 @@ RUN chmod +x /usr/bin/ostk-build \
 
 ARG VERSION
 
-ENV VERSION ${VERSION}
+ENV VERSION="${VERSION}"
 
 LABEL VERSION="${VERSION}"
 
