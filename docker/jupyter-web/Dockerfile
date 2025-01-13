@@ -8,7 +8,7 @@ FROM ${JUPYTER_NOTEBOOK_IMAGE_REPOSITORY}
 
 LABEL maintainer="kyle.cochran@loftorbital.com"
 
-ENV JUPYTER_ENABLE_LAB yes
+ENV JUPYTER_ENABLE_LAB="yes"
 
 # Set user to root
 
