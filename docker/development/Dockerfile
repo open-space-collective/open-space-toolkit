@@ -100,89 +100,89 @@ RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 \
 
 ## Python tools
 
-RUN python3.9 -m pip install --upgrade --no-cache pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.10 -m pip install --upgrade --no-cache pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.11 -m pip install --upgrade --no-cache pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.12 -m pip install --upgrade --no-cache pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.13 -m pip install --upgrade --no-cache pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+RUN python3.9 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.10 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.11 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.12 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   & python3.13 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
    & wait
 
-# ## CMake
+## CMake
 
-# ARG CMAKE_MAJOR_VERSION="3"
-# ARG CMAKE_MINOR_VERSION="26"
-# ARG CMAKE_PATCH_VERSION="3"
-# ARG CMAKE_VERSION="${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}"
+ARG CMAKE_MAJOR_VERSION="3"
+ARG CMAKE_MINOR_VERSION="26"
+ARG CMAKE_PATCH_VERSION="3"
+ARG CMAKE_VERSION="${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}"
 
-# RUN cd /tmp \
-#    && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
-#    && tar -xf cmake-${CMAKE_VERSION}.tar.gz \
-#    && cd cmake-${CMAKE_VERSION} \
-#    && ./bootstrap \
-#    && make -j $(nproc) \
-#    && make install \
-#    && rm -rf /tmp/cmake-${CMAKE_VERSION} /tmp/cmake-${CMAKE_VERSION}.tar.gz
+RUN cd /tmp \
+   && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
+   && tar -xf cmake-${CMAKE_VERSION}.tar.gz \
+   && cd cmake-${CMAKE_VERSION} \
+   && ./bootstrap \
+   && make -j $(nproc) \
+   && make install \
+   && rm -rf /tmp/cmake-${CMAKE_VERSION} /tmp/cmake-${CMAKE_VERSION}.tar.gz
 
-# ## GoogleTest
+## GoogleTest
 
-# ARG GOOGLE_TEST_VERSION="1.12.0"
+ARG GOOGLE_TEST_VERSION="1.12.0"
 
-# RUN cd /tmp \
-#    && git clone --branch release-${GOOGLE_TEST_VERSION} --depth 1 https://github.com/google/googletest.git \
-#    && cd googletest \
-#    && mkdir build \
-#    && cd build \
-#    && cmake .. \
-#    && make -j $(nproc) \
-#    && make install \
-#    && rm -rf /tmp/googletest
+RUN cd /tmp \
+   && git clone --branch release-${GOOGLE_TEST_VERSION} --depth 1 https://github.com/google/googletest.git \
+   && cd googletest \
+   && mkdir build \
+   && cd build \
+   && cmake .. \
+   && make -j $(nproc) \
+   && make install \
+   && rm -rf /tmp/googletest
 
-# # Dependencies
+# Dependencies
 
-# ## Pybind11
+## Pybind11
 
-# ARG PYBIND_11_VERSION="2.13.6-1"
+ARG PYBIND_11_VERSION="2.13.6-1"
 
-# RUN mkdir /tmp/pybind11 \
-#    && cd /tmp/pybind11 \
-#    && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_${PYBIND_11_VERSION}_all.deb \
-#    && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
-#    && rm -rf /tmp/pybind11
+RUN mkdir /tmp/pybind11 \
+   && cd /tmp/pybind11 \
+   && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_${PYBIND_11_VERSION}_all.deb \
+   && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
+   && rm -rf /tmp/pybind11
 
-# ## Boost
+## Boost
 
-# ARG BOOST_MAJOR_VERSION="1"
-# ARG BOOST_MINOR_VERSION="87"
-# ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
+ARG BOOST_MAJOR_VERSION="1"
+ARG BOOST_MINOR_VERSION="87"
+ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
 
-# RUN mkdir -p /tmp/boost \
-#    && cd /tmp/boost \
-#    && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
-#    && tar -xf boost_${BOOST_VERSION}.tar.gz \
-#    && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
-#    && ./bootstrap.sh \
-#    && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
-#    && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
-#    && rm -rf /tmp/boost
+RUN mkdir -p /tmp/boost \
+   && cd /tmp/boost \
+   && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
+   && tar -xf boost_${BOOST_VERSION}.tar.gz \
+   && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
+   && ./bootstrap.sh \
+   && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
+   && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
+   && rm -rf /tmp/boost
 
-# ## OpenSSL
+## OpenSSL
 
-# ARG OPENSSL_VERSION="3.0.2"
+ARG OPENSSL_VERSION="3.0.2"
 
-# RUN mkdir /tmp/openssl \
-#    && cd /tmp/openssl \
-#    && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
-#    && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
-#    && cd openssl-${OPENSSL_VERSION} \
-#    && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
-#    && make \
-#    && make install \
-#    && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
-#    && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
-#    && ldconfig \
-#    && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
-#    && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
-#    && rm -rf /tmp/openssl
+RUN mkdir /tmp/openssl \
+   && cd /tmp/openssl \
+   && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
+   && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
+   && cd openssl-${OPENSSL_VERSION} \
+   && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
+   && make \
+   && make install \
+   && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+   && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+   && ldconfig \
+   && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
+   && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
+   && rm -rf /tmp/openssl
 
 ## Black
 
