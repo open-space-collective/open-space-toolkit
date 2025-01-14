@@ -61,6 +61,7 @@ jobs:
           build-args: |
             BASE_IMAGE_SYSTEM=debian
             VERSION=${{ inputs.project_version }}
+          cache-from: type=gha
           cache-to: type=gha,mode=max
           target: ${{ inputs.target }}
           platforms: linux/amd64,linux/arm64
