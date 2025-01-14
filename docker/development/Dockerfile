@@ -193,8 +193,8 @@ RUN python${OSTK_PYTHON_VERSION} -m pip install black black[jupyter]
 
 # Environment
 
-ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
-ENV PYTHONPATH="/usr/local/lib:${PYTHONPATH}"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV PYTHONPATH="/usr/local/lib"
 RUN git config --global --add safe.directory /app
 
 # Install development helpers
