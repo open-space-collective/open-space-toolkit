@@ -109,19 +109,19 @@ RUN python3.9 -m pip install --upgrade pip ipython setuptools build wheel twine 
 
 ## CMake
 
+ARG TARGETPLATFORM
 ARG CMAKE_MAJOR_VERSION="3"
 ARG CMAKE_MINOR_VERSION="26"
 ARG CMAKE_PATCH_VERSION="3"
 ARG CMAKE_VERSION="${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}"
 
-RUN cd /tmp \
-   && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
-   && tar -xf cmake-${CMAKE_VERSION}.tar.gz \
-   && cd cmake-${CMAKE_VERSION} \
-   && ./bootstrap \
-   && make -j $(nproc) \
-   && make install \
-   && rm -rf /tmp/cmake-${CMAKE_VERSION} /tmp/cmake-${CMAKE_VERSION}.tar.gz
+RUN mkdir -p /tmp/cmake \
+   && cd /tmp/cmake \
+   && export PACKAGE_PLATFORM=$(if [ ${TARGETPLATFORM} = "linux/amd64" ]; then echo "x86_64"; elif [ ${TARGETPLATFORM} = "linux/arm64" ]; then echo "aarch64"; else echo "Unknown platform" && exit 1; fi;) \
+   && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}-linux-${PACKAGE_PLATFORM}.sh -O cmake-install.sh \
+   && chmod +x /tmp/cmake/cmake-install.sh \
+   && /tmp/cmake/cmake-install.sh --prefix=/usr/local --skip-license \
+   && rm -rf /tmp/cmake
 
 ## GoogleTest
 
