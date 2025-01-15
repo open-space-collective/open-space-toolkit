@@ -11,6 +11,12 @@ export docker_image_version := $(project_version)
 export jupyter_image := openspacecollective/open-space-toolkit-astrodynamics-jupyter:latest
 export jupyter_port := 8888
 
+
+# Handle multi-platform builds locally (CI sets these env vars, but need defaults here)
+TARGETPLATFORM ?= linux/amd64
+$(info Target platform is $(TARGETPLATFORM))
+
+
 build-image: ## Build image
 
 	docker build \
