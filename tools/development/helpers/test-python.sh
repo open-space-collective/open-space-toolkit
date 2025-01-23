@@ -9,4 +9,4 @@ pushd "${test_directory}" > /dev/null
 
 python${OSTK_PYTHON_VERSION} -m pytest -sv ${@}
 
-popd > /dev/null
+eval "popd > /dev/null; exit $?" # eval so $? is still the exit code of python rather than popd

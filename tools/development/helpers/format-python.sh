@@ -8,4 +8,4 @@ pushd "${project_directory}" > /dev/null
 
     python${OSTK_PYTHON_VERSION} -m black bindings/python/
 
-popd > /dev/null
+eval "popd > /dev/null; exit $?" # eval so $? is still the exit code of python rather than popd
