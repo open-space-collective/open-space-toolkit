@@ -6,6 +6,7 @@ project_directory="$(git rev-parse --show-toplevel)"
 
 pushd "${project_directory}" > /dev/null
 
-    clang-format -Werror --dry-run -style=file:thirdparty/clang/.clang-format $(find ~+ src/ include/ test/ bindings/python/src/ -name '*.cpp' -o -name '*.cxx' -o -name '*.hpp' -o -name '*.tpp')
+    clang-format -Werror --dry-run -style=file:thirdparty/clang/.clang-format $(find ~+ src/ include/ test/ bindings/python/src/ -name '*.cpp' -o -name '*.cxx' -o -name '*.hpp' -o -name '*.tpp') \
+    || exit 1
 
-eval "popd > /dev/null; exit $?" # eval so $? is still the exit code of clang-format rather than popd
+popd > /dev/null
