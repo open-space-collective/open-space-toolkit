@@ -6,7 +6,6 @@ project_directory="$(git rev-parse --show-toplevel)"
 
 pushd "${project_directory}" > /dev/null
 
-    python${OSTK_PYTHON_VERSION} -m black bindings/python/ \
-    || exit 1
+    python${OSTK_PYTHON_VERSION} -m black bindings/python/
 
 popd > /dev/null
