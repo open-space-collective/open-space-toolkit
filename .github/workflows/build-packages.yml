@@ -40,9 +40,10 @@ jobs:
           lfs: true
       - name: Set up QEMU for ARM64
         if: (matrix.architecture == 'linux/arm64' && github.ref == 'refs/heads/main') || (matrix.architecture == 'linux/arm64' && github.event_name == 'release' && github.event.action == 'published')
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: linux/arm64
+          image: tonistiigi/binfmt:qemu-v8.1.5 # https://github.com/tonistiigi/binfmt/issues/215#issuecomment-2611042596
       - name: Login to DockerHub
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: docker/login-action@v3
@@ -86,9 +87,10 @@ jobs:
           lfs: true
       - name: Set up QEMU for ARM64
         if: (matrix.architecture == 'linux/arm64' && github.ref == 'refs/heads/main') || (matrix.architecture == 'linux/arm64' && github.event_name == 'release' && github.event.action == 'published')
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: linux/arm64
+          image: tonistiigi/binfmt:qemu-v8.1.5 # https://github.com/tonistiigi/binfmt/issues/215#issuecomment-2611042596
       - name: Login to DockerHub
         if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: docker/login-action@v3
