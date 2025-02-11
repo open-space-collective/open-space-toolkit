@@ -54,7 +54,7 @@ run-jupyter: ## Run jupyter
 
 .PHONY: run-jupyter
 
-run-and-edit-jupyter: ## Run and edit jupyter notebooks
+run-and-edit-jupyter: pull-jupyter ## Run and edit jupyter notebooks
 
 	docker run \
 		-it \
