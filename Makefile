@@ -54,7 +54,7 @@ run-jupyter: ## Run jupyter
 
 .PHONY: run-jupyter
 
-run-and-edit-jupyter: ## Run and edit jupyter notebooks
+run-and-edit-jupyter: pull-jupyter ## Run and edit jupyter notebooks
 
 	docker run \
 		-it \
@@ -65,7 +65,7 @@ run-and-edit-jupyter: ## Run and edit jupyter notebooks
 		--volume="$(project_directory)/notebooks:/notebooks" \
 		--workdir=/notebooks \
 		$(jupyter_image) \
-		bash -c "pip install kaleido~=0.2; start-notebook.py --ServerApp.token=''"
+		bash -c "pip install kaleido~=0.2; start-notebook.sh --ServerApp.token=''"
 
 .PHONY: run-and-edit-jupyter
 

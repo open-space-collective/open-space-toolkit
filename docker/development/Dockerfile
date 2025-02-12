@@ -141,12 +141,18 @@ RUN cd /tmp \
 
 ## Pybind11
 
-ARG PYBIND_11_VERSION="2.13.6-1"
+ARG PYBIND_11_MAJOR_VERSION="2"
+ARG PYBIND_11_MINOR_VERSION="13"
+ARG PYBIND_11_PATCH_VERSION="6"
 
 RUN mkdir /tmp/pybind11 \
    && cd /tmp/pybind11 \
-   && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/pybind11-dev_${PYBIND_11_VERSION}_all.deb \
-   && apt-get install -y ./pybind11-dev_${PYBIND_11_VERSION}_all.deb \
+   && latest_version=$(wget -q -O - http://ftp.us.debian.org/debian/pool/main/p/pybind11/ | \
+   grep -o "pybind11-dev_${PYBIND_11_MAJOR_VERSION}\.${PYBIND_11_MINOR_VERSION}\.${PYBIND_11_PATCH_VERSION}-[0-9]\+_all\.deb" | \
+   sort -V | \
+   tail -n 1) \
+   && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/${latest_version} \
+   && apt-get install -y ./${latest_version} \
    && rm -rf /tmp/pybind11
 
 ## Boost
