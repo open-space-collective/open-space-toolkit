@@ -60,13 +60,15 @@ RUN apt-get update -y \
 
 ## Clang-format
 
-RUN wget https://apt.llvm.org/llvm-snapshot.gpg.key \
-   && apt-key add llvm-snapshot.gpg.key \
-   && rm llvm-snapshot.gpg.key \
-   && add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' \
-   && apt-get update \
-   && apt-get install -y clang-format clang \
-   && rm -rf /var/lib/apt/lists/*
+ARG CLANG_FORMAT_VERSION="18"
+
+RUN mkdir -p /tmp/clang-format \
+   && cd /tmp/clang-format \
+   && wget https://apt.llvm.org/llvm.sh \
+   && chmod +x llvm.sh \
+   && ./llvm.sh ${CLANG_FORMAT_VERSION} all \
+   && rm -rf /tmp/clang-format \
+   && ln -s /usr/bin/clang-format-${CLANG_FORMAT_VERSION} /usr/bin/clang-format
 
 ## GCC / G++
 
