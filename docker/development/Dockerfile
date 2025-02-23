@@ -58,17 +58,18 @@ RUN apt-get update -y \
    gnupg \
    && rm -rf /var/lib/apt/lists/*
 
-## Clang-format
+## Clang-format & Clang
 
-ARG CLANG_FORMAT_VERSION="18"
+ARG CLANG_VERSION="18"
 
-RUN mkdir -p /tmp/clang-format \
-   && cd /tmp/clang-format \
+RUN mkdir -p /tmp/clang \
+   && cd /tmp/clang \
    && wget https://apt.llvm.org/llvm.sh \
    && chmod +x llvm.sh \
-   && ./llvm.sh ${CLANG_FORMAT_VERSION} all \
-   && rm -rf /tmp/clang-format \
-   && ln -s /usr/bin/clang-format-${CLANG_FORMAT_VERSION} /usr/bin/clang-format
+   && ./llvm.sh ${CLANG_VERSION} all \
+   && rm -rf /tmp/clang \
+   && ln -s /usr/bin/clang-format-${CLANG_VERSION} /usr/bin/clang-format \
+   && ln -s /usr/bin/clang-${CLANG_VERSION} /usr/bin/clang
 
 ## GCC / G++
 
