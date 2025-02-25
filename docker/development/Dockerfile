@@ -104,11 +104,10 @@ RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 \
 ## Python tools
 
 RUN python3.9 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.10 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.11 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.12 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & python3.13 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   & wait
+   && python3.10 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.11 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.12 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
+   && python3.13 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen
 
 ## CMake
 
