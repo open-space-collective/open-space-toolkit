@@ -86,7 +86,7 @@ RUN git clone \
     https://github.com/open-space-collective/open-space-toolkit-data.git ${OSTK_DATA_LOCAL_CACHE} && \
     chmod -R g+w ${OSTK_DATA_LOCAL_CACHE}
 
-## Update libstdc++
+## Update libstdc++ for Cpp20 support
 
 RUN echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list.d/testing.list && \
     apt-get update && \
