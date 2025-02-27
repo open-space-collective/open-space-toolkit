@@ -62,12 +62,11 @@ To help jump-start using OSTk, here is a simple Docker image that you can use to
 
 ```docker
 ARG PYTHON_BASE_VERSION="3.11"
+ARG OSTK_DATA_LOCAL_CACHE="/var/cache/open-space-toolkit-data"
 
 # Open Space Toolkit install image
 
 FROM mcr.microsoft.com/vscode/devcontainers/python:${PYTHON_BASE_VERSION}
-
-ARG OSTK_DATA_LOCAL_CACHE="/var/cache/open-space-toolkit-data"
 
 ## Install OSTk data install dependencies
 
@@ -77,6 +76,7 @@ RUN apt-get update && \
 
 ## Seed OSTk Data
 
+ARG OSTK_DATA_LOCAL_CACHE
 ENV OSTK_PHYSICS_DATA_LOCAL_REPOSITORY="${OSTK_DATA_LOCAL_CACHE}/data"
 
 RUN git clone \
@@ -85,6 +85,13 @@ RUN git clone \
     --depth=1 \
     https://github.com/open-space-collective/open-space-toolkit-data.git ${OSTK_DATA_LOCAL_CACHE} && \
     chmod -R g+w ${OSTK_DATA_LOCAL_CACHE}
+
+## Update libstdc++
+
+RUN echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list.d/testing.list && \
+    apt-get update && \
+    apt-get install --yes -t testing libstdc++6 && \
+    rm -rf /var/lib/apt/lists/*
 
 ## Update user id and group id with local ones
 
@@ -96,6 +103,11 @@ RUN sudo groupmod --gid ${USER_GID} ${USERNAME} && \
 
 USER ${USERNAME}
 
+## Update permissions of OSTk data repo
+
+ARG OSTK_DATA_LOCAL_CACHE
+RUN chown -R ${USER_GID}:${USER_GID} ${OSTK_DATA_LOCAL_CACHE}
+
 ## Install dependencies
 
 COPY --chown=${USER_UID}:${USER_GID} pyproject.toml /home/${USERNAME}/tmp/
@@ -104,13 +116,13 @@ RUN cd /home/${USERNAME}/tmp/ && \
     pip --no-cache-dir install --user .[dev] && \
     rm -rf /home/${USERNAME}/tmp/
 
-## Change default entrypoint to bin/zsh
-
-ENTRYPOINT ["/bin/zsh"]
-
 ## Change default entrypoint folder to /app
 
 WORKDIR /app
+
+## Change default entrypoint to bin/zsh
+
+ENTRYPOINT ["/bin/zsh"]
 ```
 
 ### pyproject.toml
