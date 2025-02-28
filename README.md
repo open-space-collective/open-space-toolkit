@@ -101,12 +101,14 @@ ARG USER_GID=${USER_UID}
 RUN sudo groupmod --gid ${USER_GID} ${USERNAME} && \
     sudo usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
 
-USER ${USERNAME}
-
 ## Update permissions of OSTk data repo
 
 ARG OSTK_DATA_LOCAL_CACHE
 RUN chown -R ${USER_GID}:${USER_GID} ${OSTK_DATA_LOCAL_CACHE}
+
+## Change user
+
+USER ${USERNAME}
 
 ## Install dependencies
 
