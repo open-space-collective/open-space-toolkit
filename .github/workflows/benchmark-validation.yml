@@ -26,7 +26,7 @@ env:
 jobs:
   benchmark-cpp:
     name: Benchmark C++
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-benchmark
       - uses: benchmark-action/github-action-benchmark@v1
         with:
-          tool: 'googlecpp'
+          tool: "googlecpp"
           output-file-path: bin/benchmark_result.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: ${{ github.ref == 'refs/heads/main' }}
@@ -58,7 +58,7 @@ jobs:
 
   validation-cpp:
     name: Run C++ Validation Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

@@ -10,7 +10,6 @@ on:
   release:
     types: [published]
 
-
 concurrency:
   group: main-${{ github.ref }}
   cancel-in-progress: true
@@ -21,7 +20,7 @@ env:
 jobs:
   prepare-environment:
     name: Prepare Environment Variables
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       project_name: ${{ steps.project-name.outputs.value }}
       project_version: ${{ steps.project-version.outputs.value }}
