@@ -121,4 +121,4 @@ jobs:
         working-directory: ${{ runner.temp }}/digests
         run: |
           docker buildx imagetools create -t ${{ env.IMAGE_TAG }} \
-            $(printf '${{ env.IMAGE_TAG }}@sha256:%s ' *)
+            $(printf '${{ env.IMAGE_NAME }}@sha256:%s ' *)
