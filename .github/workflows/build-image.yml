@@ -85,7 +85,7 @@ jobs:
       - name: Prepare Artifact Path
         run: |
           platform=${{ matrix.architecture.platform }}
-          echo "PLATFORM_PATH=${platform//\//-} >> $GITHUB_ENV"
+          echo "PLATFORM_PATH=${platform//\//-}" >> $GITHUB_ENV
 
       - name: Upload Digest
         uses: actions/upload-artifact@v4
