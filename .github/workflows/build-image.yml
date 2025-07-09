@@ -31,6 +31,7 @@ on:
 
 env:
   DOCKER_REGISTRY_PATH: openspacecollective
+  IMAGE_NAME: openspacecollective/${{ inputs.project_name }}-development
   IMAGE_TAG: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
   LANG: en_US.UTF-8
 
@@ -62,7 +63,7 @@ jobs:
         id: build
         uses: docker/build-push-action@v6
         with:
-          tags: ${{ env.IMAGE_TAG }}
+          tags: ${{ env.IMAGE_NAME }}
           context: .
           file: ./docker/development/Dockerfile
           build-args: |
