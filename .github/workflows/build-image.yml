@@ -95,7 +95,8 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  merge:
+  merge-manifests:
+    name: Merge Image Manifests
     runs-on: ubuntu-24.04
     needs:
       - build-image-development
