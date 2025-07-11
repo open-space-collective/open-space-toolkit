@@ -26,7 +26,7 @@ env:
 jobs:
   deploy-package-cpp:
     name: Deploy C++ Package
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
@@ -54,7 +54,7 @@ jobs:
 
   deploy-package-python:
     name: Deploy Python Package
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -76,7 +76,7 @@ jobs:
 
   deploy-documentation:
     name: Deploy Documentation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
@@ -99,7 +99,7 @@ jobs:
 
   deploy-image-jupyter:
     name: Deploy Jupyter Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

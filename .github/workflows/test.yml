@@ -26,7 +26,7 @@ env:
 jobs:
   format-check-cpp:
     name: Check C++ Format
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
 
   test-unit-cpp:
     name: Run C++ Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -70,7 +70,7 @@ jobs:
 
   format-check-python:
     name: Check Python Format
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -89,7 +89,7 @@ jobs:
 
   build-python:
     name: Build Python bindings
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       python_versions: ${{ steps.python-versions.outputs.value }}
     steps:
@@ -121,7 +121,7 @@ jobs:
 
   test-unit-python:
     name: Run Python Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build-python
     strategy:

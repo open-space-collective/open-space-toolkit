@@ -26,44 +26,42 @@ env:
 jobs:
   build-package-cpp:
     name: Build C++ Package
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        architecture: [linux/amd64, linux/arm64]
+        architecture:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.architecture.runner }}
     steps:
       - name: Checkout Repository
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
-      - name: Set up QEMU for ARM64
-        if: (matrix.architecture == 'linux/arm64' && github.ref == 'refs/heads/main') || (matrix.architecture == 'linux/arm64' && github.event_name == 'release' && github.event.action == 'published')
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: linux/arm64
-          image: tonistiigi/binfmt:qemu-v8.1.5 # https://github.com/tonistiigi/binfmt/issues/215#issuecomment-2611042596
       - name: Login to DockerHub
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build C++ Package
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        run: make build-packages-cpp-standalone TARGETPLATFORM=${{ matrix.architecture }}
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        run: make build-packages-cpp-standalone TARGETPLATFORM=${{ matrix.architecture.platform }}
       - name: Format artifact name
         id: format-artifact-name
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: |
-          artifact_name=$(echo "${{ matrix.architecture }}" | tr / -)
+          artifact_name=$(echo "${{ matrix.architecture.platform }}" | tr / -)
           echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload C++ Package
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
           ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
         uses: actions/upload-artifact@v4
@@ -73,44 +71,42 @@ jobs:
 
   build-package-python:
     name: Build Python Package
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        architecture: [linux/amd64, linux/arm64]
+        architecture:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.architecture.runner }}
     steps:
       - name: Checkout Repository
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
-      - name: Set up QEMU for ARM64
-        if: (matrix.architecture == 'linux/arm64' && github.ref == 'refs/heads/main') || (matrix.architecture == 'linux/arm64' && github.event_name == 'release' && github.event.action == 'published')
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: linux/arm64
-          image: tonistiigi/binfmt:qemu-v8.1.5 # https://github.com/tonistiigi/binfmt/issues/215#issuecomment-2611042596
       - name: Login to DockerHub
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       - name: Build Python Package
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        run: make build-packages-python-standalone TARGETPLATFORM=${{ matrix.architecture }}
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        run: make build-packages-python-standalone TARGETPLATFORM=${{ matrix.architecture.platform }}
       - name: Format artifact name
         id: format-artifact-name
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: |
-          artifact_name=$(echo "${{ matrix.architecture }}" | tr / -)
+          artifact_name=$(echo "${{ matrix.architecture.platform }}" | tr / -)
           echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload Python Package
-        if: matrix.architecture != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
           ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
         uses: actions/upload-artifact@v4
@@ -120,7 +116,7 @@ jobs:
 
   build-documentation:
     name: Build Documentation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
