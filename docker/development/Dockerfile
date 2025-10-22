@@ -82,7 +82,7 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
 
 ## Python
 
-RUN add-apt-repository ppa:deadsnakes/ppa && \
+RUN add-apt-repository ppa:fkrull/deadsnakes && \
    apt-get update && apt-get install -y --no-install-recommends \
    python3.9 python3.9-distutils python3.9-dev \
    python3.10 python3.10-distutils python3.10-dev \
