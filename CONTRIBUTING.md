@@ -495,7 +495,7 @@ make
 
 *Tip: `ostk-debug` allows you to debug your code from within the development environment using `gdb`.*
 
-*Tip: The `ccmake` tool is installed in the dev container and can be used to configure CMake project options to speed up your build time. It can be run with the `cmake ../` command from the `./build` directory*
+*Tip: The `ccmake` tool is installed in the dev container and can be used to configure CMake project options to speed up your build time. It can be run with the `ccmake ..` command from the `./build` directory*
 
 *Tip: `ostk-clean` cleans the entire build directory.*
 
