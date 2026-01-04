@@ -37,25 +37,12 @@ RUN apt-get update -y \
    ssh-client \
    && rm -rf /var/lib/apt/lists/*
 
-## Python installing dependencies
-
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
    && apt-get install -y --no-install-recommends \
    software-properties-common \
-   build-essential \
-   libncursesw5-dev \
-   libsqlite3-dev \
-   tk-dev \
-   libgdbm-dev \
-   libc6-dev \
-   libbz2-dev \
-   autotools-dev \
-   libicu-dev \
-   libffi-dev \
    zlib1g-dev \
-   gnupg \
    && rm -rf /var/lib/apt/lists/*
 
 ## Clang-format & Clang
@@ -80,34 +67,29 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
    && update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-13 130
 
-## Python
+## uv / Python
+COPY --from=ghcr.io/astral-sh/uv:0.9.21 /uv /uvx /bin/
 
-RUN add-apt-repository ppa:deadsnakes/ppa && \
-   apt-get update && apt-get install -y --no-install-recommends \
-   python3.9 python3.9-distutils python3.9-dev \
-   python3.10 python3.10-distutils python3.10-dev \
-   python3.11 python3.11-distutils python3.11-dev \
-   python3.12 python3.12-dev \
-   python3.13 python3.13-dev \
-   python3-dev \
-   && rm -rf /var/lib/apt/lists/*
+ARG OSTK_PYTHON_VERSION="3.11"
+ENV OSTK_PYTHON_VERSION="${OSTK_PYTHON_VERSION}"
 
-## Pip
+ENV UV_PYTHON_INSTALL_DIR="/opt/uv-python"
+ENV UV_LINK_MODE="copy"
 
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9 \
-   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 \
-   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
-   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 \
-   & curl -sS https://bootstrap.pypa.io/get-pip.py | python3.13 \
-   & wait
+RUN uv python install 3.9 \ 
+   && uv python install 3.10 \ 
+   && uv python install 3.11 \ 
+   && uv python install 3.12 \ 
+   && uv python install 3.13 \
+   && chmod -R 777 ${UV_PYTHON_INSTALL_DIR} \
+   && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python \
+   && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python${OSTK_PYTHON_VERSION} \
+   && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python3
 
-## Python tools
-
-RUN python3.9 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.10 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.11 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.12 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen \
-   && python3.13 -m pip install --upgrade pip ipython setuptools build wheel twine pytest pybind11-stubgen
+# Create a venv for the default OSTk Python version. 
+ENV OSTK_VIRTUAL_ENV=/opt/ostk-venv
+RUN uv venv ${OSTK_VIRTUAL_ENV} --python ${OSTK_PYTHON_VERSION} \
+   && chmod -R 777 ${OSTK_VIRTUAL_ENV}
 
 ## CMake
 
@@ -191,13 +173,6 @@ RUN mkdir /tmp/openssl \
    && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
    && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
    && rm -rf /tmp/openssl
-
-## Black
-
-ARG OSTK_PYTHON_VERSION
-ENV OSTK_PYTHON_VERSION="3.11"
-
-RUN python${OSTK_PYTHON_VERSION} -m pip install black black[jupyter]
 
 # Environment
 

@@ -7,7 +7,7 @@ test_directory="${project_directory}/bindings/python/test"
 
 pushd "${test_directory}" > /dev/null
 
-    python${OSTK_PYTHON_VERSION} -m pytest -sv ${@} \
+    "${OSTK_VIRTUAL_ENV}/bin/python" -m pytest -sv ${@} \
     || exit 1
 
 popd > /dev/null

@@ -20,7 +20,7 @@ if [[ $1 == "--help" ]]; then
     exit 0
 fi
 
-python${OSTK_PYTHON_VERSION} -m pip install -r requirements.txt
+VIRTUAL_ENV=${OSTK_VIRTUAL_ENV} uv pip install -r requirements.txt
 
 if [[ ! -z $1 ]] && [[ $1 == "--notebooks" ]]; then
     if [[ -z $2 ]]; then
@@ -43,8 +43,8 @@ if [[ ! -z $1 ]] && [[ $1 == "--notebooks" ]]; then
     cd ..
 fi
 
-breathe-apidoc -o cpp_rst xml -g class
+"${OSTK_VIRTUAL_ENV}/bin/python" -m breathe.apidoc -o cpp_rst xml -g class
 
-sphinx-build -j $(nproc) -b html . _build/html
+"${OSTK_VIRTUAL_ENV}/bin/python" -m sphinx -j $(nproc) -b html . _build/html
 
 popd > /dev/null
