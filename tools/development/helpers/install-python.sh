@@ -12,7 +12,7 @@ export VIRTUAL_ENV=${OSTK_VIRTUAL_ENV}
 
 pushd ${python_directory} > /dev/null
 
-uv sync --all-extras --active
+uv pip install .
 
 popd > /dev/null
 

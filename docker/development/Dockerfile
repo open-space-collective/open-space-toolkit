@@ -1,18 +1,14 @@
 # Apache License 2.0
 
-FROM ubuntu:20.04 AS base
+# Common system packages
+FROM ubuntu:20.04 AS system-packages
 
-LABEL maintainer="lucas.bremond@gmail.com"
-
-# Aliases
-
-RUN alias ls='ls --color=auto' \
-   && alias ll='ls -halF'
-
-# Common Tools
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y \
    && apt-get install -y --no-install-recommends \
+   # Common utilities
+   ca-certificates \
    git \
    curl \
    wget \
@@ -20,30 +16,95 @@ RUN apt-get update -y \
    htop \
    tree \
    make \
-   libssl-dev \
-   && rm -rf /var/lib/apt/lists/*
-
-# Development Tools
-
-## GCC / GDB / lcov / doxygen
-
-RUN apt-get update -y \
-   && apt-get install -y --no-install-recommends \
+   tar \
+   perl \
+   # Development tools
    gcc \
    g++ \
    gdb \
    lcov \
    doxygen \
    ssh-client \
-   && rm -rf /var/lib/apt/lists/*
-
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update -y \
-   && apt-get install -y --no-install-recommends \
+   # Build dependencies
    software-properties-common \
    zlib1g-dev \
+   libssl-dev \
    && rm -rf /var/lib/apt/lists/*
+
+# CMake builder
+FROM system-packages AS cmake-builder
+
+ARG TARGETPLATFORM
+ARG CMAKE_MAJOR_VERSION="3"
+ARG CMAKE_MINOR_VERSION="26"
+ARG CMAKE_PATCH_VERSION="3"
+ARG CMAKE_VERSION="${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}"
+
+RUN mkdir -p /tmp/cmake \
+   && mkdir -p /opt/cmake \
+   && cd /tmp/cmake \
+   && export PACKAGE_PLATFORM=$(if [ ${TARGETPLATFORM} = "linux/amd64" ]; then echo "x86_64"; elif [ ${TARGETPLATFORM} = "linux/arm64" ]; then echo "aarch64"; else echo "Unknown platform" && exit 1; fi;) \
+   && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}-linux-${PACKAGE_PLATFORM}.sh -O cmake-install.sh \
+   && chmod +x /tmp/cmake/cmake-install.sh \
+   && /tmp/cmake/cmake-install.sh --prefix=/opt/cmake --skip-license \
+   && rm -rf /tmp/cmake
+
+# GoogleTest builder
+FROM cmake-builder AS googletest-builder
+
+ARG GOOGLE_TEST_VERSION="1.12.0"
+
+RUN cd /tmp \
+   && git clone --branch release-${GOOGLE_TEST_VERSION} --depth 1 https://github.com/google/googletest.git \
+   && cd googletest \
+   && mkdir build \
+   && cd build \
+   && /opt/cmake/bin/cmake .. -DCMAKE_INSTALL_PREFIX=/opt/googletest \
+   && make -j $(nproc) \
+   && make install \
+   && rm -rf /tmp/googletest
+
+# Boost builder
+FROM system-packages AS boost-builder
+
+ARG BOOST_MAJOR_VERSION="1"
+ARG BOOST_MINOR_VERSION="87"
+ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
+
+RUN mkdir -p /tmp/boost \
+   && cd /tmp/boost \
+   && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
+   && tar -xf boost_${BOOST_VERSION}.tar.gz \
+   && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
+   && ./bootstrap.sh --prefix=/opt/boost \
+   && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
+   && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
+   && rm -rf /tmp/boost
+
+# OpenSSL builder
+FROM system-packages AS openssl-builder
+
+ARG OPENSSL_VERSION="3.0.2"
+
+RUN mkdir -p /tmp/openssl \
+   && cd /tmp/openssl \
+   && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
+   && tar -xf openssl-${OPENSSL_VERSION}.tar.gz \
+   && cd openssl-${OPENSSL_VERSION} \
+   && ./config --prefix=/opt/openssl --openssldir=/opt/openssl shared zlib \
+   && make -j $(nproc) \
+   && make install \
+   && rm -rf /tmp/openssl
+
+# Main image
+FROM system-packages AS base
+
+LABEL maintainer="lucas.bremond@gmail.com"
+
+# Aliases
+
+RUN alias ls='ls --color=auto' \
+   && alias ll='ls -halF'
 
 ## Clang-format & Clang
 
@@ -93,86 +154,42 @@ RUN uv venv ${OSTK_VIRTUAL_ENV} --python ${OSTK_PYTHON_VERSION} \
 
 ## CMake
 
-ARG TARGETPLATFORM
-ARG CMAKE_MAJOR_VERSION="3"
-ARG CMAKE_MINOR_VERSION="26"
-ARG CMAKE_PATCH_VERSION="3"
-ARG CMAKE_VERSION="${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}"
-
-RUN mkdir -p /tmp/cmake \
-   && cd /tmp/cmake \
-   && export PACKAGE_PLATFORM=$(if [ ${TARGETPLATFORM} = "linux/amd64" ]; then echo "x86_64"; elif [ ${TARGETPLATFORM} = "linux/arm64" ]; then echo "aarch64"; else echo "Unknown platform" && exit 1; fi;) \
-   && wget --quiet https://cmake.org/files/v${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/cmake-${CMAKE_VERSION}-linux-${PACKAGE_PLATFORM}.sh -O cmake-install.sh \
-   && chmod +x /tmp/cmake/cmake-install.sh \
-   && /tmp/cmake/cmake-install.sh --prefix=/usr/local --skip-license \
-   && rm -rf /tmp/cmake
+COPY --from=cmake-builder /opt/cmake/bin /usr/local/bin
+COPY --from=cmake-builder /opt/cmake/share /usr/local/share
 
 ## GoogleTest
 
-ARG GOOGLE_TEST_VERSION="1.12.0"
-
-RUN cd /tmp \
-   && git clone --branch release-${GOOGLE_TEST_VERSION} --depth 1 https://github.com/google/googletest.git \
-   && cd googletest \
-   && mkdir build \
-   && cd build \
-   && cmake .. \
-   && make -j $(nproc) \
-   && make install \
-   && rm -rf /tmp/googletest
-
-# Dependencies
+COPY --from=googletest-builder /opt/googletest /usr/local
 
 ## Pybind11
 
-ARG PYBIND_11_MAJOR_VERSION="2"
-ARG PYBIND_11_MINOR_VERSION="13"
-ARG PYBIND_11_PATCH_VERSION="6"
+ARG PYBIND11_VERSION="2.13.6"
 
-RUN mkdir /tmp/pybind11 \
+RUN mkdir -p /tmp/pybind11 \
    && cd /tmp/pybind11 \
-   && latest_version=$(wget -q -O - http://ftp.us.debian.org/debian/pool/main/p/pybind11/ | \
-   grep -o "pybind11-dev_${PYBIND_11_MAJOR_VERSION}\.${PYBIND_11_MINOR_VERSION}\.${PYBIND_11_PATCH_VERSION}-[0-9]\+_all\.deb" | \
-   sort -V | \
-   tail -n 1) \
-   && wget http://ftp.us.debian.org/debian/pool/main/p/pybind11/${latest_version} \
-   && apt-get install -y ./${latest_version} \
+   && wget https://github.com/pybind/pybind11/archive/refs/tags/v${PYBIND11_VERSION}.tar.gz \
+   && tar -xf v${PYBIND11_VERSION}.tar.gz \
+   && cd pybind11-${PYBIND11_VERSION} \
+   && mkdir build \
+   && cd build \
+   && cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DPYBIND11_TEST=OFF \
+   && make install \
    && rm -rf /tmp/pybind11
 
 ## Boost
 
-ARG BOOST_MAJOR_VERSION="1"
-ARG BOOST_MINOR_VERSION="87"
-ARG BOOST_VERSION="${BOOST_MAJOR_VERSION}.${BOOST_MINOR_VERSION}.0"
-
-RUN mkdir -p /tmp/boost \
-   && cd /tmp/boost \
-   && wget -O boost_${BOOST_VERSION}.tar.gz https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0.tar.gz/download \
-   && tar -xf boost_${BOOST_VERSION}.tar.gz \
-   && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
-   && ./bootstrap.sh \
-   && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
-   && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
-   && rm -rf /tmp/boost
+COPY --from=boost-builder /opt/boost/include /usr/local/include
+COPY --from=boost-builder /opt/boost/lib /usr/local/lib
 
 ## OpenSSL
 
-ARG OPENSSL_VERSION="3.0.2"
+COPY --from=openssl-builder /opt/openssl /usr/local/ssl
 
-RUN mkdir /tmp/openssl \
-   && cd /tmp/openssl \
-   && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
-   && tar -xvf openssl-${OPENSSL_VERSION}.tar.gz \
-   && cd openssl-${OPENSSL_VERSION} \
-   && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib \
-   && make \
-   && make install \
-   && touch /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
-   && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl-${OPENSSL_VERSION}.conf \
+RUN touch /etc/ld.so.conf.d/openssl.conf \
+   && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl.conf \
    && ldconfig \
    && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
-   && mv /usr/local/ssl/bin/openssl /usr/bin/openssl \
-   && rm -rf /tmp/openssl
+   && mv /usr/local/ssl/bin/openssl /usr/bin/openssl
 
 # Environment
 
