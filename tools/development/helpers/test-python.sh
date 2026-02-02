@@ -3,11 +3,11 @@
 # Apache License 2.0
 
 project_directory="$(git rev-parse --show-toplevel)"
-test_directory="${project_directory}/bindings/python/test"
+test_directory="${project_directory}/build/bindings/python/OpenSpaceToolkit*Py-python-package-${OSTK_PYTHON_VERSION}/ostk/*/test"
 
-pushd "${test_directory}" > /dev/null
+pushd ${test_directory} > /dev/null
 
-    "${OSTK_VIRTUAL_ENV}/bin/python" -m pytest -sv ${@} \
+    uv run pytest -sv ${@} \
     || exit 1
 
 popd > /dev/null

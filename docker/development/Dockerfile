@@ -147,10 +147,7 @@ RUN uv python install 3.9 \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python${OSTK_PYTHON_VERSION} \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python3
 
-# Create a venv for the default OSTk Python version. 
-ENV OSTK_VIRTUAL_ENV=/opt/ostk-venv
-RUN uv venv ${OSTK_VIRTUAL_ENV} --python ${OSTK_PYTHON_VERSION} \
-   && chmod -R 777 ${OSTK_VIRTUAL_ENV}
+ENV PYTHON_WD="/app/bindings/python"
 
 ## CMake
 
@@ -194,7 +191,6 @@ RUN touch /etc/ld.so.conf.d/openssl.conf \
 # Environment
 
 ENV LD_LIBRARY_PATH="/usr/local/lib"
-ENV PYTHONPATH="/usr/local/lib"
 RUN git config --global --add safe.directory /app
 
 # Install development helpers

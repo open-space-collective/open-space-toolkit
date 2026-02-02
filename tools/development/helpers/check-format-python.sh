@@ -2,11 +2,9 @@
 
 # Apache License 2.0
 
-project_directory="$(git rev-parse --show-toplevel)"
+pushd "${PYTHON_WD}" > /dev/null
 
-pushd "${project_directory}" > /dev/null
-
-    "${OSTK_VIRTUAL_ENV}/bin/python" -m black --check --diff bindings/python/ \
+    uv run black --check --diff . \
     || exit 1
 
 popd > /dev/null

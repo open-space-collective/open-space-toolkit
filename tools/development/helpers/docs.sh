@@ -20,7 +20,11 @@ if [[ $1 == "--help" ]]; then
     exit 0
 fi
 
-VIRTUAL_ENV=${OSTK_VIRTUAL_ENV} uv pip install -r requirements.txt
+# Find and use the venv that was created when building the package.
+package_directory=(${project_directory}/build/bindings/python/OpenSpaceToolkit*Py-python-package-${OSTK_PYTHON_VERSION})
+export VIRTUAL_ENV="${package_directory[0]}/.venv"
+
+uv pip install -r requirements.txt
 
 if [[ ! -z $1 ]] && [[ $1 == "--notebooks" ]]; then
     if [[ -z $2 ]]; then
@@ -43,8 +47,8 @@ if [[ ! -z $1 ]] && [[ $1 == "--notebooks" ]]; then
     cd ..
 fi
 
-"${OSTK_VIRTUAL_ENV}/bin/python" -m breathe.apidoc -o cpp_rst xml -g class
+uv run breathe-apidoc -o cpp_rst xml -g class
 
-"${OSTK_VIRTUAL_ENV}/bin/python" -m sphinx -j $(nproc) -b html . _build/html
+uv run sphinx-build -j $(nproc) -b html . _build/html
 
 popd > /dev/null
