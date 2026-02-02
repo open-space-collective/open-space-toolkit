@@ -65,6 +65,8 @@ jobs:
   build-tests-and-coverage:
     name: Build all tests and run coverage
     runs-on: ubuntu-24.04
+    outputs:
+      python_versions: ${{ steps.python-versions.outputs.value }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
