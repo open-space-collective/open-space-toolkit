@@ -62,8 +62,8 @@ jobs:
       - name: Check Python Format
         run: make format-check-python-standalone
 
-  build-tests-and-coverage:
-    name: Build all tests and run coverage
+  build-test-image:
+    name: Build Test Image
     runs-on: ubuntu-24.04
     outputs:
       python_versions: ${{ steps.python-versions.outputs.value }}
@@ -80,51 +80,31 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Pull Development Image
         run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
-      - name: Run Coverage
-        run: make build-tests
-      - name: Upload Coverage Results
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage/
-          fail_ci_if_error: true
-      - name: Upload Python Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-bindings # TBM: use a different namespace than in build-packages for now.
-          path: build/bindings/python
-      - id: python-versions
-        name: Export Python Versions to Environment
+      - name: Build Test Image
+        run: make build-test-image
+      - name: Push Test Image
+        run: docker push ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-test:${{ inputs.project_version }}
+      - name: Export Python Versions
+        id: python-versions
         run: |
-          python_versions=$(echo -n "["; ls -d build/bindings/python/OpenSpaceToolkit*-python-package-*/ | grep -o -E '[0-9]+\.[0-9]+' | sed "s/\(.*\)/'\1'/" | tr '\n' ',' | sed 's/,$//'; echo "]")
+          python_versions=$(docker run --rm ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-test:${{ inputs.project_version }} \
+            bash -c "echo -n '['; ls -d /app/build/bindings/python/OpenSpaceToolkit*-python-package-*/ | grep -o -E '[0-9]+\.[0-9]+' | sed 's/.*/\"\0\"/' | tr '\n' ',' | sed 's/,$//'; echo ']'")
           echo "Python versions: ${python_versions}"
           echo "value=${python_versions}" >> $GITHUB_OUTPUT
 
   test-unit-python:
     name: Run Python Unit Tests
     runs-on: ubuntu-24.04
+    container:
+      image: openspacecollective/${{ inputs.project_name }}-test:${{ inputs.project_version }}
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     needs:
-      - build-tests-and-coverage
+      - build-test-image
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.build-tests-and-coverage.outputs.python_versions) }}
+        python-version: ${{ fromJson(needs.build-test-image.outputs.python_versions) }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          lfs: true
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Pull Development Image
-        run: docker pull ${{ env.DOCKER_REGISTRY_PATH }}/${{ inputs.project_name }}-development:${{ inputs.project_version }}
-      - name: Download Python packages
-        uses: actions/download-artifact@v4
-        with:
-          name: python-bindings
-          path: build/bindings/python
       - name: Run Unit Tests Python
         run: make ci-test-python ${{ format('test_python_version={0}', matrix.python-version) }}
