@@ -2,7 +2,7 @@
 
 # Apache License 2.0
 
-project_directory="$(git rev-parse --show-toplevel)"
+project_directory="/app"
 
 pushd "${project_directory}" > /dev/null
 

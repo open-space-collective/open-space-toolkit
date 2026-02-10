@@ -2,8 +2,7 @@
 
 # Apache License 2.0
 
-project_directory="$(git rev-parse --show-toplevel)"
-test_directory="${project_directory}/build/bindings/python/OpenSpaceToolkit*Py-python-package-${OSTK_PYTHON_VERSION}/ostk/*/test"
+test_directory="/app/build/bindings/python/OpenSpaceToolkit*Py-python-package-${OSTK_PYTHON_VERSION}/ostk/*/test"
 
 pushd ${test_directory} > /dev/null
 
