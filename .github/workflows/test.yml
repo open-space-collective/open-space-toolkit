@@ -76,8 +76,8 @@ jobs:
           build-args: |
             BASE_IMAGE_SYSTEM=debian
             VERSION=${{ inputs.project_version }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=linux/amd64 # corresponding `platform` name for the `runner`, defined in build-image.yml
+          cache-to: type=gha,mode=max,scope=linux/amd64 # corresponding `platform` name for the `runner`, defined in build-image.yml
           target: ci-test
           push: true
       - name: Export Python Versions
@@ -87,6 +87,27 @@ jobs:
             bash -c "echo -n '['; ls -d /app/build/bindings/python/OpenSpaceToolkit*-python-package-*/ | grep -o -E '[0-9]+\.[0-9]+' | sed 's/.*/\"\0\"/' | tr '\n' ',' | sed 's/,$//'; echo ']'")
           echo "Python versions: ${python_versions}"
           echo "value=${python_versions}" >> $GITHUB_OUTPUT
+
+  test-unit-cpp:
+    name: Run C++ Unit Tests
+    runs-on: ubuntu-24.04
+    container:
+      image: openspacecollective/${{ inputs.project_name }}-test:${{ inputs.project_version }}
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    needs:
+      - build-test-image
+    steps:
+      - name: Run Unit Tests C++
+        run: |
+          make coverage
+      - name: Upload Coverage Results
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage/
+          fail_ci_if_error: true
 
   test-unit-python:
     name: Run Python Unit Tests
