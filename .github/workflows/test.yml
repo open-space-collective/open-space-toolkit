@@ -104,10 +104,10 @@ jobs:
           cd /app/build
           make coverage
       - name: Upload Coverage Results
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: /app/build/
+          files: /app/build/coverage.info
           fail_ci_if_error: true
 
   test-unit-python:
