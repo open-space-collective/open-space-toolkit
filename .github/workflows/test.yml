@@ -101,12 +101,13 @@ jobs:
     steps:
       - name: Run Unit Tests C++
         run: |
+          cd /app/build
           make coverage
       - name: Upload Coverage Results
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage/
+          directory: /app/build/
           fail_ci_if_error: true
 
   test-unit-python:
