@@ -129,7 +129,9 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
    && update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-13 130
 
 ## uv / Python
-COPY --from=ghcr.io/astral-sh/uv:0.9.21 /uv /uvx /bin/
+ARG UV_VERSION="0.10.6"
+
+COPY --from=ghcr.io/astral-sh/uv:${UV_VERSION} /uv /uvx /bin/
 
 ARG OSTK_PYTHON_VERSION="3.11"
 ENV OSTK_PYTHON_VERSION="${OSTK_PYTHON_VERSION}"
