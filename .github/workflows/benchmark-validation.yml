@@ -32,6 +32,9 @@ jobs:
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    defaults:
+      run:
+        working-directory: /app
     steps:
       - name: Run C++ Benchmark
         run: /app/bin/${{ inputs.project_name }}.benchmark --benchmark_out_format=json --benchmark_out=/app/bin/benchmark_result.json
