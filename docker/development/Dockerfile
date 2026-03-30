@@ -59,7 +59,7 @@ RUN cd /tmp \
    && cd googletest \
    && mkdir build \
    && cd build \
-   && /opt/cmake/bin/cmake .. -DCMAKE_INSTALL_PREFIX=/opt/googletest \
+   && /opt/cmake/bin/cmake .. -DCMAKE_INSTALL_PREFIX=/opt/googletest -DCMAKE_BUILD_TYPE=Release \
    && make -j $(nproc) \
    && make install \
    && rm -rf /tmp/googletest
@@ -77,8 +77,18 @@ RUN mkdir -p /tmp/boost \
    && tar -xf boost_${BOOST_VERSION}.tar.gz \
    && cd boost_${BOOST_MAJOR_VERSION}_${BOOST_MINOR_VERSION}_0 \
    && ./bootstrap.sh --prefix=/opt/boost \
-   && ./b2 -j $(nproc) link=shared cxxflags=-fPIC install \
-   && ./b2 -j $(nproc) link=static cxxflags=-fPIC install \
+   && ./b2 -j $(nproc) link=shared,static cxxflags=-fPIC \
+   --with-atomic \
+   --with-chrono \
+   --with-date_time \
+   --with-filesystem \
+   --with-log \
+   --with-math \
+   --with-regex \
+   --with-stacktrace \
+   --with-system \
+   --with-thread \
+   install \
    && rm -rf /tmp/boost
 
 # OpenSSL builder
@@ -110,14 +120,12 @@ RUN alias ls='ls --color=auto' \
 
 ARG CLANG_VERSION="18"
 
-RUN mkdir -p /tmp/clang \
-   && cd /tmp/clang \
-   && wget https://apt.llvm.org/llvm.sh \
-   && chmod +x llvm.sh \
-   && ./llvm.sh ${CLANG_VERSION} all \
-   && rm -rf /tmp/clang \
-   && ln -s /usr/bin/clang-format-${CLANG_VERSION} /usr/bin/clang-format \
-   && ln -s /usr/bin/clang-${CLANG_VERSION} /usr/bin/clang
+RUN wget -qO /etc/apt/trusted.gpg.d/apt.llvm.org.asc https://apt.llvm.org/llvm-snapshot.gpg.key \
+   && echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-${CLANG_VERSION} main" > /etc/apt/sources.list.d/llvm.list \
+   && apt-get update \
+   && apt-get install -y --no-install-recommends clang-format-${CLANG_VERSION} \
+   && rm -rf /var/lib/apt/lists/* \
+   && ln -s /usr/bin/clang-format-${CLANG_VERSION} /usr/bin/clang-format
 
 ## GCC / G++
 
@@ -129,9 +137,7 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
    && update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-13 130
 
 ## uv / Python
-ARG UV_VERSION="0.10.6"
-
-COPY --from=ghcr.io/astral-sh/uv:${UV_VERSION} /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.10.6 /uv /uvx /bin/
 
 ARG OSTK_PYTHON_VERSION="3.11"
 ENV OSTK_PYTHON_VERSION="${OSTK_PYTHON_VERSION}"
