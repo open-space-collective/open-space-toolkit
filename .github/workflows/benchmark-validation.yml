@@ -28,11 +28,13 @@ jobs:
     name: Benchmark C++
     runs-on: ubuntu-24.04
     container:
-      image: openspacecollective/${{ inputs.project_name }}-test:${{ inputs.project_version }}
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
+      - name: Build
+        run: cd /app && make _build-test
       - name: Run C++ Benchmark
         run: /app/bin/${{ inputs.project_name }}.benchmark --benchmark_out_format=json --benchmark_out=/app/bin/benchmark_result.json
       - name: Upload benchmark result
@@ -69,10 +71,12 @@ jobs:
     name: Run C++ Validation Tests
     runs-on: ubuntu-24.04
     container:
-      image: openspacecollective/${{ inputs.project_name }}-test:${{ inputs.project_version }}
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
+      - name: Build
+        run: cd /app && make _build-test
       - name: Run C++ Validation Tests
         run: /app/bin/${{ inputs.project_name }}.validation
