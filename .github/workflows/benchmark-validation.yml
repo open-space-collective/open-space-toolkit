@@ -32,12 +32,24 @@ jobs:
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    defaults:
-      run:
-        working-directory: /app
     steps:
       - name: Run C++ Benchmark
         run: /app/bin/${{ inputs.project_name }}.benchmark --benchmark_out_format=json --benchmark_out=/app/bin/benchmark_result.json
+      - name: Upload benchmark result
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-result
+          path: /app/bin/benchmark_result.json
+
+  benchmark-cpp-report:
+    name: Report C++ Benchmark
+    needs: benchmark-cpp
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download benchmark result
+        uses: actions/download-artifact@v4
+        with:
+          name: benchmark-result
       - name: Download previous benchmark
         uses: actions/cache@v3
         with:
@@ -46,7 +58,8 @@ jobs:
       - uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: "googlecpp"
-          output-file-path: /app/bin/benchmark_result.json
+          output-file-path: benchmark_result.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: ${{ github.ref == 'refs/heads/main' }}
           alert-threshold: "200%"
