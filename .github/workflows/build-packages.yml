@@ -56,7 +56,7 @@ jobs:
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
           ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cpp-package-${{ env.ARTIFACT_NAME }}
           path: packages/cpp/
@@ -64,14 +64,14 @@ jobs:
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
           ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: python-package-${{ env.ARTIFACT_NAME }}
           path: packages/python/
       - name: Tar files
         run: cd /app && tar -cvf docs.tar.gz docs/
       - name: Upload Documentation
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: docs
           path: docs.tar.gz

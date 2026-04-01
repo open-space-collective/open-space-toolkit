@@ -38,7 +38,7 @@ jobs:
       - name: Run C++ Benchmark
         run: /app/bin/${{ inputs.project_name }}.benchmark --benchmark_out_format=json --benchmark_out=/app/bin/benchmark_result.json
       - name: Upload benchmark result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-result
           path: /app/bin/benchmark_result.json
@@ -49,11 +49,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Download benchmark result
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: benchmark-result
       - name: Download previous benchmark
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ./cache
           key: ${{ runner.os }}-benchmark
