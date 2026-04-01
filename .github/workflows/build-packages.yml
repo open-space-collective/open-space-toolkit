@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: cpp-package-${{ env.ARTIFACT_NAME }}
-          path: packages/cpp/
+          path: /app/packages/cpp/
       - name: Upload Python Package
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
@@ -67,11 +67,11 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: python-package-${{ env.ARTIFACT_NAME }}
-          path: packages/python/
+          path: /app/packages/python/
       - name: Tar files
         run: cd /app && tar -cvf docs.tar.gz docs/
       - name: Upload Documentation
         uses: actions/upload-artifact@v6
         with:
           name: docs
-          path: docs.tar.gz
+          path: /app/docs.tar.gz
