@@ -69,8 +69,10 @@ jobs:
           name: python-package-${{ env.ARTIFACT_NAME }}
           path: /app/packages/python/
       - name: Tar files
+        if: matrix.architecture.platform == 'linux/amd64'
         run: cd /app && tar -cvf docs.tar.gz docs/
       - name: Upload Documentation
+        if: matrix.architecture.platform == 'linux/amd64'
         uses: actions/upload-artifact@v6
         with:
           name: docs
