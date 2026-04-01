@@ -34,7 +34,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Build
-        run: cd /app && make _build-test
+        run: cd /app && make _build-benchmark-cpp
       - name: Run C++ Benchmark
         run: /app/bin/${{ inputs.project_name }}.benchmark --benchmark_out_format=json --benchmark_out=/app/bin/benchmark_result.json
       - name: Upload benchmark result
@@ -77,6 +77,6 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Build
-        run: cd /app && make _build-test
+        run: cd /app && make _build-validation-cpp
       - name: Run C++ Validation Tests
         run: /app/bin/${{ inputs.project_name }}.validation

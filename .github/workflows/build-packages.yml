@@ -43,7 +43,7 @@ jobs:
     steps:
       - name: Build Packages
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        run: cd /app && make _build-all-packages
+        run: cd /app && make _build-release-packages
         env:
           CESIUM_TOKEN: ${{ secrets.CESIUM_TOKEN }}
       - name: Format artifact name
