@@ -28,8 +28,7 @@ jobs:
     name: Check C++ Format
     runs-on: ubuntu-24.04
     container:
-      image: openspacecollective/${{ inputs.project_name }}-development:${{
-        inputs.project_version }}
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -41,8 +40,7 @@ jobs:
     name: Check Python Format
     runs-on: ubuntu-24.04
     container:
-      image: openspacecollective/${{ inputs.project_name }}-development:${{
-        inputs.project_version }}
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -54,8 +52,7 @@ jobs:
     name: Run C++ Unit Tests
     runs-on: ubuntu-24.04
     container:
-      image: openspacecollective/${{ inputs.project_name }}-development:${{
-        inputs.project_version }}
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -65,7 +62,7 @@ jobs:
       - name: Run C++ Unit Tests With Coverage
         run: cd /app/build && make coverage
       - name: Upload Coverage Results
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: /app/build/coverage.info

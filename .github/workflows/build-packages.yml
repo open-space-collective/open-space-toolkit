@@ -24,8 +24,8 @@ env:
   LANG: en_US.UTF-8
 
 jobs:
-  build-packages:
-    name: Build all packages
+  build-package-cpp:
+    name: Build C++ Package
     strategy:
       fail-fast: true
       matrix:
@@ -41,11 +41,9 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
-      - name: Build Packages
+      - name: Build C++ Package
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
-        run: cd /app && make _build-release-packages
-        env:
-          CESIUM_TOKEN: ${{ secrets.CESIUM_TOKEN }}
+        run: cd /app && make _build-package-cpp
       - name: Format artifact name
         id: format-artifact-name
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
@@ -60,6 +58,33 @@ jobs:
         with:
           name: cpp-package-${{ env.ARTIFACT_NAME }}
           path: /app/packages/cpp/
+
+  build-package-python:
+    name: Build Python Package
+    strategy:
+      fail-fast: true
+      matrix:
+        architecture:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.architecture.runner }}
+    container:
+      image: openspacecollective/${{ inputs.project_name }}-development:${{inputs.project_version }}
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Build Python Package
+        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        run: cd /app && make _build-package-python
+      - name: Format artifact name
+        id: format-artifact-name
+        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        run: |
+          artifact_name=$(echo "${{ matrix.architecture.platform }}" | tr / -)
+          echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload Python Package
         # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
@@ -68,11 +93,23 @@ jobs:
         with:
           name: python-package-${{ env.ARTIFACT_NAME }}
           path: /app/packages/python/
+
+  build-documentation:
+    name: Build Documentation
+    runs-on: ubuntu-24.04
+    container:
+      image: openspacecollective/${{ inputs.project_name }}-development:${{inputs.project_version }}
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Build Documentation
+        run: cd /app && make _build-documentation
+        env:
+          CESIUM_TOKEN: ${{ secrets.CESIUM_TOKEN }}
       - name: Tar files
-        if: matrix.architecture.platform == 'linux/amd64'
         run: cd /app && tar -cvf docs.tar.gz docs/
       - name: Upload Documentation
-        if: matrix.architecture.platform == 'linux/amd64'
         uses: actions/upload-artifact@v6
         with:
           name: docs
