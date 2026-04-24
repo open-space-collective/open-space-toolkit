@@ -99,14 +99,14 @@ RUN mkdir -p /tmp/boost \
 # OpenSSL builder
 FROM system-packages AS openssl-builder
 
-ARG OPENSSL_VERSION="3.0.2"
+ARG OPENSSL_VERSION="3.0.20"
 
 RUN mkdir -p /tmp/openssl \
    && cd /tmp/openssl \
    && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
    && tar -xf openssl-${OPENSSL_VERSION}.tar.gz \
    && cd openssl-${OPENSSL_VERSION} \
-   && ./config --prefix=/opt/openssl --openssldir=/opt/openssl shared zlib \
+   && ./config --prefix=/opt/openssl --openssldir=/etc/ssl shared zlib \
    && make -j $(nproc) \
    && make install \
    && rm -rf /tmp/openssl
@@ -146,11 +146,7 @@ ENV OSTK_PYTHON_VERSION="${OSTK_PYTHON_VERSION}"
 ENV UV_PYTHON_INSTALL_DIR="/opt/uv-python"
 ENV UV_LINK_MODE="copy"
 
-RUN uv python install 3.9 \
-   && uv python install 3.10 \
-   && uv python install 3.11 \
-   && uv python install 3.12 \
-   && uv python install 3.13 \
+RUN uv python install 3.9 3.10 3.11 3.12 3.13 \
    && chmod -R 777 ${UV_PYTHON_INSTALL_DIR} \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python${OSTK_PYTHON_VERSION} \
@@ -191,8 +187,8 @@ COPY --from=boost-builder /opt/boost/lib /usr/local/lib
 
 COPY --from=openssl-builder /opt/openssl /usr/local/ssl
 
-RUN touch /etc/ld.so.conf.d/openssl.conf \
-   && echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl.conf \
+RUN echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl.conf \
+   && echo "/usr/local/ssl/lib" >> /etc/ld.so.conf.d/openssl.conf \
    && ldconfig \
    && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
    && mv /usr/local/ssl/bin/openssl /usr/bin/openssl
