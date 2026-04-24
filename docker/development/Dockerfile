@@ -116,11 +116,6 @@ FROM system-packages AS base
 
 LABEL maintainer="lucas.bremond@gmail.com"
 
-# Aliases
-
-RUN alias ls='ls --color=auto' \
-   && alias ll='ls -halF'
-
 ## Clang-format & Clang
 
 ARG CLANG_VERSION="18"
@@ -136,7 +131,7 @@ RUN wget -qO /etc/apt/trusted.gpg.d/apt.llvm.org.asc https://apt.llvm.org/llvm-s
 
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
    && apt-get update \
-   && apt-get install -y gcc-13 g++-13 \
+   && apt-get install -y --no-install-recommends gcc-13 g++-13 \
    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \
    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
    && update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-13 130 \
