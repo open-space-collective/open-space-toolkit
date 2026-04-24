@@ -1,13 +1,12 @@
 # Apache License 2.0
 
-ARG UBUNTU_VERSION="20.04"
 ARG UV_VERSION="0.11.7"
 
 # uv binary
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv-binary
 
 # Common system packages
-FROM ubuntu:${UBUNTU_VERSION} AS system-packages
+FROM ubuntu:20.04 AS system-packages
 
 ARG DEBIAN_FRONTEND=noninteractive
 
