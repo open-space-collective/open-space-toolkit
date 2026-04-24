@@ -151,10 +151,10 @@ ENV OSTK_PYTHON_VERSION="${OSTK_PYTHON_VERSION}"
 ENV UV_PYTHON_INSTALL_DIR="/opt/uv-python"
 ENV UV_LINK_MODE="copy"
 
-RUN uv python install 3.9 \ 
-   && uv python install 3.10 \ 
-   && uv python install 3.11 \ 
-   && uv python install 3.12 \ 
+RUN uv python install 3.9 \
+   && uv python install 3.10 \
+   && uv python install 3.11 \
+   && uv python install 3.12 \
    && uv python install 3.13 \
    && chmod -R 777 ${UV_PYTHON_INSTALL_DIR} \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python \
