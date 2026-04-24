@@ -6,7 +6,7 @@ test_directory="/app/build/bindings/python/OpenSpaceToolkit*Py-python-package-${
 
 pushd ${test_directory} > /dev/null
 
-    uv run pytest -sv test ${@} \
+    uv run pytest -sv test "$@" \
     || exit 1
 
 popd > /dev/null
