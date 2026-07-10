@@ -61,8 +61,9 @@ jobs:
         run: cd /app && make _build-test-cpp
       - name: Run C++ Unit Tests With Coverage
         run: cd /app/build && make coverage
+      - uses: actions/checkout@v6 # Required for codecov
       - name: Upload Coverage Results
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: /app/build/coverage.info
