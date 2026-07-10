@@ -69,6 +69,7 @@ jobs:
           build-args: |
             BASE_IMAGE_SYSTEM=debian
             VERSION=${{ inputs.project_version }}
+            TARGETPLATFORM=${{ matrix.architecture.platform }}
           cache-from: type=gha,scope=${{ matrix.architecture.platform }}
           cache-to: type=gha,mode=max,scope=${{ matrix.architecture.platform }}
           target: ${{ inputs.target }}
