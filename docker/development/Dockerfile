@@ -93,6 +93,7 @@ RUN mkdir -p /tmp/boost \
    --with-stacktrace \
    --with-system \
    --with-thread \
+   --with-url \
    install \
    && rm -rf /tmp/boost
 
