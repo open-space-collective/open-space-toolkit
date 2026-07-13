@@ -42,16 +42,16 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Build C++ Package
-        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: cd /app && make _build-package-cpp
       - name: Format artifact name
         id: format-artifact-name
-        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: |
           artifact_name=$(echo "${{ matrix.architecture.platform }}" | tr / -)
           echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload C++ Package
-        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
           ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
         uses: actions/upload-artifact@v6
@@ -77,16 +77,16 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Build Python Package
-        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: cd /app && make _build-package-python
       - name: Format artifact name
         id: format-artifact-name
-        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         run: |
           artifact_name=$(echo "${{ matrix.architecture.platform }}" | tr / -)
           echo "ARTIFACT_NAME=${artifact_name}" >> $GITHUB_OUTPUT
       - name: Upload Python Package
-        # if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
+        if: matrix.architecture.platform != 'linux/arm64' || github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.action == 'published')
         env:
           ARTIFACT_NAME: ${{ steps.format-artifact-name.outputs.ARTIFACT_NAME }}
         uses: actions/upload-artifact@v6
