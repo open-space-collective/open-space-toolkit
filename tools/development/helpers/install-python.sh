@@ -10,7 +10,7 @@ python_directory="${project_directory}/build/bindings/python/OpenSpaceToolkit*Py
 pushd ${python_directory} > /dev/null
 
 uv sync --all-extras
-uv pip install "cesiumpy @ git+https://github.com/open-space-collective/cesiumpy@0.4.0" # TBR: after https://github.com/open-space-collective/open-space-toolkit/issues/183
+uv pip install "cesiumpy @ git+https://github.com/open-space-collective/cesiumpy@0.4.1" # TBR: after https://github.com/open-space-collective/open-space-toolkit/issues/183
 
 popd > /dev/null
 
