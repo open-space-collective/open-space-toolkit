@@ -60,10 +60,9 @@ jobs:
       - uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: "googlecpp"
-          output-file-path: benchmark_result.json
-          external-data-json-path: ./cache/benchmark-data.json
+          output-file-path: ./cache/benchmark_result.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: ${{ github.ref == 'refs/heads/main' }}
+          auto-push: true # TBR
           alert-threshold: "200%"
           comment-on-alert: true
 
