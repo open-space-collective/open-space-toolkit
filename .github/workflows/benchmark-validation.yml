@@ -48,6 +48,10 @@ jobs:
     needs: benchmark-cpp
     runs-on: ubuntu-24.04
     steps:
+      - name: Checkout Repository # Required for github-action-benchmark
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Download benchmark result
         uses: actions/download-artifact@v8
         with:
