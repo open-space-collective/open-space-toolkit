@@ -48,6 +48,10 @@ jobs:
     needs: benchmark-cpp
     runs-on: ubuntu-24.04
     steps:
+      - name: Checkout Repository # Required for github-action-benchmark
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Download benchmark result
         uses: actions/download-artifact@v8
         with:
@@ -61,7 +65,6 @@ jobs:
         with:
           tool: "googlecpp"
           output-file-path: benchmark_result.json
-          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: ${{ github.ref == 'refs/heads/main' }}
           alert-threshold: "200%"
