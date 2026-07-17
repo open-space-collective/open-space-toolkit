@@ -47,7 +47,7 @@ jobs:
           merge-multiple: true
           path: packages/cpp/
       - name: Release C++ Package
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: packages/cpp/*
