@@ -1,6 +1,6 @@
 # Apache License 2.0
 
-ARG UV_VERSION="0.11.7"
+ARG UV_VERSION="0.11.32"
 
 # uv binary
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv-binary
@@ -147,7 +147,7 @@ ENV OSTK_PYTHON_VERSION="${OSTK_PYTHON_VERSION}"
 ENV UV_PYTHON_INSTALL_DIR="/opt/uv-python"
 ENV UV_LINK_MODE="copy"
 
-RUN uv python install 3.9 3.10 3.11 3.12 3.13 \
+RUN uv python install 3.9 3.10 3.11 3.12 3.13 3.14 \
    && chmod -R 777 ${UV_PYTHON_INSTALL_DIR} \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python \
    && ln -sf $(uv python find ${OSTK_PYTHON_VERSION}) /usr/local/bin/python${OSTK_PYTHON_VERSION} \
