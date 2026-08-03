@@ -33,7 +33,7 @@ env:
   DOCKER_REGISTRY_PATH: openspacecollective
   IMAGE_NAME: openspacecollective/${{ inputs.project_name }}-development
   IMAGE_TAG: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
-  LANG: C.UTF-8
+  LANG: C.UTF-8 # use the default locale available in the base image
 
 jobs:
   build-image-development:
