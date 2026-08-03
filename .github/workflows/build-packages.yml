@@ -21,7 +21,6 @@ on:
 
 env:
   DOCKER_REGISTRY_PATH: openspacecollective
-  LANG: en_US.UTF-8
 
 jobs:
   build-package-cpp:
