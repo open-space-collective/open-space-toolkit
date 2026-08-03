@@ -2,6 +2,8 @@
 
 # Apache License 2.0
 
+set -e
+
 project_directory="/app"
 docs_directory="${project_directory}/docs"
 
