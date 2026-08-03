@@ -21,7 +21,6 @@ on:
 
 env:
   DOCKER_REGISTRY_PATH: openspacecollective
-  LANG: C.UTF-8 # use the default locale available in the base image
 
 jobs:
   deploy-package-cpp:
