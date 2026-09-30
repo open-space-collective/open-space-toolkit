@@ -194,6 +194,23 @@ RUN echo "/usr/local/ssl/lib64" >> /etc/ld.so.conf.d/openssl.conf \
    && mv /usr/local/ssl/bin/c_rehash /usr/bin/c_rehash \
    && mv /usr/local/ssl/bin/openssl /usr/bin/openssl
 
+## ABI Compliance Tools (used by ostk-check-abi)
+
+# The Ubuntu 20.04 abi-dumper (1.1) silently drops most symbols from GCC 13 builds, hence the install from source.
+
+ARG ABI_DUMPER_VERSION="1.4"
+ARG ABI_COMPLIANCE_CHECKER_VERSION="2.3"
+
+RUN apt-get update \
+   && apt-get install -y --no-install-recommends elfutils universal-ctags vtable-dumper \
+   && rm -rf /var/lib/apt/lists/* \
+   && cd /tmp \
+   && git clone --branch ${ABI_DUMPER_VERSION} --depth 1 https://github.com/lvc/abi-dumper.git \
+   && make -C abi-dumper install prefix=/usr/local \
+   && git clone --branch ${ABI_COMPLIANCE_CHECKER_VERSION} --depth 1 https://github.com/lvc/abi-compliance-checker.git \
+   && make -C abi-compliance-checker install prefix=/usr/local \
+   && rm -rf /tmp/abi-dumper /tmp/abi-compliance-checker
+
 # Environment
 
 ENV LD_LIBRARY_PATH="/usr/local/lib"
@@ -213,6 +230,7 @@ COPY tools/development/helpers/clean.sh /usr/bin/ostk-clean
 COPY tools/development/helpers/install-python.sh /usr/bin/ostk-install-python
 COPY tools/development/helpers/debug.sh /usr/bin/ostk-debug
 COPY tools/development/helpers/docs.sh /usr/bin/ostk-build-docs
+COPY tools/development/helpers/check-abi.sh /usr/bin/ostk-check-abi
 
 RUN chmod +x /usr/bin/ostk-build \
    && chmod +x /usr/bin/ostk-test \
@@ -225,7 +243,8 @@ RUN chmod +x /usr/bin/ostk-build \
    && chmod +x /usr/bin/ostk-clean \
    && chmod +x /usr/bin/ostk-install-python \
    && chmod +x /usr/bin/ostk-debug \
-   && chmod +x /usr/bin/ostk-build-docs
+   && chmod +x /usr/bin/ostk-build-docs \
+   && chmod +x /usr/bin/ostk-check-abi
 
 # Labels
 

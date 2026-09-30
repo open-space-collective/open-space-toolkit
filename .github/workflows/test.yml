@@ -84,3 +84,59 @@ jobs:
           for version in $(ls /app/build/bindings/python/ | grep -oE '[0-9]+\.[0-9]+$' | sort -u); do
             OSTK_PYTHON_VERSION=${version} ostk-test-python
           done
+
+  check-abi:
+    name: Check ABI Compatibility
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: openspacecollective/${{ inputs.project_name }}-development:${{ inputs.project_version }}
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Check ABI Compatibility
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          # Development images built from a base image older than ostk-check-abi cannot run the check.
+          if ! command -v ostk-check-abi > /dev/null; then
+            echo "::warning::ABI check skipped: ostk-check-abi is not in this development image. Rebuild it from a newer open-space-toolkit base image."
+            exit 0
+          fi
+
+          # The workspace is owned by the runner user, not the container's root user, and actions/checkout only trusts
+          # it during its own step. The clones made by ostk-check-abi need the .git directory trusted too, hence '*'.
+          git config --global --add safe.directory '*'
+
+          status=0
+          ostk-check-abi "${BASE_SHA}" HEAD || status=$?
+
+          if [[ ${status} -eq 1 ]]; then
+            # Read the title live rather than from the event payload, so that editing it and re-running the job works.
+            title=$(curl -fsSL -H "Authorization: Bearer ${GITHUB_TOKEN}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" | python3 -c 'import json, sys; print(json.load(sys.stdin)["title"])')
+
+            if [[ "${title}" =~ ^[a-z]+(\([^\)]*\))?!: ]]; then
+              echo "::warning::ABI break allowed: the PR title marks a breaking change."
+              exit 0
+            fi
+
+            echo "::error::ABI break detected. Fix it, or mark the PR title as a breaking change (e.g. 'feat!: ...') and re-run. See the abi-report artifact."
+          fi
+
+          exit ${status}
+      - name: Upload ABI Report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: abi-report
+          path: build/abi-report/
+          if-no-files-found: ignore

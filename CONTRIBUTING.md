@@ -503,6 +503,12 @@ make
 
 *Tip: `ostk-test` simplifies running C++ tests from within the development environment. A [specific test](http://google.github.io/googletest/advanced.html#running-a-subset-of-the-tests) can be run by matching patterns `ostk-test *TEST-NAME*`.*
 
+### ABI Compatibility
+
+Pull requests are checked with [ABI Compliance Checker](https://lvc.github.io/abi-compliance-checker/) for changes that break the binary or source compatibility of the shared library with their base branch. If a break is intentional, mark the pull request title as a breaking change (e.g. `feat!: ...`) and re-run the check.
+
+*Tip: `ostk-check-abi` runs the same check from within the development environment, comparing the current commit against the latest release, or against another revision with `ostk-check-abi <revision>`. Only committed changes are checked, and the report is written to `build/abi-report/compat_report.html`.*
+
 ### Python
 
 *Tip: `ostk-install-python` installs the currently build shared object libraries as a python package within the development environment so that you can use your most recent changes to OSTk in python.*
