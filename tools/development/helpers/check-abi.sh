@@ -12,7 +12,12 @@
 #
 # Only committed changes are checked. The HTML report is written to <project>/build/abi-report/.
 #
-# Exit status: 0 if compatible, 1 if incompatible, 2 or more on error.
+# The old revision is built in the same environment as the new one, so it cannot be built if it requires a different
+# major version of an OSTk dependency than the one installed. Such a bump is itself a break of the library, so the
+# revisions are reported as not comparable instead of failing the build of the old revision.
+#
+# Exit status: 0 if compatible, 1 if incompatible, 3 if not comparable (an OSTk dependency changed major version),
+# 2 or more on any other error.
 
 set -Eeuo pipefail
 
@@ -30,6 +35,25 @@ library_name="$(git -C "${project_directory}" show "${new_revision}:CMakeLists.t
 if [[ -z "${library_name}" ]]; then
     echo "Error: PROJECT_PACKAGE_NAME not found in the CMakeLists.txt of ${new_revision}." >&2
     exit 2
+fi
+
+# Lists the required major version of each OSTk dependency, e.g. "OpenSpaceToolkitCore 5".
+dependency_majors () {
+
+    git -C "${project_directory}" show "$1:CMakeLists.txt" \
+        | sed -nE 's/^[[:space:]]*FIND_PACKAGE[[:space:]]*\([[:space:]]*"(OpenSpaceToolkit[A-Za-z]*)"[[:space:]]+"([0-9]+)[^"]*".*/\1 \2/Ip' \
+        | sort -u
+
+}
+
+old_dependencies="$(dependency_majors "${old_revision}")"
+new_dependencies="$(dependency_majors "${new_revision}")"
+
+if [[ "${old_dependencies}" != "${new_dependencies}" ]]; then
+    echo "Not comparable: ${old_revision} and ${new_revision} require different major versions of OSTk dependencies:" >&2
+    diff <(echo "${old_dependencies}") <(echo "${new_dependencies}") >&2 || true
+    echo "The old revision cannot be built against the dependencies installed for the new one." >&2
+    exit 3
 fi
 
 # vtable-dumper treats any argument containing "-h" or "-v" as --help or --version, so this path must contain neither.
