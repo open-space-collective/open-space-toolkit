@@ -17,7 +17,7 @@
 # revisions are reported as not comparable instead of failing the build of the old revision.
 #
 # Exit status: 0 if compatible, 1 if incompatible, 3 if not comparable (an OSTk dependency of the old revision changed major version or was removed),
-# 2 or more on any other error.
+# 2 on any other error, including those reported by the tools it runs.
 
 set -Eeuo pipefail
 
@@ -152,6 +152,14 @@ status=0
 
 if [[ ${status} -eq 124 ]]; then
     echo "Error: abi-compliance-checker timed out." >&2
+    exit 2
+fi
+
+# abi-compliance-checker exits with 0 if compatible, 1 if incompatible, and 2 or more on error, with its own meaning for
+# each (e.g. 3 for a missing system command). The statuses 2 and above are the ones this script uses for its own
+# errors and for not comparable revisions (3), so any checker error is reported as 2 to not be mistaken for them.
+if [[ ${status} -gt 1 ]]; then
+    echo "Error: abi-compliance-checker failed with status ${status}." >&2
     exit 2
 fi
 
