@@ -12,11 +12,11 @@
 #
 # Only committed changes are checked. The HTML report is written to <project>/build/abi-report/.
 #
-# The old revision is built in the same environment as the new one, so it cannot be built if it requires a different
-# major version of an OSTk dependency than the one installed. Such a bump is itself a break of the library, so the
+# The old revision is built in the same environment as the new one, so it cannot be built if it requires a major version
+# of an OSTk dependency that the new revision does not. Such a bump is itself a break of the library, so the
 # revisions are reported as not comparable instead of failing the build of the old revision.
 #
-# Exit status: 0 if compatible, 1 if incompatible, 3 if not comparable (an OSTk dependency changed major version),
+# Exit status: 0 if compatible, 1 if incompatible, 3 if not comparable (an OSTk dependency of the old revision changed major version or was removed),
 # 2 or more on any other error.
 
 set -Eeuo pipefail
@@ -49,9 +49,16 @@ dependency_majors () {
 old_dependencies="$(dependency_majors "${old_revision}")"
 new_dependencies="$(dependency_majors "${new_revision}")"
 
-if [[ "${old_dependencies}" != "${new_dependencies}" ]]; then
-    echo "Not comparable: ${old_revision} and ${new_revision} require different major versions of OSTk dependencies:" >&2
-    diff <(echo "${old_dependencies}") <(echo "${new_dependencies}") >&2 || true
+# Only the dependencies required by the old revision matter: it is the one that must be built in this environment.
+# Dependencies that only the new revision requires do not prevent building the old one.
+unmatched_dependencies="$(comm -23 <(echo "${old_dependencies}") <(echo "${new_dependencies}"))"
+
+if [[ -n "${unmatched_dependencies}" ]]; then
+    echo "Not comparable: ${old_revision} requires OSTk dependencies that ${new_revision} requires at another major version, or no longer requires:" >&2
+    while read -r name major; do
+        new_major="$(awk -v name="${name}" '$1 == name { print $2 }' <<< "${new_dependencies}")"
+        echo "  ${name}: ${major} -> ${new_major:-removed}" >&2
+    done <<< "${unmatched_dependencies}"
     echo "The old revision cannot be built against the dependencies installed for the new one." >&2
     exit 3
 fi
