@@ -120,7 +120,8 @@ jobs:
           status=0
           ostk-check-abi "${BASE_SHA}" HEAD || status=$?
 
-          if [[ ${status} -eq 1 ]]; then
+          # Status 1 is an ABI break, and 3 is a major version bump of an OSTk dependency, which cannot be compared.
+          if [[ ${status} -eq 1 || ${status} -eq 3 ]]; then
             # Read the title live rather than from the event payload, so that editing it and re-running the job works.
             title=$(curl -fsSL -H "Authorization: Bearer ${GITHUB_TOKEN}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" | python3 -c 'import json, sys; print(json.load(sys.stdin)["title"])')
 
@@ -129,7 +130,7 @@ jobs:
               exit 0
             fi
 
-            echo "::error::ABI break detected. Fix it, or mark the PR title as a breaking change (e.g. 'feat!: ...') and re-run. See the abi-report artifact."
+            echo "::error::ABI break detected (or not comparable, see the log). Fix it, or mark the PR title as a breaking change (e.g. 'feat!: ...') and re-run. See the abi-report artifact."
           fi
 
           exit ${status}
