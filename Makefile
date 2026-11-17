@@ -48,26 +48,9 @@ run-jupyter: ## Run jupyter
 
 	docker run \
 		--publish=$(jupyter_port):8888 \
-		--volume="$(project_directory)/notebooks:/notebooks" \
-		--workdir=/notebooks \
 		$(jupyter_image)
 
 .PHONY: run-jupyter
-
-run-and-edit-jupyter: pull-jupyter ## Run and edit jupyter notebooks
-
-	docker run \
-		-it \
-		--rm \
-		--user=$(shell id -u) \
-		--group-add=users \
-		--publish=$(jupyter_port):8888 \
-		--volume="$(project_directory)/notebooks:/notebooks" \
-		--workdir=/notebooks \
-		$(jupyter_image) \
-		bash -c "pip install kaleido~=0.2; start-notebook.sh --ServerApp.token=''"
-
-.PHONY: run-and-edit-jupyter
 
 deploy-image: build-image ## Deploy image
 
