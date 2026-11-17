@@ -27,7 +27,15 @@ RUN jupyter labextension install --no-build \
 
 COPY ./docker/jupyter-web/shortcuts-extension /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension
 
-COPY notebooks /home/jovyan/notebooks
+# Fetch the example notebooks from the component repositories
+
+RUN for project in physics astrodynamics; do \
+        git clone --depth=1 --filter=blob:none --sparse "https://github.com/open-space-collective/open-space-toolkit-${project}.git" "/tmp/${project}" \
+     && git -C "/tmp/${project}" sparse-checkout set tutorials/python/notebooks \
+     && mkdir -p /home/jovyan/notebooks \
+     && cp -r "/tmp/${project}/tutorials/python/notebooks" "/home/jovyan/notebooks/${project}" \
+     && rm -rf "/tmp/${project}" ; \
+    done
 
 RUN chown -R ${NB_UID}:${NB_GID} /home/jovyan
 

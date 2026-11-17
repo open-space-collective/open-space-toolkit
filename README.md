@@ -12,12 +12,12 @@ The Open Space Toolkit (**OSTk**) is a collection of versatile libraries for aer
 
 ## Getting Started
 
-Want to get started? This is the simplest and quickest way:
+Want to get started? Each component ships runnable example notebooks:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/open-space-collective/open-space-toolkit/main?urlpath=lab/tree/notebooks)
+- [Physics notebooks](https://github.com/open-space-collective/open-space-toolkit-physics/tree/main/tutorials/python/notebooks): coordinate conversions, atmospheric, gravitational and magnetic models, sensor projection.
+- [Astrodynamics notebooks](https://github.com/open-space-collective/open-space-toolkit-astrodynamics/tree/main/tutorials/python/notebooks): orbit computation and determination, access computation, maneuvers, attitude profiles, sensor modeling.
 
-*This will automatically start a [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment in your web browser with Open Space Toolkit libraries and example notebooks ready to use. Nothing to download or install! 🚀*
-
+To run them, clone the component repository and run `make start-jupyter`.
 
 ### Local JupyterLab in Docker
 
