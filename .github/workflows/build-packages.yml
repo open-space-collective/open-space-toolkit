@@ -93,6 +93,26 @@ jobs:
           name: python-package-${{ env.ARTIFACT_NAME }}
           path: /app/packages/python/
 
+  build-package-python-macos:
+    name: Build Python Package (macOS arm64)
+    runs-on: macos-15
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: true
+      - name: Build macOS Python wheels
+        run: make build-packages-python-macos
+      - name: Upload Python Package
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-package-macos-arm64
+          path: packages/python/*.whl
+          if-no-files-found: error
+
   build-documentation:
     name: Build Documentation
     runs-on: ubuntu-24.04
